@@ -1,0 +1,143 @@
+/*@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap");*/
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 0, 149, 246;
+    --primary-background: 255, 255, 255;
+    --primary-button: 0, 149, 246;
+    --primary-text: 0, 0, 0;
+    --primary-hover: 24, 119, 242;
+    --primary-link-hover: 0, 55, 107;
+    --primary-foreground: 210 40% 98%;
+
+    --always-dark-overlay: 0, 0, 0, 0.4;
+
+    --hover-overlay: 0, 0, 0, 0.05;
+    --banner-background: 255, 255, 255;
+    --stroke: 219, 219, 219;
+    --highlight-background: 239, 239, 239;
+    --elevated-background: 255, 255, 255;
+    --elevated-separator: 219, 219, 219;
+    --toggle-background-off-prism: 219, 223, 228;
+    --toggle-background-on-prism: 15, 20, 25;
+    --stroke-prism: 255, 255, 255;
+
+    --separator: 219, 219, 219;
+    --separator-post: 239, 239, 239;
+
+    --secondary: 115, 115, 115;
+    --secondary-text: 115, 115, 115;
+    --secondary-background: 250, 250, 250;
+    --secondary-button: 38, 38, 38;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary-button-background: 239, 239, 239;
+    --secondary-button-hover: 219, 219, 219;
+    --secondary-button-foreground: 0, 0%, 85.9%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 237, 73, 86;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --nav-narrow-width: 72px;
+    --nav-medium-width: 244px;
+
+    --radius: 0.5rem;
+    --web-always-white: 255, 255, 255;
+    --web-always-black: 0, 0, 0;
+    --badge: 255, 48, 64;
+  }
+
+  .dark {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 0, 149, 246;
+    --primary-background: 0, 0, 0;
+    --primary-button: 0, 149, 246;
+    --primary-text: 245, 245, 245;
+    --primary-hover: 24, 119, 242;
+    --primary-link-hover: 0, 55, 107;
+    --primary-foreground: 210 40% 98%;
+
+    --hover-overlay: 255, 255, 255, 0.1;
+    --banner-background: 38, 38, 38;
+    --stroke: 85, 85, 85;
+    --highlight-background: 38, 38, 38;
+    --elevated-background: 38, 38, 38;
+    --elevated-separator: 54, 54, 54;
+    --toggle-background-off-prism: 50, 53, 57;
+    --toggle-background-on-prism: 248, 249, 249;
+    --stroke-prism: 15, 20, 25;
+
+    --separator: 38, 38, 38;
+    --separator-post: 239, 239, 239;
+
+    --secondary: 115, 115, 115;
+    --secondary-background: 26, 26, 26;
+    --secondary-text: 168, 168, 168;
+
+    --nav-narrow-width: 72px;
+    --nav-medium-width: 244px;
+
+    --secondary-button: 38, 38, 38;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary-button-background: 54, 54, 54;
+    --secondary-button-hover: 38, 38, 38;
+    --secondary-button-foreground: 0, 0%, 85.9%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 237, 73, 86;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+    --web-always-white: 255, 255, 255;
+    --web-always-black: 0, 0, 0;
+    --badge: 255, 48, 64;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
