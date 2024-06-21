@@ -8,7 +8,7 @@ type Props = {
   firstName: string;
   lastName: string;
   content?: string | null;
-  createdAt: string;
+  createdAt: Date;
   username: string;
 };
 
@@ -29,7 +29,7 @@ export default function PostCommentItem({
       </div>
       <div className="text-sm">
         <Link
-          to={`/${username}`}
+          href={`/${username}`}
           className="mr-1 inline-flex align-middle font-semibold hover:opacity-50"
         >
           {firstName} {lastName}{" "}

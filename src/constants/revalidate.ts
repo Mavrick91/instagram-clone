@@ -4,6 +4,10 @@ export const revalidateAuth: RevalidatePath = {
   originalPath: "/(auth)",
 };
 
+export const revalidateDirect: RevalidatePath = {
+  originalPath: "/direct",
+};
+
 export const revalidateUserProfilePage: RevalidatePath = {
   originalPath: "/(auth)/[username]/(profile)",
   type: "layout",

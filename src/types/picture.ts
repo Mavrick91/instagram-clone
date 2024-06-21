@@ -1,5 +1,8 @@
 import { Prisma } from "@prisma/client";
 
+import { CommentsPicture } from "./comment";
+import { CurrentUserType } from "./user";
+
 export type Sizes = {
   small: string;
   medium: string;
@@ -9,14 +12,20 @@ export type Sizes = {
 
 export type ExtendPictureWithSizes<T> = Omit<T, "sizes"> & { sizes: Sizes };
 
-const userPictureDetailsSelect = {
+export const userPictureDetailsSelect = {
   id: true,
   createdAt: true,
   disableComments: true,
+  sizes: true,
   description: true,
   hideLikesAndViewCounts: true,
   altText: true,
-  sizes: true,
+  _count: {
+    select: {
+      comments: true,
+      likes: true,
+    },
+  },
   user: {
     select: {
       id: true,
@@ -24,12 +33,6 @@ const userPictureDetailsSelect = {
       avatar: true,
       firstName: true,
       lastName: true,
-    },
-  },
-  _count: {
-    select: {
-      comments: true,
-      likes: true,
     },
   },
   likes: {
@@ -56,9 +59,17 @@ export const pictureLightSelect = {
   },
 } as const;
 
-export type UserPictureDetails = Prisma.PictureGetPayload<{
+export type UserPictureDetailsSelect = Prisma.PictureGetPayload<{
   select: typeof userPictureDetailsSelect;
 }>;
+
+export type UserPictureDetails = {
+  currentUser: CurrentUserType;
+  isCurrentUserFollowingProfile: boolean;
+  comments: CommentsPicture[];
+  isLiked: boolean;
+  isSaved: boolean;
+} & UserPictureDetailsSelect & { sizes: Sizes };
 
 export type PictureLight = Prisma.PictureGetPayload<{
   select: typeof pictureLightSelect;

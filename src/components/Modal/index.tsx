@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
-import { ReactNode, Suspense, useEffect, useState } from "react";
+import { ReactNode, Suspense, useEffect } from "react";
 import ReactDOM from "react-dom";
 
 import useOutsideClick from "@/hooks/useOutsideClick";
@@ -11,8 +11,8 @@ import LoadingSpinner from "../ui/LoadingSpinner";
 
 type ModalProps = {
   isOpen: boolean;
-  onClose?: () => void;
-  children: React.ReactNode;
+  onClose: () => void;
+  children: ReactNode;
 };
 
 const modalVariants = {
@@ -45,13 +45,7 @@ const backdropVariants = {
 };
 
 const Modal = ({ isOpen, onClose, children }: ModalProps) => {
-  const [mounted, setMounted] = useState(false);
   const modalRef = useOutsideClick(onClose);
-
-  useEffect(() => {
-    setMounted(true);
-    return () => setMounted(false);
-  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -64,10 +58,6 @@ const Modal = ({ isOpen, onClose, children }: ModalProps) => {
       document.body.style.overflow = "";
     };
   }, [isOpen]);
-
-  if (!mounted) {
-    return null;
-  }
 
   const modalRoot = document.getElementById("modal-root");
   if (!modalRoot) {

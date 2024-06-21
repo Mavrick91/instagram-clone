@@ -24,8 +24,8 @@ const ButtonFollow = ({
   buttonProps,
   revalidateOptions,
 }: ButtonFollowProps) => {
-  const [optimisticIsFollow, updateOptimistic] =
-    useOptimisticTransition<boolean>(
+  const [optimisticIsFollow, updateOptimistic, setRealFollow] =
+    useOptimisticTransition<boolean, boolean>(
       isFollowing,
       (_state, newValue: boolean) => newValue,
     );
@@ -36,11 +36,10 @@ const ButtonFollow = ({
     try {
       updateOptimistic(newValue);
 
-      if (newValue) {
-        await followUser(targetUserId, revalidateOptions);
-      } else {
-        await unfollowUser(targetUserId, revalidateOptions);
-      }
+      if (newValue) await followUser(targetUserId, revalidateOptions);
+      else await unfollowUser(targetUserId, revalidateOptions);
+
+      setRealFollow(newValue);
     } catch (error) {
       toast("Failed to perform this action.", { type: "error" });
     }
@@ -49,11 +48,12 @@ const ButtonFollow = ({
       callback();
     }
   }, [
-    updateOptimistic,
     optimisticIsFollow,
     callback,
+    updateOptimistic,
     targetUserId,
     revalidateOptions,
+    setRealFollow,
   ]);
 
   return (

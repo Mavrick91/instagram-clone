@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -16,7 +16,7 @@ export default function PostCaption({ username, description }: Props) {
 
   const descriptionRef = useRef<HTMLParagraphElement | null>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (descriptionRef.current) {
       const lineHeight = parseFloat(
         getComputedStyle(descriptionRef.current).lineHeight,

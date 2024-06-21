@@ -30,10 +30,8 @@ type SideNavProviderProps = {
   children: React.ReactNode;
 };
 
-export const SideNavProvider: React.FC<SideNavProviderProps> = ({
-  children,
-}) => {
-  const windowWidth = useWindowWidth() || 10000;
+const SideNavProvider: React.FC<SideNavProviderProps> = ({ children }) => {
+  const windowWidth = useWindowWidth();
   const [sideNavOpen, setSideNavOpen] = useState(windowWidth < 1264);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [isNotificationVisible, setIsNotificationVisible] = useState(false);
@@ -105,3 +103,5 @@ export const useSideNav = (): SideNavContextType => {
   }
   return context;
 };
+
+export default SideNavProvider;

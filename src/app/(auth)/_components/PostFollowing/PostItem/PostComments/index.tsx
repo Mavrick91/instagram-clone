@@ -1,29 +1,16 @@
 "use client";
 
-import { useState } from "react";
-
-import Modal from "@/components/Modal";
 import { Pluralize } from "@/components/Pluralize";
-import PostDetailsDialog from "@/components/PostDetailsDialog";
+import { useModalFunctions } from "@/providers/ModalProvider";
 import { UserPictureDetails } from "@/types/picture";
 
 type Props = {
   commentCount: number;
   picture: UserPictureDetails;
-  isFollowingCurrentProfile: boolean;
 };
 
-export default function PostComments({
-  commentCount,
-  picture,
-  isFollowingCurrentProfile,
-}: Props) {
-  const [selectedPicture, setSelectedPicture] =
-    useState<UserPictureDetails | null>(null);
-
-  const closeModal = () => {
-    setSelectedPicture(null);
-  };
+export default function PostComments({ commentCount, picture }: Props) {
+  const { showModal } = useModalFunctions();
 
   if (commentCount === 0) {
     return null;
@@ -35,18 +22,11 @@ export default function PostComments({
         <button
           className="text-sm text-secondary"
           type="button"
-          onClick={() => setSelectedPicture(picture)}
+          onClick={() => showModal("PostDetails", { pictureId: picture.id })}
         >
           View all <Pluralize count={commentCount} singular="comment" />
         </button>
       </div>
-
-      <Modal isOpen={!!selectedPicture} onClose={closeModal}>
-        <PostDetailsDialog
-          picture={selectedPicture!}
-          isFollowingCurrentProfile={isFollowingCurrentProfile}
-        />
-      </Modal>
     </>
   );
 }

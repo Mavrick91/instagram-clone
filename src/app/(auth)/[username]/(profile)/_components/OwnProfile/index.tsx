@@ -1,26 +1,22 @@
 "use client";
 
-import { useCallback, useState } from "react";
-
-import EditProfileDialog from "@/components/EditProfileDialog";
-import Modal from "@/components/Modal";
 import { Button } from "@/components/ui/button";
+import { useModalFunctions } from "@/providers/ModalProvider";
 
 const OwnProfile = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleModal = useCallback(() => {
-    setIsOpen((prev) => !prev);
-  }, []);
+  const { showModal } = useModalFunctions();
 
   return (
     <div className="flex">
-      <Button variant="gray" size="xs" onClick={toggleModal}>
+      <Button
+        variant="gray"
+        size="xs"
+        onClick={() => {
+          showModal("EditProfile");
+        }}
+      >
         Edit Profile
       </Button>
-      <Modal isOpen={isOpen} onClose={toggleModal}>
-        <EditProfileDialog />
-      </Modal>
     </div>
   );
 };

@@ -5,7 +5,9 @@ import * as bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
+import { invalidateCache } from "@/lib/lru";
 import prisma from "@/lib/prisma";
 import { RevalidatePath } from "@/types/global";
 import {
@@ -74,6 +76,12 @@ export const login = async (email: string, password: string) => {
   }
 };
 
+export const logout = async () => {
+  setCookie({ name: "accessToken", value: "", maxAge: 0 });
+  setCookie({ name: "refreshToken", value: "", maxAge: 0 });
+  redirect("/login");
+};
+
 export const getMockedUser = async (): Promise<User[]> => {
   return prisma.user.findMany({
     where: {
@@ -130,6 +138,9 @@ export const updateUserProfile = async (
     },
     data: updateUserInput,
   });
+
+  const keyGenerator = async () => `userProfile-${username}`;
+  await invalidateCache(keyGenerator);
 
   options && revalidatePath(options.originalPath, options?.type);
 };

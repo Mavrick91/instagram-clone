@@ -27,6 +27,8 @@ const config = {
       },
       boxShadow: {
         ig: "0 4px 12px rgba(var(--web-always-black),.15)",
+        "custom-bubble": "8px 14px 0 -6px var(--ig-bubble-background)",
+        "custom-bubble-small": "3px 6px 0 -2px var(--ig-bubble-background)",
       },
       margin: {
         ...sidenavSizes,
@@ -59,6 +61,23 @@ const config = {
         "toggle-background-on-prism": "rgb(var(--toggle-background-on-prism))",
         "always-dark-overlay": "rgba(var(--always-dark-overlay))",
         "border-avatar": "rgba(var(--web-always-black),.0975)",
+        "bubble-background": "rgb(var(--ig-bubble-background))",
+
+        "ig-banner-background": "var(--ig-banner-background)",
+        "web-always-black": "var(--web-always-black)",
+        "ig-bubble-background": "var(--ig-bubble-background)",
+        "system-20-font-size": "var(--system-20-font-size)",
+        "system-20-line-height": "var(--system-20-line-height)",
+        "ig-secondary-background": "var(--ig-secondary-background)",
+        "font-family-system": "var(--font-family-system)",
+        "ig-primary-text": "var(--ig-primary-text)",
+        "system-12-font-size": "var(--system-12-font-size)",
+        "ig-secondary-text": "var(--ig-secondary-text)",
+        "web-always-white": "var(--web-always-white)",
+        "font-weight-system-semibold": "var(--font-weight-system-semibold)",
+        "system-14-line-height": "var(--system-14-line-height)",
+        "ig-primary-button-hover": "var(--ig-primary-button-hover)",
+        "ig-link": "var(--ig-link)",
         separator: {
           DEFAULT: "rgb(var(--separator))",
           post: "rgb(var(--separator-post))",

@@ -1,25 +1,29 @@
-"use client";
-
-import { Ellipsis } from "lucide-react";
 import Link from "next/link";
 
+import { getPictureDetails } from "@/actions/picture";
 import PictureCommentList from "@/components/PostDetailsDialog/PostCommentList";
-import { useUserInfo } from "@/providers/UserInfoProvider";
-import { UserPictureDetails } from "@/types/picture";
+import {
+  revalidateAuth,
+  revalidateUserProfilePage,
+} from "@/constants/revalidate";
+import { getIsCurrentUserFollowingProfile } from "@/utils/user";
 
 import ButtonFollow from "../ButtonFollow";
 import ImageClient from "../ImageClient";
 import Separator from "../ui/separator";
 import UserAvatar from "../UserAvatar";
-import PostAction from "./PostAction";
 
-type Props = {
-  picture: UserPictureDetails;
-  isFollowingCurrentProfile: boolean;
+type PostDetailsDialogProps = {
+  pictureId: number;
 };
 
-function PostDetailsDialog({ picture, isFollowingCurrentProfile }: Props) {
-  const user = useUserInfo();
+async function PostDetailsDialog({ pictureId }: PostDetailsDialogProps) {
+  const picture = await getPictureDetails(pictureId);
+
+  const isFollowingProfile = getIsCurrentUserFollowingProfile(
+    picture.currentUser,
+    picture.user.id,
+  );
 
   return (
     <div className="flex">
@@ -41,7 +45,7 @@ function PostDetailsDialog({ picture, isFollowingCurrentProfile }: Props) {
       <div className="flex min-w-[405px] max-w-[500px] shrink-0 flex-col border-l border-separator bg-primary-background">
         <div className="flex flex-col pl-3 pt-3">
           <div className="flex items-center">
-            <Link className="shrink-0" href={`/${picture?.user.username}`}>
+            <Link className="shrink-0" href={`/${picture.user.username}`}>
               <UserAvatar
                 avatar={picture.user.avatar}
                 username={picture.user.username}
@@ -52,17 +56,18 @@ function PostDetailsDialog({ picture, isFollowingCurrentProfile }: Props) {
               <div className="flex items-center justify-between pr-5">
                 <div>
                   <Link
-                    href={`/${picture?.user.username}`}
+                    href={`/${picture.user.username}`}
                     className="ml-4 text-sm font-semibold text-primary-text"
                   >
-                    {picture?.user?.firstName} {picture?.user?.lastName}
+                    {picture.user.firstName} {picture.user.lastName}
                   </Link>
-                  {user.id !== picture.user?.id && (
+                  {picture.currentUser.id !== picture.user?.id && (
                     <>
                       {" "}
                       •{" "}
                       <ButtonFollow
-                        isFollowing={isFollowingCurrentProfile}
+                        revalidateOptions={revalidateAuth}
+                        isFollowing={isFollowingProfile}
                         targetUserId={picture.user.id}
                         buttonProps={{
                           variant: "ghost",
@@ -71,11 +76,12 @@ function PostDetailsDialog({ picture, isFollowingCurrentProfile }: Props) {
                     </>
                   )}
                 </div>
-                {picture?.id && user.id === picture.user?.id && (
-                  <PostAction picture={picture}>
-                    <Ellipsis className="text-primary-text" />
-                  </PostAction>
-                )}
+                {picture.currentUser.id &&
+                  picture.currentUser.id === picture.user?.id && (
+                    <PostAction picture={picture}>
+                      <Ellipsis className="text-primary-text" />
+                    </PostAction>
+                  )}
               </div>
             </div>
           </div>

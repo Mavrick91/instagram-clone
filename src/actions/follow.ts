@@ -60,12 +60,12 @@ export const followUser = async (
         targetUserId,
       },
     });
+
+    options && revalidatePath(options.originalPath, options?.type);
   } catch (error) {
     console.error("Error follow user:", error);
     throw new Error("Unable to follow.");
   }
-
-  options && revalidatePath(options.originalPath, options?.type);
 };
 
 export const unfollowUser = async (
@@ -81,10 +81,10 @@ export const unfollowUser = async (
         targetUserId,
       },
     });
+
+    options && revalidatePath(options.originalPath, options?.type);
   } catch (error) {
     console.error("Error follow user:", error);
     throw new Error("Unable to unfollow.");
   }
-
-  options && revalidatePath(options.originalPath, options?.type);
 };

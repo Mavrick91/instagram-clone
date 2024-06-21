@@ -1,27 +1,34 @@
 "use client";
 
-import { useCallback, useOptimistic, useTransition } from "react";
+import { useCallback, useOptimistic, useState, useTransition } from "react";
 
-function useOptimisticTransition<T>(
-  initialState: T,
-  optimisticUpdate: (state: T, action: T) => T,
+function useOptimisticTransition<S, A>(
+  initialState: S,
+  optimisticUpdate: (state: S, action: A) => S,
 ) {
-  const [optimisticValue, setOptimisticValue] = useOptimistic(
-    initialState,
+  const [realValue, setRealValue] = useState<S>(initialState);
+  const [optimisticValue, setOptimisticValue] = useOptimistic<S, A>(
+    realValue,
     optimisticUpdate,
   );
   const [isPending, startTransition] = useTransition();
 
   const updateState = useCallback(
-    (newValue: T) => {
+    (action: A) => {
       startTransition(() => {
-        setOptimisticValue(newValue);
+        setOptimisticValue(action);
       });
     },
     [setOptimisticValue],
   );
 
-  return [optimisticValue, updateState, isPending] as const;
+  return [
+    optimisticValue,
+    updateState,
+    setRealValue,
+    realValue,
+    isPending,
+  ] as const;
 }
 
 export default useOptimisticTransition;

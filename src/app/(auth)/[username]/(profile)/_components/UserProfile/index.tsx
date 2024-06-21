@@ -1,13 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useState } from "react";
 
 import ButtonFollow from "@/components/ButtonFollow";
-import FollowersDialog from "@/components/FollowersDialog";
-import Modal from "@/components/Modal";
 import { Pluralize } from "@/components/Pluralize";
 import { revalidateUserProfilePage } from "@/constants/revalidate";
+import { useModalFunctions } from "@/providers/ModalProvider";
 import { UserProfileType } from "@/types/user";
 
 import OwnProfile from "../OwnProfile";
@@ -23,16 +21,8 @@ const UserProfile = ({
   currentUserId,
   isFollowingCurrentProfile,
 }: UserProfileProps) => {
-  const [isOpenFollowers, setIsOpenFollowers] = useState(false);
-  const [isOpenFollowing, setIsOpenFollowing] = useState(false);
+  const { showModal } = useModalFunctions();
 
-  const toggleFollowersModal = useCallback(() => {
-    setIsOpenFollowers((prev) => !prev);
-  }, []);
-
-  const toggleFollowingModal = useCallback(() => {
-    setIsOpenFollowing((prev) => !prev);
-  }, []);
   return (
     <>
       <div className="mb-11">
@@ -79,14 +69,29 @@ const UserProfile = ({
                   bold
                 />
               </span>
-              <button type="button" onClick={toggleFollowersModal}>
+              <button
+                type="button"
+                onClick={() =>
+                  showModal("Followers", {
+                    isFollowers: true,
+                    followers: userProfile.receivedFollows,
+                  })
+                }
+              >
                 <Pluralize
                   count={userProfile._count.receivedFollows}
                   singular="follower"
                   bold
                 />
               </button>
-              <button type="button" onClick={toggleFollowingModal}>
+              <button
+                type="button"
+                onClick={() =>
+                  showModal("Followers", {
+                    followers: userProfile.initiatedFollows,
+                  })
+                }
+              >
                 <Pluralize
                   count={userProfile._count.initiatedFollows}
                   singular="following"
@@ -105,14 +110,6 @@ const UserProfile = ({
           </section>
         </div>
       </div>
-
-      <Modal isOpen={isOpenFollowers} onClose={toggleFollowersModal}>
-        <FollowersDialog isFollowers followers={userProfile.receivedFollows} />
-      </Modal>
-
-      <Modal isOpen={isOpenFollowing} onClose={toggleFollowingModal}>
-        <FollowersDialog followers={userProfile.initiatedFollows} />
-      </Modal>
     </>
   );
 };

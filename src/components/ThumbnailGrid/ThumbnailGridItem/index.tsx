@@ -1,8 +1,10 @@
+"use client";
+
 import { MessageCircle } from "lucide-react";
-import Link from "next/link";
 import { memo } from "react";
 
 import ImageClient from "@/components/ImageClient";
+import { useModalFunctions } from "@/providers/ModalProvider";
 import { PictureLight } from "@/types/picture";
 
 type Props = {
@@ -10,10 +12,13 @@ type Props = {
 };
 
 function ThumbnailGridItem({ picture }: Props) {
+  const { showModal } = useModalFunctions();
+
   return (
     <>
-      <Link
-        href={`/p/${picture.id}`}
+      <button
+        type="button"
+        onClick={() => showModal("PostDetails", { pictureId: picture.id })}
         key={picture.id}
         className="group relative col-span-1 aspect-square overflow-hidden bg-highlight-background"
       >
@@ -29,14 +34,7 @@ function ThumbnailGridItem({ picture }: Props) {
           <MessageCircle fill="white" size={32} />
           <span className="text-2xl">{picture._count?.comments}</span>
         </div>
-      </Link>
-
-      {/*{selectedPicture && (*/}
-      {/*  <PictureDetailsDialog*/}
-      {/*    picture={selectedPicture}*/}
-      {/*    onClose={() => setSelectedPicture(null)}*/}
-      {/*  />*/}
-      {/*)}*/}
+      </button>
     </>
   );
 }

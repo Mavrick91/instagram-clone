@@ -8,35 +8,30 @@ import prisma from "@/lib/prisma";
 import {
   CollectionByUserId,
   collectionByUserIdSelect,
-  UserCollectionDetailsSelect,
   userCollectionDetailsSelect,
   UserDefaultCollectionPictures,
   userDefaultCollectionPicturesSelect,
 } from "@/types/collection";
 import { RevalidatePath } from "@/types/global";
 
-export const isPictureInUserCollection = async (
+export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
+export const getIsPictureInUserCollection = async (
   pictureId: number,
 ): Promise<boolean> => {
-  try {
-    const currentUser = await getCurrentUser();
-
-    const pictureInDefaultCollection =
-      await prisma.pictureOnCollection.findFirst({
-        where: {
-          pictureId: pictureId,
-          collection: {
-            userId: currentUser.id,
-            isDefault: true,
-          },
+  const currentUser = await getCurrentUser();
+  const pictureInDefaultCollection = await prisma.pictureOnCollection.findFirst(
+    {
+      where: {
+        pictureId: pictureId,
+        collection: {
+          userId: currentUser.id,
+          isDefault: true,
         },
-      });
-
-    return !!pictureInDefaultCollection;
-  } catch (error) {
-    console.error("Error checking if picture is in saved:", error);
-    throw new Error("Unable to check if picture is in saved.");
-  }
+      },
+    },
+  );
+  return !!pictureInDefaultCollection;
 };
 
 export const removePictureFromDefaultCollection = async (
@@ -158,64 +153,49 @@ export const addPictureToDefaultCollection = async (
 export const getCollectionsByUserId = async (
   userId: number,
 ): Promise<CollectionByUserId[]> => {
-  try {
-    return prisma.collection.findMany({
-      where: {
-        userId: userId,
-      },
-      select: collectionByUserIdSelect,
-    });
-  } catch (error) {
-    console.error("Error fetching saved by username:", error);
-    throw new Error("Unable to fetch the collections.");
-  }
+  return prisma.collection.findMany({
+    where: {
+      userId: userId,
+    },
+    select: collectionByUserIdSelect,
+  });
 };
 
 export const getDefaultCollectionByUsername = async (
   username: string,
 ): Promise<UserDefaultCollectionPictures> => {
-  try {
-    const user = await prisma.user.findFirstOrThrow({
-      where: {
-        username: username,
-      },
-    });
+  const user = await prisma.user.findFirstOrThrow({
+    where: {
+      username: username,
+    },
+  });
 
-    return prisma.collection.findFirstOrThrow({
-      where: {
-        userId: user.id,
-        isDefault: true,
-      },
-      select: userDefaultCollectionPicturesSelect,
-    });
-  } catch (error) {
-    console.error("Error fetching default saved:", error);
-    throw new Error("Unable to fetch the default collection.");
-  }
+  return prisma.collection.findFirstOrThrow({
+    where: {
+      userId: user.id,
+      isDefault: true,
+    },
+    select: userDefaultCollectionPicturesSelect,
+  });
 };
 
 export const getUserCollectionDetails = async (
   username: string,
   collectionName: string,
-): Promise<UserCollectionDetailsSelect | null> => {
-  try {
-    const user = await prisma.user.findFirstOrThrow({
-      where: {
-        username: username,
-      },
-    });
+): Promise<Collection | null> => {
+  const user = await prisma.user.findFirstOrThrow({
+    where: {
+      username: username,
+    },
+  });
 
-    return prisma.collection.findFirst({
-      where: {
-        userId: user.id,
-        nameId: collectionName,
-      },
-      select: userCollectionDetailsSelect,
-    });
-  } catch (error) {
-    console.error("Error fetching saved details:", error);
-    throw new Error("Unable to fetch the collection.");
-  }
+  return prisma.collection.findFirst({
+    where: {
+      userId: user.id,
+      nameId: collectionName,
+    },
+    select: userCollectionDetailsSelect,
+  });
 };
 
 export const createCollectionAndAddPictures = async (

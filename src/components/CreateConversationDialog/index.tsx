@@ -1,36 +1,28 @@
+import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
-import {
-  useCreateThreadMutation,
-  useGetUsersByUsernameQuery,
-} from "@/__generated__/graphql";
+import { createThread } from "@/actions/thread";
+import { getUserByUsername } from "@/actions/user";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Separator } from "@/components/ui/separator.tsx";
+import Separator from "@/components/ui/separator";
 import UserListItem from "@/components/UserListItem";
+import { useModalFunctions } from "@/providers/ModalProvider";
 import { useUserInfo } from "@/providers/UserInfoProvider";
 
-import UserAvatar from "../UserAvatar";
-
-type Props = {
-  onClose: () => void;
-};
-
-export default function CreateConversationDialog({ onClose }: Props) {
+export default function CreateConversationDialog() {
   const user = useUserInfo();
-  const [isOpen, setIsOpen] = useState(true);
+  const { closeModal } = useModalFunctions();
+
   const [inputValue, setInputValue] = useState("");
   const [debouncedInputValue, setDebouncedInputValue] = useState("");
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const [createThread] = useCreateThreadMutation();
-  const navigate = useNavigate();
+  const router = useRouter();
 
-  const { data } = useGetUsersByUsernameQuery({
-    variables: {
-      username: debouncedInputValue,
-    },
-    skip: !debouncedInputValue,
+  const { data: users } = useQuery({
+    queryKey: ["usersByUsername"],
+    queryFn: async () => getUserByUsername(debouncedInputValue),
+    enabled: !!debouncedInputValue,
   });
 
   useEffect(() => {
@@ -45,56 +37,47 @@ export default function CreateConversationDialog({ onClose }: Props) {
     };
   }, [inputValue]);
 
-  const handleCloseModal = () => {
-    onClose();
-    setIsOpen(false);
-  };
-
   const handleStartConversation = async (recipientId: number) => {
-    const response = await createThread({
-      variables: {
-        createThreadInput: {
-          userIds: [user.id, recipientId],
-        },
-      },
-    });
-
-    if (response.data?.createThread) {
-      handleCloseModal();
-      navigate(`/direct/t/${response.data.createThread.id}`);
+    try {
+      const newThread = await createThread([user.id, recipientId]);
+      setDebouncedInputValue("");
+      router.push(`/direct/inbox/${newThread.id}`);
+      closeModal();
+    } catch (e) {
+      console.error(e);
     }
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleCloseModal}>
-      <DialogContent className="flex flex-col gap-0 p-0">
-        <div className="flex justify-center px-4 py-3.5">
-          <h3 className="font-bold">New message</h3>
+    <div className="flex w-screen max-w-xl flex-col gap-0 p-0">
+      <div className="flex justify-center px-4 py-3.5">
+        <h3 className="font-bold">New message</h3>
+      </div>
+      <Separator />
+      <div className="flex h-9 items-center px-4">
+        <span className="font-bold">To:</span>
+        <div className="px-4 py-1">
+          <input
+            type="text"
+            placeholder="Search..."
+            className="grow bg-transparent focus:outline-none"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+          />
         </div>
-        <Separator elevated />
-        <div className="flex h-9 items-center px-4">
-          <span className="font-bold">To:</span>
-          <div className="px-4 py-1">
-            <input
-              type="text"
-              placeholder="Search..."
-              className="grow bg-transparent focus:outline-none"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-            />
-          </div>
-        </div>
-        <Separator elevated />
-        <div className="h-96 overflow-y-auto py-3">
-          {!data ? (
-            <div className="px-6 text-sm text-secondary">No account found.</div>
-          ) : (
-            data.usersByUsername.map((user) => (
-              <button
-                key={user.id}
-                className="w-full hover:bg-hover-overlay"
-                onClick={() => handleStartConversation(user.id)}
-              >
+      </div>
+      <Separator />
+      <div className="h-96 overflow-y-auto py-3">
+        {!users ? (
+          <div className="px-6 text-sm text-secondary">No account found.</div>
+        ) : (
+          users.map((user) => (
+            <button
+              key={user.id}
+              className="w-full hover:bg-hover-overlay"
+              onClick={() => handleStartConversation(user.id)}
+            >
+              <div className="px-4 py-2">
                 <UserListItem
                   subText={user.username}
                   firstName={user.firstName}
@@ -102,14 +85,14 @@ export default function CreateConversationDialog({ onClose }: Props) {
                   avatar={user.avatar}
                   subTextSize="sm"
                 />
-              </button>
-            ))
-          )}
-        </div>
-        <div className="p-6">
-          <Button className="w-full">Chat</Button>
-        </div>
-      </DialogContent>
-    </Dialog>
+              </div>
+            </button>
+          ))
+        )}
+      </div>
+      <div className="p-6">
+        <Button className="w-full">Chat</Button>
+      </div>
+    </div>
   );
 }

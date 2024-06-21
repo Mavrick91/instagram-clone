@@ -78,7 +78,6 @@ export const getIsPictureLiked = async (
         pictureId: pictureId,
       },
     });
-
     return isLiked !== null;
   } catch (error) {
     console.error(

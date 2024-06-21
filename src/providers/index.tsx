@@ -1,7 +1,5 @@
 "use client";
 
-import { Suspense } from "react";
-
 import QueryClientProvider from "./ReactQueryProvider";
 import { ThemeProvider } from "./ThemeProvider";
 

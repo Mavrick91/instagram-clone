@@ -5,8 +5,7 @@ import TextareaAutosize from "react-textarea-autosize";
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { useUserInfo } from "@/providers/UserInfoProvider";
+import Separator from "@/components/ui/separator";
 
 const commentSchema = z.object({
   content: z
@@ -18,20 +17,11 @@ const commentSchema = z.object({
 type CommentFormData = z.infer<typeof commentSchema>;
 
 type Props = {
-  pictureId: number;
-  refetchCommentList: () => void;
   commentListRef: RefObject<HTMLDivElement>;
+  handleAddComment: (comment: string) => Promise<void>;
 };
 
-function PostCommentForm({
-  pictureId,
-  refetchCommentList,
-  commentListRef,
-}: Props) {
-  const user = useUserInfo();
-
-  // const [commentPicture] = useCreateComment();
-
+function PostCommentForm({ commentListRef, handleAddComment }: Props) {
   const { register, handleSubmit, reset, watch } = useForm<CommentFormData>({
     resolver: zodResolver(commentSchema),
   });
@@ -40,16 +30,7 @@ function PostCommentForm({
 
   const onSubmit = async (data: CommentFormData) => {
     try {
-      // await commentPicture({
-      //   variables: {
-      //     createCommentInput: {
-      //       content: data.content,
-      //       userId: user.id,
-      //       pictureId,
-      //     },
-      //   },
-      // });
-      refetchCommentList();
+      await handleAddComment(data.content);
       commentListRef.current?.scroll({
         top: 0,
         behavior: "smooth",
@@ -62,7 +43,7 @@ function PostCommentForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Separator elevated />
+      <Separator />
       <div className="flex min-h-12 items-center py-2 pl-2 pr-4">
         <TextareaAutosize
           className="w-full resize-none bg-transparent p-2 text-sm text-primary-text placeholder:text-secondary-text focus:outline-none"

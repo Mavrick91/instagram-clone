@@ -8,6 +8,9 @@ const nextConfig = {
     ],
   },
   reactStrictMode: false,
+  logging: {
+    fetches: true,
+  },
 };
 
 export default nextConfig;

@@ -1,13 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 
 function useWindowWidth() {
-  const [windowWidth, setWindowWidth] = useState<number | null>(null);
+  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
+  useLayoutEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
 
     setWindowWidth(window.innerWidth);

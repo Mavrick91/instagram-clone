@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { revalidateUserProfilePage } from "@/constants/revalidate";
 import { cn } from "@/lib/utils";
+import { useModalFunctions } from "@/providers/ModalProvider";
 import { useUserInfo } from "@/providers/UserInfoProvider";
 
 const ProfileSchema = z.object({
@@ -33,7 +34,8 @@ const ProfileSchema = z.object({
 type FormData = z.infer<typeof ProfileSchema>;
 
 export default function EditProfileDialog() {
-  // const [uploadStatus, setUploadStatus] = useState(false);
+  const { closeModal } = useModalFunctions();
+
   const user = useUserInfo();
   const {
     register,
@@ -54,30 +56,6 @@ export default function EditProfileDialog() {
 
   const onSubmit = async (data: FormData) => {
     try {
-      // let avatarUrl: string | undefined;
-      // let avatarName: string | undefined;
-
-      if (data.avatar[0]) {
-        // setUploadStatus(true);
-        // const { fileUrl, fileKey } = await uploadImage(data.avatar[0]);
-        // avatarUrl = fileUrl;
-        // avatarName = fileKey;
-      }
-
-      // const variables: UpdateUserProfileMutationVariables = {
-      //   username: user.username,
-      //   updateUserInput: {
-      //     firstName: data.firstName,
-      //     lastName: data.lastName,
-      //     bio: data.bio,
-      //   },
-      // };
-
-      // if (avatarUrl) {
-      //   variables.updateUserInput.avatar = avatarUrl;
-      //   variables.updateUserInput.avatarName = avatarName;
-      // }
-
       await updateUserProfile(
         user.username,
         {
@@ -87,10 +65,10 @@ export default function EditProfileDialog() {
         },
         revalidateUserProfilePage,
       );
+
+      closeModal();
     } catch (error) {
       console.error("Failed to update user posts:", error);
-    } finally {
-      // setUploadStatus(false);
     }
   };
 
@@ -108,38 +86,7 @@ export default function EditProfileDialog() {
                 "border-dashed border-gray-300": !user.avatar,
               },
             )}
-          >
-            {/*<FileUploadArea defaultPreview={user.avatar}>*/}
-            {/*  {(handleFileChange, _, previewUrl) => (*/}
-            {/*    <>*/}
-            {/*      {previewUrl ? (*/}
-            {/*        <>*/}
-            {/*          <UserAvatar*/}
-            {/*            avatar={previewUrl}*/}
-            {/*            className="size-full"*/}
-            {/*          />*/}
-            {/*          <div className="absolute inset-0 z-20 flex items-center justify-center rounded-full bg-black bg-opacity-50 opacity-0 transition group-hover:opacity-100">*/}
-            {/*            <UploadIcon className="size-6" color="white" />*/}
-            {/*          </div>*/}
-            {/*        </>*/}
-            {/*      ) : (*/}
-            {/*        <>*/}
-            {/*          <UploadIcon className="size-6" />*/}
-            {/*          <span className="sr-only">Upload new avatar</span>*/}
-            {/*        </>*/}
-            {/*      )}*/}
-            {/*      <input*/}
-            {/*        type="file"*/}
-            {/*        id="avatar"*/}
-            {/*        {...register("avatar")}*/}
-            {/*        onChange={handleFileChange}*/}
-            {/*        accept={ACCEPTED_IMAGE_TYPES.join(",")}*/}
-            {/*        className="sr-only"*/}
-            {/*      />*/}
-            {/*    </>*/}
-            {/*  )}*/}
-            {/*</FileUploadArea>*/}
-          </span>
+          ></span>
         </Label>
       </div>
       <div className="grid grid-cols-2 gap-4">
@@ -177,11 +124,7 @@ export default function EditProfileDialog() {
           </span>
         </div>
       </div>
-      <Button
-        className="ml-auto mt-4"
-        type="submit"
-        // loading={uploadStatus || mutationLoading}
-      >
+      <Button className="ml-auto mt-4" type="submit">
         Save
       </Button>
     </form>

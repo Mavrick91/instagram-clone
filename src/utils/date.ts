@@ -1,4 +1,4 @@
-export function formatTimestamp(timestamp: string): string {
+export function formatTimestamp(timestamp: Date): string {
   const messageDate = new Date(timestamp);
   const currentDate = new Date();
 

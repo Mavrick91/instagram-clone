@@ -4,6 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body {
+  height: 100%;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -79,6 +83,24 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
+    --ig-bubble-background: rgb(54, 54, 54);
+
+    --ig-banner-background: rgb(38, 38, 38);
+    --web-always-black: rgb(0, 0, 0);
+    --system-20-font-size: 20px;
+    --system-20-line-height: 25px;
+    --ig-secondary-background: rgb(18, 18, 18);
+    --font-family-system: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --ig-primary-text: rgb(245, 245, 245);
+    --system-12-font-size: 12px;
+    --ig-secondary-text: rgb(168, 168, 168);
+    --always-dark-overlay: rgba(0, 0, 0, 0.4);
+    --web-always-white: rgb(255, 255, 255);
+    --font-weight-system-semibold: 600;
+    --system-14-line-height: 18px;
+    --ig-primary-button-hover: rgb(24, 119, 242);
+    --ig-link: rgb(224, 241, 255);
+
     --primary: 0, 149, 246;
     --primary-background: 0, 0, 0;
     --primary-button: 0, 149, 246;
@@ -127,8 +149,6 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
-    --web-always-white: 255, 255, 255;
-    --web-always-black: 0, 0, 0;
     --badge: 255, 48, 64;
   }
 }

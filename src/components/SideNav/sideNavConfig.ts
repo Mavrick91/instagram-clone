@@ -14,7 +14,6 @@ export interface SideNavItem {
   onClick?: () => void;
   userAvatarProps?: {
     avatar?: string | null;
-    username: string;
     size: string;
   };
 }
@@ -65,7 +64,6 @@ export const getNavigationItems = (
     onClick: () => null,
     userAvatarProps: {
       avatar: user.avatar,
-      username: user.username,
       size: "size-6",
     },
     isActive: (path) =>

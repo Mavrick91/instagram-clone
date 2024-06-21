@@ -10,6 +10,7 @@ import {
 import { useRouter } from "next/navigation";
 import { Fragment } from "react/jsx-runtime";
 
+import { logout } from "@/actions/user";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,7 +18,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { clearStorage } from "@/lib/storage";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useUserInfo } from "@/providers/UserInfoProvider";
@@ -32,8 +32,7 @@ export default function DropdownMore({ displaySmallNav }: Props) {
   const router = useRouter();
 
   const handleLogout = () => {
-    clearStorage();
-    router.push("/login");
+    logout();
   };
 
   const dropdownItems = [

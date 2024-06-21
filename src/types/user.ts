@@ -8,6 +8,12 @@ export const currentUserSelect = {
   firstName: true,
   lastName: true,
   bio: true,
+  thought: {
+    select: {
+      id: true,
+      content: true,
+    },
+  },
 } as const;
 
 export type CurrentUserType = Prisma.UserGetPayload<{

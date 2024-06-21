@@ -1,5 +1,6 @@
 import { getCurrentUser, getUserProfile } from "@/actions/user";
 import { ServerLayoutProps } from "@/types/global";
+import { getIsCurrentUserFollowingProfile } from "@/utils/user";
 
 import ErrorProfile from "./_components/ErrorProfile";
 import UserProfile from "./_components/UserProfile";
@@ -16,8 +17,9 @@ const ProfileLayout = async ({
   if (!userProfile) return <ErrorProfile />;
 
   const currentUser = await getCurrentUser();
-  const isFollowingProfile = currentUser.initiatedFollows.some(
-    (initiateFollow) => initiateFollow.targetUserId === userProfile.id,
+  const isFollowingProfile = getIsCurrentUserFollowingProfile(
+    currentUser,
+    userProfile.id,
   );
 
   return (

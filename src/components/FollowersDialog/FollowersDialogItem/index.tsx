@@ -6,7 +6,7 @@ import ButtonFollow from "@/components/ButtonFollow";
 import UserListItem from "@/components/UserListItem";
 import { revalidateUserProfilePage } from "@/constants/revalidate";
 import { useUserInfo } from "@/providers/UserInfoProvider";
-import { UserFollowType } from "@/types/user";
+import { UserFollowType } from "@/types/follow";
 
 type Props = {
   follower: UserFollowType["initiator"] | UserFollowType["targetUser"];

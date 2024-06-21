@@ -1,14 +1,11 @@
-const SectionSkeleton = () => {
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
+
+const ProfileLoading = () => {
   return (
-    <div className="grid w-full grid-cols-3 gap-1">
-      {[...Array(4)].map((_, index) => (
-        <div
-          key={index}
-          className=" relative col-span-1 aspect-square rounded bg-gray-300"
-        />
-      ))}
+    <div className="flex-center h-56 w-full">
+      <LoadingSpinner className="size-11 text-gray-900/80" />
     </div>
   );
 };
 
-export default SectionSkeleton;
+export default ProfileLoading;
