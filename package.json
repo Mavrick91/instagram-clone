@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write .",
-    "lint:fix": "eslint --fix ."
+    "lint:fix": "eslint --fix .",
+    "check": "TS_BUILD_INFO_FILE=/dev/null tsc --noEmit"
   },
   "dependencies": {
     "@graphql-codegen/typescript-graphql-files-modules": "^3.0.0",
@@ -36,7 +37,6 @@
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
     "localforage": "^1.10.0",
-    "lru-cache": "^10.2.2",
     "lucide-react": "^0.395.0",
     "match-sorter": "^6.3.4",
     "moment": "^2.30.1",

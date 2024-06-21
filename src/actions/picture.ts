@@ -1,6 +1,5 @@
 "use server";
 
-import { withCache } from "@/lib/lru";
 import prisma from "@/lib/prisma";
 import {
   PictureLight,
@@ -20,22 +19,16 @@ import { getCurrentUser } from "./user";
 export const getPicturesLight = async (
   userId?: number,
 ): Promise<PictureLight[]> => {
-  const keyGenerator = async () => `picturesLight-${userId || "all"}`;
+  const pictures = await prisma.picture.findMany({
+    where: { userId: userId ? userId : undefined },
+    orderBy: { createdAt: "desc" },
+    select: pictureLightSelect,
+  });
 
-  const fetchFunction = async (): Promise<PictureLight[]> => {
-    const pictures = await prisma.picture.findMany({
-      where: { userId: userId ? userId : undefined },
-      orderBy: { createdAt: "desc" },
-      select: pictureLightSelect,
-    });
-
-    return pictures.map((picture) => ({
-      ...picture,
-      sizes: picture.sizes as Sizes,
-    }));
-  };
-
-  return withCache<PictureLight[]>(keyGenerator, fetchFunction);
+  return pictures.map((picture) => ({
+    ...picture,
+    sizes: picture.sizes as Sizes,
+  }));
 };
 
 const fetchAndCacheIndividualPictureDetails = async (
@@ -100,11 +93,9 @@ export const getFollowedUsersPictures = async (): Promise<
     select: userPictureDetailsSelect,
   });
 
-  const picturesWithDetails = await Promise.all(
+  return await Promise.all(
     pictures.map((picture) =>
       fetchAndCacheIndividualPictureDetails(picture.id, currentUser),
     ),
   );
-
-  return picturesWithDetails;
 };

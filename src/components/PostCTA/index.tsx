@@ -12,7 +12,7 @@ import { likePicture, unlikePicture } from "@/actions/like";
 import { Pluralize } from "@/components/Pluralize";
 import useOptimisticTransition from "@/hooks/useOptimisticTransition";
 import { cn } from "@/lib/utils";
-import { useModalFunctions } from "@/providers/ModalProvider";
+import { useModal } from "@/providers/ModalProvider";
 import { useUserInfo } from "@/providers/UserInfoProvider";
 import { RevalidatePath } from "@/types/global";
 import { UserPictureDetails } from "@/types/picture";
@@ -35,7 +35,7 @@ const PostCTA = ({
   revalidatePath,
 }: Props) => {
   const user = useUserInfo();
-  const { showModal } = useModalFunctions();
+  const { showModal } = useModal();
 
   const [optimisticLikeState, setOptimisticLikeState, setRealLikeState] =
     useOptimisticTransition<LikeState, LikeState>(

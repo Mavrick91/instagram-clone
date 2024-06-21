@@ -1,4 +1,10 @@
+import { PrismaClient } from "@prisma/client";
 import { ReactNode } from "react";
+
+declare global {
+  // eslint-disable-next-line no-var
+  var prisma: PrismaClient | undefined;
+}
 
 export type RevalidatePath = {
   originalPath: string;

@@ -2,12 +2,12 @@
 
 import { SquarePen } from "lucide-react";
 
-import { useModalFunctions } from "@/providers/ModalProvider";
+import { useModal } from "@/providers/ModalProvider";
 import { useUserInfo } from "@/providers/UserInfoProvider";
 
 const SidebarConversationHeader = () => {
   const user = useUserInfo();
-  const { showModal } = useModalFunctions();
+  const { showModal } = useModal();
 
   return (
     <div className="flex items-center justify-between px-6 pb-3">

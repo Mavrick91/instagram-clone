@@ -4,14 +4,14 @@ import { redirect } from "next/navigation";
 
 import { getUserCollectionDetails } from "@/actions/collection";
 import ThumbnailGrid from "@/components/ThumbnailGrid";
-import { UserDefaultCollectionPictures } from "@/types/collection";
+import { LightCollectionByUserId } from "@/types/collection";
 
 import CollectionAction from "../CollectionAction";
 
 type UserProfileCollectionDetailsProps = {
   collectionName: string;
   username: string;
-  defaultCollection: UserDefaultCollectionPictures;
+  defaultCollection: LightCollectionByUserId;
 };
 
 const UserProfileCollectionDetails = async ({

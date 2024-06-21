@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
-import { PictureFragmentFragment } from "@/__generated__/graphql";
+import { PictureLight } from "@/types/picture";
 
 type Props = {
-  picture: PictureFragmentFragment;
+  picture: PictureLight;
 };
 
 const ImageWithPlaceholder = ({ picture }: Props) => {
@@ -22,7 +22,7 @@ const ImageWithPlaceholder = ({ picture }: Props) => {
     };
   }, [picture.sizes.original]);
 
-  return <img src={currentImageUrl} alt={picture.altText} />;
+  return <img src={currentImageUrl} alt={picture.altText || ""} />;
 };
 
 export default ImageWithPlaceholder;

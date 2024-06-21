@@ -11,7 +11,7 @@ const UsernameSearch = () => {
   const [debouncedInputValue, setDebouncedInputValue] = useState("");
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const { data, error, isFetching } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ["usersByUsername", debouncedInputValue],
     queryFn: async () => {
       return getUserByUsername(debouncedInputValue);
@@ -31,10 +31,6 @@ const UsernameSearch = () => {
       }
     };
   }, [inputValue]);
-
-  if (error) {
-    return <div>{error}</div>;
-  }
 
   return (
     <>

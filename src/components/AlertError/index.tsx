@@ -1,4 +1,4 @@
-import { Alert, AlertDescription } from "@/components/ui/alert.tsx";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 type Props = {
   error: string;

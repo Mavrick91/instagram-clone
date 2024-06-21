@@ -1,5 +1,7 @@
 import { WebSocketServer } from "ws";
 
+import { ThreadMessage } from "@/types/thread";
+
 const wss = new WebSocketServer({ port: 8081 }); // Change to 8081 or another available port
 
 wss.on("connection", function connection(ws) {
@@ -8,10 +10,13 @@ wss.on("connection", function connection(ws) {
   });
 });
 
-export const broadcastMessage = (message) => {
+export const broadcastMessage = (event: {
+  type: "messageAdded";
+  message: ThreadMessage;
+}) => {
   wss.clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
-      client.send(JSON.stringify(message));
+      client.send(JSON.stringify(event));
     }
   });
 };

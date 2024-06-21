@@ -11,7 +11,6 @@ import { z } from "zod";
 import { login } from "@/actions/user";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { LRUCache } from "@/lib/lru";
 
 import LoginForm from "./_components/LoginForm";
 import LoginMode from "./_components/LoginMode";
@@ -38,7 +37,6 @@ export default function Login() {
     mutationKey: ["login"],
     mutationFn: (data: LoginFormInputs) => login(data.email, data.password),
     onSuccess: () => {
-      LRUCache.clear();
       router.replace("/");
     },
   });

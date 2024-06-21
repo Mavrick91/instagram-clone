@@ -2,10 +2,10 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
-import { ReactNode, Suspense, useEffect } from "react";
+import { ReactNode, Suspense, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 
-import useOutsideClick from "@/hooks/useOutsideClick";
+import useClickOutside from "@/hooks/useOnClickOutside";
 
 import LoadingSpinner from "../ui/LoadingSpinner";
 
@@ -45,7 +45,9 @@ const backdropVariants = {
 };
 
 const Modal = ({ isOpen, onClose, children }: ModalProps) => {
-  const modalRef = useOutsideClick(onClose);
+  const modalRef = useRef(null);
+
+  useClickOutside(modalRef, onClose);
 
   useEffect(() => {
     if (isOpen) {

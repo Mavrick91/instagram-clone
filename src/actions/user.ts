@@ -7,7 +7,6 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { invalidateCache } from "@/lib/lru";
 import prisma from "@/lib/prisma";
 import { RevalidatePath } from "@/types/global";
 import {
@@ -138,9 +137,6 @@ export const updateUserProfile = async (
     },
     data: updateUserInput,
   });
-
-  const keyGenerator = async () => `userProfile-${username}`;
-  await invalidateCache(keyGenerator);
 
   options && revalidatePath(options.originalPath, options?.type);
 };

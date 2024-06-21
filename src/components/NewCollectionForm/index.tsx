@@ -8,7 +8,7 @@ import { createCollectionAndAddPictures } from "@/actions/collection";
 import { UserDefaultCollectionPictures } from "@/types/collection";
 import { RevalidatePath } from "@/types/global";
 
-import { AddPicturesStep } from "../AddPicturesStep";
+import AddPicturesStep from "../AddPicturesStep";
 import { CreateCollectionStep } from "../CreateCollectionStep";
 
 const formSchema = z.object({
@@ -16,7 +16,7 @@ const formSchema = z.object({
   selectedPictures: z.array(z.number()).default([]),
 });
 
-export type FormData = z.infer<typeof formSchema>;
+export type FormDataNewCollection = z.infer<typeof formSchema>;
 
 const revalidatePath: RevalidatePath = {
   originalPath: "/(auth)/[username]/(profile)/saved",
@@ -35,7 +35,7 @@ const NewCollectionForm = ({
   const [selectedPictures, setSelectedPictures] = useState<number[]>([]);
   const [currentStep, setCurrentStep] = useState(0);
 
-  const methods = useForm<FormData>({
+  const methods = useForm<FormDataNewCollection>({
     resolver: zodResolver(formSchema),
   });
 
@@ -57,7 +57,7 @@ const NewCollectionForm = ({
     methods.setValue("selectedPictures", newSelectedPictures);
   };
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: FormDataNewCollection) => {
     try {
       await createCollectionAndAddPictures(
         data.collectionName,

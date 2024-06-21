@@ -1,10 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useModalFunctions } from "@/providers/ModalProvider";
+import { useModal } from "@/providers/ModalProvider";
 
 const OwnProfile = () => {
-  const { showModal } = useModalFunctions();
+  const { showModal } = useModal();
 
   return (
     <div className="flex">

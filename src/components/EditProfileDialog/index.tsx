@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { revalidateUserProfilePage } from "@/constants/revalidate";
 import { cn } from "@/lib/utils";
-import { useModalFunctions } from "@/providers/ModalProvider";
+import { useModal } from "@/providers/ModalProvider";
 import { useUserInfo } from "@/providers/UserInfoProvider";
 
 const ProfileSchema = z.object({
@@ -34,7 +34,7 @@ const ProfileSchema = z.object({
 type FormData = z.infer<typeof ProfileSchema>;
 
 export default function EditProfileDialog() {
-  const { closeModal } = useModalFunctions();
+  const { closeModal } = useModal();
 
   const user = useUserInfo();
   const {

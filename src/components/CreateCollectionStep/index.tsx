@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Separator from "@/components/ui/separator";
 
-import { FormData } from "../NewCollectionForm";
+import { FormDataNewCollection } from "../NewCollectionForm";
 
 type Props = {
   onClickNext: () => void;
@@ -16,7 +16,7 @@ export const CreateCollectionStep = ({ onClickNext, labelSubmit }: Props) => {
   const {
     register,
     formState: { errors },
-  } = useFormContext<FormData>();
+  } = useFormContext<FormDataNewCollection>();
 
   return (
     <div className="w-screen max-w-96 rounded-lg">

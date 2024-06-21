@@ -1,7 +1,7 @@
 "use client";
 
 import { Pluralize } from "@/components/Pluralize";
-import { useModalFunctions } from "@/providers/ModalProvider";
+import { useModal } from "@/providers/ModalProvider";
 import { UserPictureDetails } from "@/types/picture";
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
 };
 
 export default function PostComments({ commentCount, picture }: Props) {
-  const { showModal } = useModalFunctions();
+  const { showModal } = useModal();
 
   if (commentCount === 0) {
     return null;

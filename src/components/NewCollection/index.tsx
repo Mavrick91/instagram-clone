@@ -5,8 +5,8 @@ import { useCallback, useState } from "react";
 import Modal from "@/components/Modal";
 import { UserDefaultCollectionPictures } from "@/types/collection";
 
-import { Button } from "../../../../../../../components/ui/button";
-import NewCollectionForm from "./NewCollectionForm";
+import NewCollectionForm from "../NewCollectionForm";
+import { Button } from "../ui/button";
 
 type Props = {
   defaultCollection: UserDefaultCollectionPictures;

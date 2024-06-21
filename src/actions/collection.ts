@@ -6,15 +6,16 @@ import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/actions/user";
 import prisma from "@/lib/prisma";
 import {
-  CollectionByUserId,
-  collectionByUserIdSelect,
+  LightCollectionByUserId,
+  lightCollectionByUserIdSelect,
+  UserCollectionDetails,
   userCollectionDetailsSelect,
-  UserDefaultCollectionPictures,
-  userDefaultCollectionPicturesSelect,
 } from "@/types/collection";
 import { RevalidatePath } from "@/types/global";
-
-export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+import {
+  transformCollectionPictures,
+  transformLightPicture,
+} from "@/utils/picture";
 
 export const getIsPictureInUserCollection = async (
   pictureId: number,
@@ -152,50 +153,67 @@ export const addPictureToDefaultCollection = async (
 
 export const getCollectionsByUserId = async (
   userId: number,
-): Promise<CollectionByUserId[]> => {
-  return prisma.collection.findMany({
+): Promise<LightCollectionByUserId[]> => {
+  const collections = await prisma.collection.findMany({
     where: {
       userId: userId,
     },
-    select: collectionByUserIdSelect,
+    select: lightCollectionByUserIdSelect,
   });
+
+  return collections.map((collection) => ({
+    ...collection,
+    pictures: transformCollectionPictures(collection.pictures),
+  }));
 };
 
 export const getDefaultCollectionByUsername = async (
   username: string,
-): Promise<UserDefaultCollectionPictures> => {
+): Promise<LightCollectionByUserId> => {
   const user = await prisma.user.findFirstOrThrow({
     where: {
       username: username,
     },
   });
 
-  return prisma.collection.findFirstOrThrow({
+  const collection = await prisma.collection.findFirstOrThrow({
     where: {
       userId: user.id,
       isDefault: true,
     },
-    select: userDefaultCollectionPicturesSelect,
+    select: lightCollectionByUserIdSelect,
   });
+
+  return {
+    ...collection,
+    pictures: transformCollectionPictures(collection.pictures),
+  };
 };
 
 export const getUserCollectionDetails = async (
   username: string,
   collectionName: string,
-): Promise<Collection | null> => {
+): Promise<UserCollectionDetails> => {
   const user = await prisma.user.findFirstOrThrow({
     where: {
       username: username,
     },
   });
 
-  return prisma.collection.findFirst({
+  const collection = await prisma.collection.findFirstOrThrow({
     where: {
       userId: user.id,
       nameId: collectionName,
     },
     select: userCollectionDetailsSelect,
   });
+
+  return {
+    ...collection,
+    pictures: collection.pictures.map((p) => ({
+      picture: transformLightPicture(p.picture),
+    })),
+  };
 };
 
 export const createCollectionAndAddPictures = async (

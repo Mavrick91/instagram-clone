@@ -5,7 +5,7 @@ import * as user from "@/types/user";
 import Modal from "../Modal";
 import FollowersDialogItem from "./FollowersDialogItem";
 
-type FollowersDialogProps = {
+export type FollowersDialogProps = {
   followers: user.FollowerType[];
   isFollowers?: boolean;
 };

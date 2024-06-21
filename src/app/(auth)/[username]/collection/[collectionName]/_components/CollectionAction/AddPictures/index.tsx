@@ -5,10 +5,10 @@ import { toast } from "react-toastify";
 import { z } from "zod";
 
 import { addPictureToCollectionById } from "@/actions/collection";
-import { AddPicturesStep } from "@/app/(auth)/[username]/(profile)/saved/_components/NewCollection/AddPicturesStep";
+import AddPicturesStep from "@/components/AddPicturesStep";
 import { Dialog } from "@/components/ui/dialog";
 import { revalidateCollectionPage } from "@/constants/revalidate";
-import { UserDefaultCollectionPictures } from "@/types/collection";
+import { LightCollectionByUserId } from "@/types/collection";
 
 const formSchema = z.object({
   selectedPictures: z.array(z.number()),
@@ -16,21 +16,21 @@ const formSchema = z.object({
 
 export type FormData = z.infer<typeof formSchema>;
 
-type Props = {
+type AddPicturesProps = {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   setCurrentStep?: (step: number) => void;
   collectionId: number;
-  defaultCollection: UserDefaultCollectionPictures;
+  defaultCollection: LightCollectionByUserId;
 };
 
-export const AddPictures: React.FC<Props> = ({
+export const AddPictures = ({
   isOpen,
   setIsOpen,
   setCurrentStep,
   collectionId,
   defaultCollection,
-}) => {
+}: AddPicturesProps) => {
   const [selectedPictures, setSelectedPictures] = useState<number[]>([]);
   const methods = useForm<FormData>({
     resolver: zodResolver(formSchema),

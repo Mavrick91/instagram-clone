@@ -8,7 +8,7 @@ import { deleteCollection } from "@/actions/collection";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import Separator from "@/components/ui/separator";
 import { useUserInfo } from "@/providers/UserInfoProvider";
-import { UserDefaultCollectionPictures } from "@/types/collection";
+import { LightCollectionByUserId } from "@/types/collection";
 import { RevalidatePath } from "@/types/global";
 
 import { AddPictures } from "./AddPictures";
@@ -24,7 +24,7 @@ type CollectionActionProps = {
   children: ReactNode;
   collectionId: number;
   collectionName: string;
-  defaultCollection: UserDefaultCollectionPictures;
+  defaultCollection: LightCollectionByUserId;
 };
 
 const revalidatePath: RevalidatePath = {

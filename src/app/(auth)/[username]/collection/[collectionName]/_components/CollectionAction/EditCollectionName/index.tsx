@@ -51,8 +51,6 @@ export const EditCollectionName = ({
     <FormProvider {...methods}>
       <CreateNewCollectionName
         onClickNext={methods.handleSubmit(onSubmitEditName)}
-        open={isOpen}
-        setOpen={setIsOpen}
         labelSubmit="Done"
       />
     </FormProvider>

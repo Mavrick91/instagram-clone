@@ -71,8 +71,11 @@ export type UserPictureDetails = {
   isSaved: boolean;
 } & UserPictureDetailsSelect & { sizes: Sizes };
 
-export type PictureLight = Prisma.PictureGetPayload<{
+export type PictureLightWithJsonSizes = Prisma.PictureGetPayload<{
   select: typeof pictureLightSelect;
-}> & {
+}>;
+
+// Final type for pictures with Sizes
+export type PictureLight = Omit<PictureLightWithJsonSizes, "sizes"> & {
   sizes: Sizes;
 };

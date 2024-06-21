@@ -4,7 +4,7 @@ import { MessageCircle } from "lucide-react";
 import { memo } from "react";
 
 import ImageClient from "@/components/ImageClient";
-import { useModalFunctions } from "@/providers/ModalProvider";
+import { useModal } from "@/providers/ModalProvider";
 import { PictureLight } from "@/types/picture";
 
 type Props = {
@@ -12,7 +12,7 @@ type Props = {
 };
 
 function ThumbnailGridItem({ picture }: Props) {
-  const { showModal } = useModalFunctions();
+  const { showModal } = useModal();
 
   return (
     <>

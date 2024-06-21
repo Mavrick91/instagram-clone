@@ -1,8 +1,8 @@
 import { Prisma } from "@prisma/client";
 
-import { pictureLightSelect, Sizes } from "./picture";
+import { PictureLight, pictureLightSelect } from "./picture";
 
-export const collectionByUserIdSelect = {
+export const lightCollectionByUserIdSelect = {
   nameId: true,
   name: true,
   isDefault: true,
@@ -10,31 +10,23 @@ export const collectionByUserIdSelect = {
     select: {
       pictureId: true,
       picture: {
-        select: {
-          id: true,
-          sizes: true,
-        },
+        select: pictureLightSelect,
       },
     },
   },
 } as const;
 
-type CollectionByUserIdBase = Prisma.CollectionGetPayload<{
-  select: typeof collectionByUserIdSelect;
-}>;
-
-// Extend the base type with the correct type for sizes
-export type CollectionByUserId = Omit<CollectionByUserIdBase, "pictures"> & {
+export type LightCollectionByUserId = Omit<
+  Prisma.CollectionGetPayload<{
+    select: typeof lightCollectionByUserIdSelect;
+  }>,
+  "pictures"
+> & {
   pictures: {
-    picture: Omit<
-      CollectionByUserIdBase["pictures"][number]["picture"],
-      "sizes"
-    > & {
-      sizes: Sizes;
-    };
+    pictureId: number;
+    picture: PictureLight;
   }[];
 };
-
 export const userCollectionDetailsSelect = {
   id: true,
   nameId: true,
@@ -49,37 +41,13 @@ export const userCollectionDetailsSelect = {
   },
 } as const;
 
-export type UserCollectionDetailsSelect = Prisma.CollectionGetPayload<{
-  select: typeof userCollectionDetailsSelect;
-}>;
-
-export const userDefaultCollectionPicturesSelect = {
-  pictures: {
-    include: {
-      picture: {
-        select: {
-          id: true,
-          sizes: true,
-        },
-      },
-    },
-  },
-};
-
-type UserDefaultCollectionPicturesBase = Prisma.CollectionGetPayload<{
-  select: typeof collectionByUserIdSelect;
-}>;
-
-export type UserDefaultCollectionPictures = Omit<
-  UserDefaultCollectionPicturesBase,
+export type UserCollectionDetails = Omit<
+  Prisma.CollectionGetPayload<{
+    select: typeof userCollectionDetailsSelect;
+  }>,
   "pictures"
 > & {
   pictures: {
-    picture: Omit<
-      CollectionByUserIdBase["pictures"][number]["picture"],
-      "sizes"
-    > & {
-      sizes: Sizes;
-    };
+    picture: PictureLight;
   }[];
 };

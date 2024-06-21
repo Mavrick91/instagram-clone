@@ -6,26 +6,26 @@ import Modal from "@/components/Modal";
 import { Button } from "@/components/ui/button";
 import Separator from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { UserDefaultCollectionPictures } from "@/types/collection";
+import { LightCollectionByUserId } from "@/types/collection";
 
-import { FormData } from "../NewCollectionForm";
+import { FormDataNewCollection } from "../NewCollectionForm";
 
-type Props = {
-  defaultCollection: UserDefaultCollectionPictures;
+type AddPicturesStepProps = {
+  defaultCollection: LightCollectionByUserId;
   selectedPictures: number[];
   handlePictureClick: (pic: number) => void;
   setCurrentStep?: (step: number) => void;
-  onSubmit: (data: FormData) => void;
+  onSubmit: (data: FormDataNewCollection) => void;
 };
 
-export const AddPicturesStep = ({
+const AddPicturesStep = ({
   defaultCollection,
   selectedPictures,
   handlePictureClick,
   setCurrentStep,
   onSubmit,
-}: Props) => {
-  const { handleSubmit } = useFormContext<FormData>();
+}: AddPicturesStepProps) => {
+  const { handleSubmit } = useFormContext<FormDataNewCollection>();
 
   return (
     <div className="flex min-h-[691px] w-screen max-w-[400px] flex-col gap-0 overflow-hidden rounded-lg p-0">
@@ -81,3 +81,5 @@ export const AddPicturesStep = ({
     </div>
   );
 };
+
+export default AddPicturesStep;

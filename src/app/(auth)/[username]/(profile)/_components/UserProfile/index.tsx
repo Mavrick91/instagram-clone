@@ -5,7 +5,7 @@ import Image from "next/image";
 import ButtonFollow from "@/components/ButtonFollow";
 import { Pluralize } from "@/components/Pluralize";
 import { revalidateUserProfilePage } from "@/constants/revalidate";
-import { useModalFunctions } from "@/providers/ModalProvider";
+import { useModal } from "@/providers/ModalProvider";
 import { UserProfileType } from "@/types/user";
 
 import OwnProfile from "../OwnProfile";
@@ -21,7 +21,7 @@ const UserProfile = ({
   currentUserId,
   isFollowingCurrentProfile,
 }: UserProfileProps) => {
-  const { showModal } = useModalFunctions();
+  const { showModal } = useModal();
 
   return (
     <>

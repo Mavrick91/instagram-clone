@@ -1,4 +1,4 @@
-import { CreateCollectionStep } from "../../app/(auth)/[username]/(profile)/saved/_components/NewCollection/CreateCollectionStep";
+import { CreateCollectionStep } from "../CreateCollectionStep";
 
 type Props = {
   onClickNext: () => void;

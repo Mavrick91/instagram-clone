@@ -13,7 +13,7 @@ import ImageClient from "../ImageClient";
 import Separator from "../ui/separator";
 import UserAvatar from "../UserAvatar";
 
-type PostDetailsDialogProps = {
+export type PostDetailsDialogProps = {
   pictureId: number;
 };
 

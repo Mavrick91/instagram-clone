@@ -2,8 +2,7 @@ import Link from "next/link";
 
 import { getCollectionsByUserId } from "@/actions/collection";
 import ImageClient from "@/components/ImageClient";
-
-import NewCollection from "../NewCollection";
+import NewCollection from "@/components/NewCollection";
 
 type UserProfileCollectionsProps = {
   userProfileId: number;

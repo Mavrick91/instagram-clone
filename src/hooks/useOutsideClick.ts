@@ -24,9 +24,9 @@ const useClickOutside = (): UseClickOutside => {
 
   const handleClickOutside = useCallback((event: MouseEvent) => {
     if (
-      !!dropdownRef.current &&
+      dropdownRef.current &&
       !dropdownRef.current.contains(event.target as Node) &&
-      !!buttonRef.current &&
+      buttonRef.current &&
       !buttonRef.current.contains(event.target as Node)
     ) {
       setIsDropdownOpen(false);
@@ -34,15 +34,11 @@ const useClickOutside = (): UseClickOutside => {
   }, []);
 
   useEffect(() => {
-    if (isDropdownOpen) {
-      document.addEventListener("click", handleClickOutside);
-    } else {
-      document.removeEventListener("click", handleClickOutside);
-    }
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("click", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isDropdownOpen, handleClickOutside]);
+  }, [handleClickOutside]);
 
   return {
     isDropdownOpen,

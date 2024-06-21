@@ -7,12 +7,12 @@ import { getUserByUsername } from "@/actions/user";
 import { Button } from "@/components/ui/button";
 import Separator from "@/components/ui/separator";
 import UserListItem from "@/components/UserListItem";
-import { useModalFunctions } from "@/providers/ModalProvider";
+import { useModal } from "@/providers/ModalProvider";
 import { useUserInfo } from "@/providers/UserInfoProvider";
 
 export default function CreateConversationDialog() {
   const user = useUserInfo();
-  const { closeModal } = useModalFunctions();
+  const { closeModal } = useModal();
 
   const [inputValue, setInputValue] = useState("");
   const [debouncedInputValue, setDebouncedInputValue] = useState("");
