@@ -5,7 +5,6 @@ import { useQuery } from "@tanstack/react-query";
 import { getPictureDetails } from "@/actions/picture";
 import PostCTA from "@/components/PostCTA";
 import Separator from "@/components/ui/separator";
-import { revalidateAuth } from "@/constants/revalidate";
 import getQueryClient from "@/lib/queryClient";
 import { UserPictureDetails } from "@/types/picture";
 
@@ -53,10 +52,7 @@ const PostItem = ({ pictureId }: Props) => {
             commentCount={picture._count.comments}
             picture={picture}
           />
-          <PostAddComment
-            pictureId={picture.id}
-            revalidatePath={revalidateAuth}
-          />
+          <PostAddComment pictureId={picture.id} />
         </>
       )}
       <Separator className="mt-4" />

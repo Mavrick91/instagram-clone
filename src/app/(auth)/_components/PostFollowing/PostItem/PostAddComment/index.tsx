@@ -5,9 +5,8 @@ import { useForm } from "react-hook-form";
 import TextareaAutosize from "react-textarea-autosize";
 import { z } from "zod";
 
-import { createComment } from "@/actions/comment";
 import { Button } from "@/components/ui/button";
-import { RevalidatePath } from "@/types/global";
+import useUpdateComment from "@/hooks/useUpdateComment";
 
 const schema = z.object({
   comment: z.string().min(1, { message: "Comment is required" }),
@@ -17,19 +16,18 @@ type Inputs = z.infer<typeof schema>;
 
 type Props = {
   pictureId: number;
-  revalidatePath: RevalidatePath;
 };
 
-export default function PostAddComment({ pictureId, revalidatePath }: Props) {
+export default function PostAddComment({ pictureId }: Props) {
   const { reset, register, handleSubmit, watch } = useForm<Inputs>({
     resolver: zodResolver(schema),
   });
   const watchComment = watch("comment");
+  const { handleCreateComment } = useUpdateComment(pictureId);
 
   const onSubmit = async (data: Inputs) => {
-    await createComment(pictureId, data.comment, revalidatePath);
-
     reset();
+    await handleCreateComment(data.comment);
   };
 
   return (
@@ -45,7 +43,7 @@ export default function PostAddComment({ pictureId, revalidatePath }: Props) {
       />
 
       {watchComment && (
-        <Button variant="ghost" type="submit">
+        <Button variant="ghost" type="submit" className="h-auto py-0">
           Post
         </Button>
       )}
