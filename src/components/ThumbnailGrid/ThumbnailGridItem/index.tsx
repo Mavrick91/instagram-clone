@@ -15,7 +15,6 @@ type Props = {
 };
 
 const ThumbnailGridItem = ({ serverPicture }: Props) => {
-  console.log("😀😀 serverPicture ~ ", serverPicture);
   const { showModal } = useModal();
 
   const { data: picture, isLoading } = useQuery<UserPictureDetails>({
@@ -25,7 +24,6 @@ const ThumbnailGridItem = ({ serverPicture }: Props) => {
     },
     initialData: serverPicture,
   });
-  console.log("😀😀 isLoading ~ ", isLoading);
 
   if (!picture) return null;
 
