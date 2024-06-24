@@ -13,7 +13,7 @@ type Props = {
   subTextSize: "sm" | "xs";
 };
 
-function UserListItem({
+const UserListItem = ({
   avatar,
   firstName,
   lastName,
@@ -21,7 +21,7 @@ function UserListItem({
   subTextSize,
   username,
   size = "size-11",
-}: Props) {
+}: Props) => {
   return (
     <div className="flex w-full items-center overflow-hidden">
       <UserAvatar avatar={avatar} size={size} username={username} />
@@ -45,6 +45,6 @@ function UserListItem({
       </div>
     </div>
   );
-}
+};
 
 export default UserListItem;

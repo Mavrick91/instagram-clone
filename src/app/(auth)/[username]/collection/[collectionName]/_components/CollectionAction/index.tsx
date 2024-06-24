@@ -61,8 +61,8 @@ const CollectionAction = ({
     }
   };
 
-  const actions = useMemo(
-    () => [
+  const actions = useMemo(() => {
+    return [
       {
         type: "delete-collection",
         label: "Delete collection",
@@ -71,9 +71,8 @@ const CollectionAction = ({
       { type: "add", label: "Add from saved" },
       { type: "edit", label: "Edit collection" },
       { type: "cancel", label: "Cancel" },
-    ],
-    [],
-  );
+    ];
+  }, []);
 
   return (
     <>
@@ -82,20 +81,24 @@ const CollectionAction = ({
           <button>{children}</button>
         </DialogTrigger>
         <DialogContent className="max-w-sm gap-0 rounded-lg p-0">
-          {actions.map((action, index) => (
-            <Fragment key={index}>
-              <button
-                type="button"
-                className={`py-3.5 text-center text-sm ${action.className || ""}`}
-                onClick={() => handleAction(action.type)}
-              >
-                <div className="flex items-center justify-center">
-                  {action.label}
-                </div>
-              </button>
-              <Separator className="last:hidden" />
-            </Fragment>
-          ))}
+          {actions.map((action, index) => {
+            return (
+              <Fragment key={index}>
+                <button
+                  type="button"
+                  className={`py-3.5 text-center text-sm ${action.className || ""}`}
+                  onClick={() => {
+                    return handleAction(action.type);
+                  }}
+                >
+                  <div className="flex items-center justify-center">
+                    {action.label}
+                  </div>
+                </button>
+                <Separator className="last:hidden" />
+              </Fragment>
+            );
+          })}
         </DialogContent>
       </Dialog>
 

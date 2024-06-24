@@ -10,7 +10,7 @@ type Props = {
   onClick?: () => void;
 };
 
-export default function UserAvatar({ avatar, username, size, onClick }: Props) {
+const UserAvatar = ({ avatar, username, size, onClick }: Props) => {
   const avatarImage = avatar ?? "/placeholder-avatar.png";
   const isLink = !!username;
   const isButton = !!onClick;
@@ -18,15 +18,17 @@ export default function UserAvatar({ avatar, username, size, onClick }: Props) {
   const baseClassName = `${size} after:size-${size} after:bg-secondary-background shrink-0 flex after:border after:border-border-avatar after:absolute after:inset-0 after:z-10 relative after:rounded-full`;
   const imageClassName = "w-full h-full rounded-full shrink-0 z-20 relative";
 
-  const renderAvatar = () => (
-    <Image
-      src={avatarImage}
-      alt={username ? `${username} profile picture` : "User posts picture"}
-      className={imageClassName}
-      width={24}
-      height={24}
-    />
-  );
+  const renderAvatar = () => {
+    return (
+      <Image
+        src={avatarImage}
+        alt={username ? `${username} profile picture` : "User posts picture"}
+        className={imageClassName}
+        width={24}
+        height={24}
+      />
+    );
+  };
 
   if (isLink) {
     return (
@@ -45,4 +47,6 @@ export default function UserAvatar({ avatar, username, size, onClick }: Props) {
   }
 
   return <div className={baseClassName}>{renderAvatar()}</div>;
-}
+};
+
+export default UserAvatar;

@@ -4,6 +4,7 @@ import { AnimatePresence } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { useModal } from "@/providers/ModalProvider";
 import { useSideNav } from "@/providers/SideNavProvider";
 import { useUserInfo } from "@/providers/UserInfoProvider";
 
@@ -17,7 +18,7 @@ import SideNavLogo from "./SideNavLogo";
 import SideNavOverlay from "./SideNavOverlay";
 import UsernameSearch from "./UsernameSearch";
 
-export default function SideNav() {
+const SideNav = () => {
   const user = useUserInfo();
   const {
     isSearchVisible,
@@ -28,6 +29,7 @@ export default function SideNav() {
     toggleNewPost,
     displaySmallNav,
   } = useSideNav();
+  const { showModal } = useModal();
 
   // const { notifications, fetchNextPage, hasNextPage, setAllNotifications } =
   //   useInfiniteNotifications();
@@ -40,7 +42,12 @@ export default function SideNav() {
   const navigationItems = getNavigationItems(
     user,
     toggleSearch,
-    toggleNewPost,
+    () => {
+      return showModal("UploadPostDialog", {
+        buttonSubmitText: "Share",
+        title: "Create new post",
+      });
+    },
     toggleNotification,
   );
 
@@ -66,12 +73,10 @@ export default function SideNav() {
 
   const handleToggleNotification = () => {
     // const newNotifications = notificationsCount.flatMap((item) => item.count);
-
     // if (newNotifications?.length)
-      // markNotifAsRead({
-      //   variables: { notificationIds: newNotifications },
-      // });
-
+    // markNotifAsRead({
+    //   variables: { notificationIds: newNotifications },
+    // });
     // toggleNotification();
   };
 
@@ -91,16 +96,18 @@ export default function SideNav() {
 
           <div className="flex h-full grow flex-col justify-between">
             <ul className="flex flex-col">
-              {navigationItems.map((item) => (
-                <SideNavItem
-                  key={item.name}
-                  item={item}
-                  isSmall={displaySmallNav}
-                  isSearchVisible={isSearchVisible}
-                  isNotificationVisible={isNotificationVisible}
-                  notificationsCount={notificationsCount}
-                />
-              ))}
+              {navigationItems.map((item) => {
+                return (
+                  <SideNavItem
+                    key={item.name}
+                    item={item}
+                    isSmall={displaySmallNav}
+                    isSearchVisible={isSearchVisible}
+                    isNotificationVisible={isNotificationVisible}
+                    notificationsCount={notificationsCount}
+                  />
+                );
+              })}
             </ul>
 
             <DropdownMore displaySmallNav={displaySmallNav} />
@@ -120,7 +127,9 @@ export default function SideNav() {
               notifications={[]}
               hasNextPage={false}
               // fetchNextPage={fetchNextPage}
-              fetchNextPage={() => null}
+              fetchNextPage={() => {
+                return null;
+              }}
             />
           </SideNavOverlay>
         )}
@@ -136,4 +145,6 @@ export default function SideNav() {
       )}
     </header>
   );
-}
+};
+
+export default SideNav;

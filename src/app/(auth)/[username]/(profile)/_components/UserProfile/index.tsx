@@ -1,27 +1,38 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 
+import { getUserProfile } from "@/actions/user";
 import ButtonFollow from "@/components/ButtonFollow";
 import { Pluralize } from "@/components/Pluralize";
-import { revalidateUserProfilePage } from "@/constants/revalidate";
 import { useModal } from "@/providers/ModalProvider";
+import { useUserInfo } from "@/providers/UserInfoProvider";
 import { UserProfileType } from "@/types/user";
+import { getIsCurrentUserFollowingProfile } from "@/utils/user";
 
 import OwnProfile from "../OwnProfile";
 
 type UserProfileProps = {
-  userProfile: UserProfileType;
-  currentUserId: number;
-  isFollowingCurrentProfile: boolean;
+  initialUserProfile: UserProfileType;
 };
 
-const UserProfile = ({
-  userProfile,
-  currentUserId,
-  isFollowingCurrentProfile,
-}: UserProfileProps) => {
+const UserProfile = ({ initialUserProfile }: UserProfileProps) => {
   const { showModal } = useModal();
+  const currentUser = useUserInfo();
+
+  const { data: userProfile } = useQuery<UserProfileType>({
+    queryKey: ["user", initialUserProfile.username],
+    queryFn: () => {
+      return getUserProfile(initialUserProfile.username);
+    },
+    initialData: initialUserProfile,
+  });
+
+  const isCurrentUserFollowingProfile = getIsCurrentUserFollowingProfile(
+    currentUser,
+    userProfile.id,
+  );
 
   return (
     <>
@@ -46,17 +57,17 @@ const UserProfile = ({
                 <span>{userProfile.username}</span>
               </h1>
               <div className="ml-5 flex items-center space-x-2">
-                {currentUserId === userProfile.id ? (
+                {currentUser.id === userProfile.id ? (
                   <OwnProfile />
                 ) : (
                   <ButtonFollow
-                    isFollowing={isFollowingCurrentProfile}
-                    targetUserId={userProfile.id}
+                    isFollowing={isCurrentUserFollowingProfile}
+                    userProfileUsername={userProfile.username}
+                    userProfileId={userProfile.id}
                     buttonProps={{
-                      variant: isFollowingCurrentProfile ? "gray" : "blue",
+                      variant: isCurrentUserFollowingProfile ? "gray" : "blue",
                       size: "xs",
                     }}
-                    revalidateOptions={revalidateUserProfilePage}
                   />
                 )}
               </div>
@@ -71,12 +82,12 @@ const UserProfile = ({
               </span>
               <button
                 type="button"
-                onClick={() =>
-                  showModal("Followers", {
+                onClick={() => {
+                  return showModal("Followers", {
                     isFollowers: true,
                     followers: userProfile.receivedFollows,
-                  })
-                }
+                  });
+                }}
               >
                 <Pluralize
                   count={userProfile._count.receivedFollows}
@@ -86,11 +97,11 @@ const UserProfile = ({
               </button>
               <button
                 type="button"
-                onClick={() =>
-                  showModal("Followers", {
+                onClick={() => {
+                  return showModal("Followers", {
                     followers: userProfile.initiatedFollows,
-                  })
-                }
+                  });
+                }}
               >
                 <Pluralize
                   count={userProfile._count.initiatedFollows}

@@ -111,8 +111,8 @@ export const getUserByUsername = async (username: string): Promise<User[]> => {
 
 export const getUserProfile = async (
   username: string,
-): Promise<UserProfileType | null> => {
-  return prisma.user.findFirst({
+): Promise<UserProfileType> => {
+  return prisma.user.findFirstOrThrow({
     where: {
       username,
     },

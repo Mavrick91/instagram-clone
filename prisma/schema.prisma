@@ -126,20 +126,24 @@ model Picture {
   userId                 Int
   createdAt              DateTime              @default(now())
   updatedAt              DateTime              @updatedAt
-  comments               Comment[]
-  likes                  Like[]
+  comments               Comment[]             @relation("PictureComments")
+  likes                  Like[]                @relation("PictureLikes")
   collection             PictureOnCollection[]
   sizes                  Json
   notifications          Notification[]
+
+  @@index([userId])
 }
 
 model PictureOnCollection {
   pictureId    Int
-  picture      Picture    @relation(fields: [pictureId], references: [id])
+  picture      Picture    @relation(fields: [pictureId], references: [id], onDelete: Cascade)
   collectionId Int
-  collection   Collection @relation(fields: [collectionId], references: [id])
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
 
   @@id([pictureId, collectionId])
+  @@index([pictureId])
+  @@index([collectionId])
 }
 
 model Comment {
@@ -147,7 +151,7 @@ model Comment {
   content       String
   user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        Int
-  picture       Picture        @relation(fields: [pictureId], references: [id], onDelete: Cascade)
+  picture       Picture        @relation("PictureComments", fields: [pictureId], references: [id], onDelete: Cascade)
   pictureId     Int
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
@@ -159,6 +163,6 @@ model Like {
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
-  picture   Picture  @relation(fields: [pictureId], references: [id], onDelete: Cascade)
+  picture   Picture  @relation("PictureLikes", fields: [pictureId], references: [id], onDelete: Cascade)
   pictureId Int
 }

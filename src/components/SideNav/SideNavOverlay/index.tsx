@@ -1,14 +1,14 @@
 import { motion } from "framer-motion";
-import { useRef } from "react";
+import { ReactNode, useRef } from "react";
 
 import useClickOutside from "@/hooks/useOnClickOutside";
 
 type Props = {
-  children: React.ReactNode;
+  children: ReactNode;
   toggle: () => void;
 };
 
-export default function SideNavOverlay({ children, toggle }: Props) {
+const SideNavOverlay = ({ children, toggle }: Props) => {
   const ref = useRef(null);
 
   useClickOutside(ref, () => {
@@ -33,4 +33,6 @@ export default function SideNavOverlay({ children, toggle }: Props) {
       {children}
     </motion.div>
   );
-}
+};
+
+export default SideNavOverlay;

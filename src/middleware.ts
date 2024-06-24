@@ -13,7 +13,7 @@ const getVerifyTokenUrl = () => {
   return "http://localhost:3000/api/auth/verifyToken";
 };
 
-async function verifyToken(accessToken: string, url: string) {
+const verifyToken = async (accessToken: string, url: string) => {
   const VERIFY_TOKEN_URL = getVerifyTokenUrl();
 
   try {
@@ -29,9 +29,9 @@ async function verifyToken(accessToken: string, url: string) {
 
     return false;
   }
-}
+};
 
-function clearTokenAndRedirect(url: string, search: string) {
+const clearTokenAndRedirect = (url: string, search: string) => {
   const clearResponse = NextResponse.redirect(new URL(`/${search}`, url));
   clearResponse.cookies.set("accessToken", "", {
     httpOnly: true,
@@ -46,9 +46,9 @@ function clearTokenAndRedirect(url: string, search: string) {
     maxAge: -1,
   });
   return clearResponse;
-}
+};
 
-export async function middleware(request: NextRequest) {
+export const middleware = async (request: NextRequest) => {
   const accessToken = request.cookies.get("accessToken")?.value;
   const { pathname, search } = request.nextUrl;
 
@@ -78,7 +78,7 @@ export async function middleware(request: NextRequest) {
     }
     return NextResponse.redirect(new URL(`/login${search}`, request.url));
   }
-}
+};
 
 export const config = {
   matcher: [

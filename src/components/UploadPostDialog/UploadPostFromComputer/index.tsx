@@ -9,12 +9,9 @@ export default function UploadPostFromComputer() {
   const { setValue, register } = useFormContext();
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (
-      event.target.files === null ||
-      event.target.files.length === 0 ||
-      event.target.files[0] === null
-    )
+    if (event.target.files === null || event.target.files.length === 0) {
       return;
+    }
     setValue("picture", event.target.files[0]);
   };
 
@@ -26,9 +23,9 @@ export default function UploadPostFromComputer() {
         Select From Computer
         <input
           type="file"
+          accept="image/*"
           className="sr-only"
-          {...register("picture")}
-          onChange={handleFileChange}
+          {...register("picture", { onChange: handleFileChange })}
         />
       </label>
     </div>

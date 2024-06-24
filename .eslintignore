@@ -1,8 +1,5 @@
 # Node modules
 node_modules/
-frontend/node_modules/
-frontend/src/__generated__/
-backend/node_modules/
 
 # Logs
 logs/
@@ -15,8 +12,7 @@ bun-debug.log*
 # Build directories
 dist/
 build/
-frontend/.next/
-backend/dist/
+.next/
 
 # Temporary files
 temp/
@@ -26,8 +22,7 @@ tmp/
 
 # Coverage directory used by testing tools
 coverage/
-frontend/coverage/
-backend/coverage/
+coverage/
 
 # IDE specific files
 .vscode/

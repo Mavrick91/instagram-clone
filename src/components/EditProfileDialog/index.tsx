@@ -11,31 +11,37 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { revalidateUserProfilePage } from "@/constants/revalidate";
 import { cn } from "@/lib/utils";
-import { useModal } from "@/providers/ModalProvider";
 import { useUserInfo } from "@/providers/UserInfoProvider";
 
 const ProfileSchema = z.object({
   firstName: z
     .string()
     .min(1, "First name is required")
-    .transform((val) => val.trim()),
+    .transform((val) => {
+      return val.trim();
+    }),
   lastName: z
     .string()
     .min(1, "Last name is required")
-    .transform((val) => val.trim()),
+    .transform((val) => {
+      return val.trim();
+    }),
   bio: z
     .string()
     .max(150, "Bio must be 150 characters or less")
-    .transform((val) => val.trim())
+    .transform((val) => {
+      return val.trim();
+    })
     .optional(),
   avatar: z.any().optional(),
 });
 
 type FormData = z.infer<typeof ProfileSchema>;
 
-export default function EditProfileDialog() {
-  const { closeModal } = useModal();
-
+type EditProfileDialogProps = {
+  onClose: () => void;
+};
+const EditProfileDialog = ({ onClose }: EditProfileDialogProps) => {
   const user = useUserInfo();
   const {
     register,
@@ -66,7 +72,7 @@ export default function EditProfileDialog() {
         revalidateUserProfilePage,
       );
 
-      closeModal();
+      onClose();
     } catch (error) {
       console.error("Failed to update user posts:", error);
     }
@@ -129,4 +135,6 @@ export default function EditProfileDialog() {
       </Button>
     </form>
   );
-}
+};
+
+export default EditProfileDialog;

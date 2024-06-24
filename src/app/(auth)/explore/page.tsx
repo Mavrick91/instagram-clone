@@ -1,8 +1,8 @@
-import { getPicturesLight } from "@/actions/picture";
+import { getPicturesByUser } from "@/actions/picture";
 import ThumbnailGrid from "@/components/ThumbnailGrid";
 
 const ExplorePage = async () => {
-  const picturesLight = await getPicturesLight();
+  const picturesLight = await getPicturesByUser();
 
   return (
     <div className="mx-auto flex max-w-lg-page flex-col">

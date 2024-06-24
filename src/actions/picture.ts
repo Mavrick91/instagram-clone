@@ -1,5 +1,9 @@
 "use server";
 
+import { Picture, Prisma } from "@prisma/client";
+import moment from "moment/moment";
+
+import { uploadFile } from "@/actions/upload";
 import prisma from "@/lib/prisma";
 import {
   PictureLight,
@@ -8,34 +12,76 @@ import {
   UserPictureDetails,
   userPictureDetailsSelect,
 } from "@/types/picture";
-import { CurrentUserType } from "@/types/user";
-import { getIsCurrentUserFollowingProfile } from "@/utils/user";
 
 import { getIsPictureInUserCollection } from "./collection";
 import { getCommentsForPicture } from "./comment";
 import { getIsPictureLiked } from "./like";
 import { getCurrentUser } from "./user";
 
-export const getPicturesLight = async (
+const createDefaultAltText = async (): Promise<string> => {
+  const currentUser = await getCurrentUser();
+
+  return `Photo by ${currentUser.firstName} ${currentUser.lastName} on ${moment().format("MMMM Do, YYYY")}. May be an image of text.`;
+};
+
+export const createPicture = async (formData: FormData): Promise<void> => {
+  const currentUser = await getCurrentUser();
+
+  const description = formData.get("description") as string;
+  const altText = formData.get("altText") as string;
+  const hideLikesAndViewCounts =
+    formData.get("hideLikesAndViewCounts") === "true";
+  const disableComments = formData.get("disableComments") === "true";
+
+  const { fileName, sizes } = await uploadFile(formData);
+
+  const defaultAltText = await createDefaultAltText();
+
+  const pictureData: Prisma.PictureCreateInput = {
+    user: {
+      connect: { id: currentUser.id },
+    },
+    sizes,
+    fileName,
+    description,
+    altText: altText || defaultAltText,
+    hideLikesAndViewCounts,
+    disableComments,
+  };
+
+  await prisma.picture.create({ data: pictureData });
+};
+
+export const updatePicture = async (
+  pictureId: number,
+  data: Record<string, string | boolean>,
+) => {
+  await prisma.picture.update({
+    where: { id: pictureId },
+    data,
+  });
+};
+
+export const getPicturesByUser = async (
   userId?: number,
-): Promise<PictureLight[]> => {
+): Promise<UserPictureDetails[]> => {
   const pictures = await prisma.picture.findMany({
     where: { userId: userId ? userId : undefined },
     orderBy: { createdAt: "desc" },
-    select: pictureLightSelect,
+    select: userPictureDetailsSelect,
   });
 
-  return pictures.map((picture) => ({
-    ...picture,
-    sizes: picture.sizes as Sizes,
-  }));
+  return pictures.map((picture) => {
+    return {
+      ...picture,
+      sizes: picture.sizes as Sizes,
+    };
+  });
 };
 
-const fetchAndCacheIndividualPictureDetails = async (
+export const getPictureDetails = async (
   pictureId: number,
-  currentUser: CurrentUserType,
 ): Promise<UserPictureDetails> => {
-  console.log("Fetching picture details for pictureId:", pictureId);
   const [comments, isLiked, isSaved, picture] = await Promise.all([
     getCommentsForPicture(pictureId),
     getIsPictureLiked(pictureId),
@@ -50,27 +96,13 @@ const fetchAndCacheIndividualPictureDetails = async (
     throw new Error("Picture not found");
   }
 
-  const isCurrentUserFollowingProfile = getIsCurrentUserFollowingProfile(
-    currentUser,
-    picture.user.id,
-  );
-
   return {
-    currentUser,
-    isCurrentUserFollowingProfile,
     comments,
     isLiked,
     isSaved,
     ...picture,
     sizes: picture.sizes as Sizes,
   };
-};
-
-export const getPictureDetails = async (
-  pictureId: number,
-): Promise<UserPictureDetails> => {
-  const currentUser = await getCurrentUser();
-  return fetchAndCacheIndividualPictureDetails(pictureId, currentUser);
 };
 
 export const getFollowedUsersPictures = async (): Promise<
@@ -88,14 +120,15 @@ export const getFollowedUsersPictures = async (): Promise<
     },
   };
 
-  const pictures = await prisma.picture.findMany({
+  return prisma.picture.findMany({
     where: whereClause,
     select: userPictureDetailsSelect,
+    // take: 1,
   });
+};
 
-  return await Promise.all(
-    pictures.map((picture) =>
-      fetchAndCacheIndividualPictureDetails(picture.id, currentUser),
-    ),
-  );
+export const deletePicture = async (pictureId: number): Promise<void> => {
+  await prisma.picture.delete({
+    where: { id: pictureId },
+  });
 };

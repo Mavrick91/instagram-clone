@@ -1,4 +1,4 @@
-export function formatTimestamp(timestamp: Date): string {
+export const formatTimestamp = (timestamp: Date): string => {
   const messageDate = new Date(timestamp);
   const currentDate = new Date();
 
@@ -22,4 +22,4 @@ export function formatTimestamp(timestamp: Date): string {
       minute: "2-digit",
     });
   }
-}
+};

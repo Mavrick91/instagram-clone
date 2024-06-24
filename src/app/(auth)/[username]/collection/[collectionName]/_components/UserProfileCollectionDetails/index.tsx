@@ -26,7 +26,9 @@ const UserProfileCollectionDetails = async ({
 
   if (!userCollectionDetails) redirect(`/${username}/saved`);
 
-  const pictures = userCollectionDetails.pictures.map((p) => p.picture);
+  const pictures = userCollectionDetails.pictures.map((p) => {
+    return p.picture;
+  });
 
   return (
     <div className="mx-auto mt-6 flex max-w-lg-page flex-col">

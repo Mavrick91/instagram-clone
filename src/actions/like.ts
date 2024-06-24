@@ -1,16 +1,10 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
-
 import prisma from "@/lib/prisma";
-import { RevalidatePath } from "@/types/global";
 
 import { getCurrentUser } from "./user";
 
-export const likePicture = async (
-  pictureId: number,
-  options?: RevalidatePath,
-): Promise<void> => {
+export const likePicture = async (pictureId: number): Promise<void> => {
   try {
     const currentUser = await getCurrentUser();
 
@@ -31,18 +25,13 @@ export const likePicture = async (
         pictureId: pictureId,
       },
     });
-
-    options && revalidatePath(options.originalPath, options?.type);
   } catch (error) {
     console.error("Error liking the picture:", error);
     throw new Error("Unable to like the picture");
   }
 };
 
-export const unlikePicture = async (
-  pictureId: number,
-  options?: RevalidatePath,
-): Promise<void> => {
+export const unlikePicture = async (pictureId: number): Promise<void> => {
   try {
     const currentUser = await getCurrentUser();
 
@@ -58,8 +47,6 @@ export const unlikePicture = async (
         id: existingLike.id,
       },
     });
-
-    options && revalidatePath(options.originalPath, options?.type);
   } catch (error) {
     console.error("Error unliking the picture:", error);
     throw new Error("Unable to unlike the picture");

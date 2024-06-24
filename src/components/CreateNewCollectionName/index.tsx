@@ -5,8 +5,10 @@ type Props = {
   labelSubmit: string;
 };
 
-const CreateNewCollectionName = ({ onClickNext, labelSubmit }: Props) => (
-  <CreateCollectionStep onClickNext={onClickNext} labelSubmit={labelSubmit} />
-);
+const CreateNewCollectionName = ({ onClickNext, labelSubmit }: Props) => {
+  return (
+    <CreateCollectionStep onClickNext={onClickNext} labelSubmit={labelSubmit} />
+  );
+};
 
 export default CreateNewCollectionName;

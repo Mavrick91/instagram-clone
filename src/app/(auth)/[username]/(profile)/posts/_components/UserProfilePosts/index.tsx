@@ -1,13 +1,13 @@
-import { getPicturesLight } from "@/actions/picture";
+import { getPictureDetails, getPicturesByUser } from "@/actions/picture";
 import ThumbnailGrid from "@/components/ThumbnailGrid";
 
 type UserProfilePostsProps = {
   userProfileId: number;
 };
 const UserProfilePosts = async ({ userProfileId }: UserProfilePostsProps) => {
-  const userProfilePicturesLight = await getPicturesLight(userProfileId);
+  const pictures = await getPicturesByUser(userProfileId);
 
-  return <ThumbnailGrid pictures={userProfilePicturesLight} />;
+  return <ThumbnailGrid pictures={pictures} />;
 };
 
 export default UserProfilePosts;

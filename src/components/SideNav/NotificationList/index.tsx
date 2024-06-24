@@ -5,51 +5,66 @@ import NotificationItem from "./NotificationItem";
 const NOTIFICATION_CATEGORIES = [
   {
     label: "New",
-    filter: (notification: any) => !notification.read,
+    filter: (notification: any) => {
+      return !notification.read;
+    },
   },
   {
     label: "Today",
-    filter: (notification: any) =>
-      moment().isSame(notification.createdAt, "day"),
+    filter: (notification: any) => {
+      return moment().isSame(notification.createdAt, "day");
+    },
   },
   {
     label: "Yesterday",
-    filter: (notification: any) =>
-      moment().subtract(1, "days").isSame(notification.createdAt, "day"),
+    filter: (notification: any) => {
+      return moment().subtract(1, "days").isSame(notification.createdAt, "day");
+    },
   },
   {
     label: "Last 7 days",
-    filter: (notification: any) =>
-      moment().diff(notification.createdAt, "days") <= 7,
+    filter: (notification: any) => {
+      return moment().diff(notification.createdAt, "days") <= 7;
+    },
   },
   {
     label: "Last 30 days",
-    filter: (notification: any) =>
-      moment().diff(notification.createdAt, "days") <= 30,
+    filter: (notification: any) => {
+      return moment().diff(notification.createdAt, "days") <= 30;
+    },
   },
-  { label: "Older", filter: () => true },
+  {
+    label: "Older",
+    filter: () => {
+      return true;
+    },
+  },
 ];
 
-const categorizeNotifications = (
-  notifications: any[],
-) => {
-  const categorizedNotifications = NOTIFICATION_CATEGORIES.map(({ label }) => ({
-    label,
-    items: [] as any[],
-  }));
+const categorizeNotifications = (notifications: any[]) => {
+  const categorizedNotifications = NOTIFICATION_CATEGORIES.map(({ label }) => {
+    return {
+      label,
+      items: [] as any[],
+    };
+  });
 
   notifications.forEach((notification) => {
-    const category = NOTIFICATION_CATEGORIES.find(({ filter }) =>
-      filter(notification),
-    );
+    const category = NOTIFICATION_CATEGORIES.find(({ filter }) => {
+      return filter(notification);
+    });
     if (category) {
       categorizedNotifications
-        .find(({ label }) => label === category.label)
+        .find(({ label }) => {
+          return label === category.label;
+        })
         ?.items.push(notification);
     }
   });
 
-  return categorizedNotifications.filter(({ items }) => items.length > 0);
+  return categorizedNotifications.filter(({ items }) => {
+    return items.length > 0;
+  });
 };
 
 type Props = {
@@ -90,12 +105,14 @@ export default function NotificationList({
                 <div className="px-6 py-2 font-bold text-primary-text">
                   {label}
                 </div>
-                {items.map((notification) => (
-                  <NotificationItem
-                    key={notification.id}
-                    notification={notification}
-                  />
-                ))}
+                {items.map((notification) => {
+                  return (
+                    <NotificationItem
+                      key={notification.id}
+                      notification={notification}
+                    />
+                  );
+                })}
               </div>
             );
           })}

@@ -31,7 +31,11 @@ const AddPicturesStep = ({
     <div className="flex min-h-[691px] w-screen max-w-[400px] flex-col gap-0 overflow-hidden rounded-lg p-0">
       <Modal.Header>
         {setCurrentStep && (
-          <Modal.Header.ArrowBack onClick={() => setCurrentStep(0)} />
+          <Modal.Header.ArrowBack
+            onClick={() => {
+              return setCurrentStep(0);
+            }}
+          />
         )}
         <Modal.Header.Title>Add from saved</Modal.Header.Title>
       </Modal.Header>
@@ -43,7 +47,9 @@ const AddPicturesStep = ({
               <button
                 type="button"
                 key={picture.picture.id}
-                onClick={() => handlePictureClick(picture.picture.id)}
+                onClick={() => {
+                  return handlePictureClick(picture.picture.id);
+                }}
                 className="relative col-span-1 aspect-square transition hover:bg-white hover:opacity-70"
               >
                 <ImageClient

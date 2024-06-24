@@ -1,20 +1,20 @@
-import { PictureLight } from "@/types/picture";
+import { UserPictureDetails } from "@/types/picture";
 
 import ThumbnailGridItem from "./ThumbnailGridItem";
 
 type ThumbnailGridProps = {
-  pictures: PictureLight[];
+  pictures: UserPictureDetails[];
 };
 
-function ThumbnailGrid({ pictures }: ThumbnailGridProps) {
+const ThumbnailGrid = ({ pictures }: ThumbnailGridProps) => {
   return (
     <div className="grid w-full grid-cols-3 gap-1">
       {pictures &&
-        pictures.map((picture) => (
-          <ThumbnailGridItem picture={picture} key={picture.id} />
-        ))}
+        pictures.map((picture) => {
+          return <ThumbnailGridItem picture={picture} key={picture.id} />;
+        })}
     </div>
   );
-}
+};
 
 export default ThumbnailGrid;

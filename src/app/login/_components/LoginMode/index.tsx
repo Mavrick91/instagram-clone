@@ -20,14 +20,18 @@ export default function LoginMode({ loginChoice, setLoginChoice }: Props) {
       <button
         className="z-10 h-full flex-1 text-center text-lg font-medium"
         type="button"
-        onClick={() => setLoginChoice("custom")}
+        onClick={() => {
+          return setLoginChoice("custom");
+        }}
       >
         Custom
       </button>
       <button
         className="z-10 h-full flex-1 text-center text-lg font-medium"
         type="button"
-        onClick={() => setLoginChoice("mocked")}
+        onClick={() => {
+          return setLoginChoice("mocked");
+        }}
       >
         Mocked
       </button>

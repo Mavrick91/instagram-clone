@@ -16,8 +16,10 @@ export const transformLightPicture = (
 export const transformCollectionPictures = (
   pictures: { pictureId: number; picture: PictureLightWithJsonSizes }[],
 ) => {
-  return pictures.map((p) => ({
-    pictureId: p.pictureId,
-    picture: transformLightPicture(p.picture),
-  }));
+  return pictures.map((p) => {
+    return {
+      pictureId: p.pictureId,
+      picture: transformLightPicture(p.picture),
+    };
+  });
 };

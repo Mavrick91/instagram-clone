@@ -26,7 +26,7 @@ type Props = {
   displaySmallNav: boolean;
 };
 
-export default function DropdownMore({ displaySmallNav }: Props) {
+const DropdownMore = ({ displaySmallNav }: Props) => {
   const { toggleTheme } = useTheme();
   const user = useUserInfo();
   const router = useRouter();
@@ -59,7 +59,9 @@ export default function DropdownMore({ displaySmallNav }: Props) {
     },
     {
       name: "Switch accounts",
-      onClick: () => router.push(`/profile/${user.id}`),
+      onClick: () => {
+        return router.push(`/profile/${user.id}`);
+      },
     },
     {
       name: "Log out",
@@ -105,4 +107,6 @@ export default function DropdownMore({ displaySmallNav }: Props) {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-}
+};
+
+export default DropdownMore;

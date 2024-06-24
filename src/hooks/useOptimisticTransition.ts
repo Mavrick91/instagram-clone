@@ -2,10 +2,10 @@
 
 import { useCallback, useOptimistic, useState, useTransition } from "react";
 
-function useOptimisticTransition<S, A>(
+const useOptimisticTransition = <S, A>(
   initialState: S,
   optimisticUpdate: (state: S, action: A) => S,
-) {
+) => {
   const [realValue, setRealValue] = useState<S>(initialState);
   const [optimisticValue, setOptimisticValue] = useOptimistic<S, A>(
     realValue,
@@ -29,6 +29,6 @@ function useOptimisticTransition<S, A>(
     realValue,
     isPending,
   ] as const;
-}
+};
 
 export default useOptimisticTransition;

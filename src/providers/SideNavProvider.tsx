@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import {
   createContext,
+  ReactNode,
   useCallback,
   useContext,
   useEffect,
@@ -27,10 +28,10 @@ type SideNavContextType = {
 const SideNavContext = createContext<SideNavContextType | undefined>(undefined);
 
 type SideNavProviderProps = {
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
-const SideNavProvider: React.FC<SideNavProviderProps> = ({ children }) => {
+const SideNavProvider = ({ children }: SideNavProviderProps) => {
   const windowWidth = useWindowWidth();
   const [sideNavOpen, setSideNavOpen] = useState(windowWidth < 1264);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
@@ -45,21 +46,27 @@ const SideNavProvider: React.FC<SideNavProviderProps> = ({ children }) => {
   }, [windowWidth]);
 
   const toggleSideNav = useCallback(() => {
-    setSideNavOpen((prevSideNavOpen) => !prevSideNavOpen);
+    setSideNavOpen((prevSideNavOpen) => {
+      return !prevSideNavOpen;
+    });
   }, []);
 
   const toggleSearch = useCallback(() => {
-    setIsSearchVisible((prevIsSearchVisible) => !prevIsSearchVisible);
+    setIsSearchVisible((prevIsSearchVisible) => {
+      return !prevIsSearchVisible;
+    });
   }, []);
 
   const toggleNotification = useCallback(() => {
-    setIsNotificationVisible(
-      (prevIsNotificationVisible) => !prevIsNotificationVisible,
-    );
+    setIsNotificationVisible((prevIsNotificationVisible) => {
+      return !prevIsNotificationVisible;
+    });
   }, []);
 
   const toggleNewPost = useCallback(() => {
-    setIsNewPostVisible((prevIsNewPostVisible) => !prevIsNewPostVisible);
+    setIsNewPostVisible((prevIsNewPostVisible) => {
+      return !prevIsNewPostVisible;
+    });
   }, []);
 
   const closeSearch = useCallback(() => {

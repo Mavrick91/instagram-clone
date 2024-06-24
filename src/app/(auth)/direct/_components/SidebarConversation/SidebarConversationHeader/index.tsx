@@ -14,7 +14,11 @@ const SidebarConversationHeader = () => {
       <span className="text-xl font-bold text-primary-text">
         {user.username}
       </span>
-      <button onClick={() => showModal("CreateConversation")}>
+      <button
+        onClick={() => {
+          return showModal("CreateConversation");
+        }}
+      >
         <SquarePen className="text-primary-text" />
       </button>
     </div>

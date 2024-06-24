@@ -12,7 +12,9 @@ async function ConversationList() {
   return (
     <div>
       {threads.map((thread) => {
-        const recipientUser = thread.users.find((u) => u.id !== currentUser.id);
+        const recipientUser = thread.users.find((u) => {
+          return u.id !== currentUser.id;
+        });
 
         if (!recipientUser) return null;
 

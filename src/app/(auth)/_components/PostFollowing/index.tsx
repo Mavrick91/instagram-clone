@@ -1,29 +1,32 @@
-import { User } from "@prisma/client";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
+import { getPictureDetails } from "@/actions/picture";
+import getQueryClient from "@/lib/queryClient";
 import { UserPictureDetails } from "@/types/picture";
 
 import PostItem from "./PostItem";
 
 type PostFollowingProps = {
-  picturesFromFollowing: UserPictureDetails[];
-  followings: User[];
+  serverPicture: UserPictureDetails;
 };
 
-export default function PostFollowing({
-  picturesFromFollowing,
-  followings,
-}: PostFollowingProps) {
+const PostFollowing = async ({ serverPicture }: PostFollowingProps) => {
+  const queryClient = getQueryClient();
+  await queryClient.prefetchQuery({
+    queryKey: ["picture", serverPicture.id],
+    queryFn: () => {
+      return getPictureDetails(serverPicture.id);
+    },
+  });
+  const dehydratedState = dehydrate(queryClient);
+
   return (
     <div className="space-y-4">
-      {picturesFromFollowing.map((picture) => {
-        return (
-          <PostItem
-            key={picture.id}
-            picture={picture}
-            followings={followings}
-          />
-        );
-      })}
+      <HydrationBoundary state={dehydratedState}>
+        <PostItem pictureId={serverPicture.id} />
+      </HydrationBoundary>
     </div>
   );
-}
+};
+
+export default PostFollowing;

@@ -44,13 +44,12 @@ export const getFollowings = async (): Promise<User[]> => {
     },
   });
 
-  return followedUsers.map((follow) => follow.targetUser);
+  return followedUsers.map((follow) => {
+    return follow.targetUser;
+  });
 };
 
-export const followUser = async (
-  targetUserId: number,
-  options?: RevalidatePath,
-) => {
+export const followUser = async (targetUserId: number) => {
   try {
     const currentUser = await getCurrentUser();
 
@@ -60,18 +59,13 @@ export const followUser = async (
         targetUserId,
       },
     });
-
-    options && revalidatePath(options.originalPath, options?.type);
   } catch (error) {
     console.error("Error follow user:", error);
     throw new Error("Unable to follow.");
   }
 };
 
-export const unfollowUser = async (
-  targetUserId: number,
-  options?: RevalidatePath,
-) => {
+export const unfollowUser = async (targetUserId: number) => {
   try {
     const currentUser = await getCurrentUser();
 
@@ -81,8 +75,6 @@ export const unfollowUser = async (
         targetUserId,
       },
     });
-
-    options && revalidatePath(options.originalPath, options?.type);
   } catch (error) {
     console.error("Error follow user:", error);
     throw new Error("Unable to unfollow.");

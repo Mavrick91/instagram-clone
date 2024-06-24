@@ -20,7 +20,9 @@ const loginSchema = z.object({
   email: z
     .string()
     .email()
-    .transform((val) => val.trim().toLowerCase()),
+    .transform((val) => {
+      return val.trim().toLowerCase();
+    }),
   password: z.string().min(1, "Password must not be empty"),
 });
 
@@ -35,7 +37,9 @@ export default function Login() {
     error,
   } = useMutation({
     mutationKey: ["login"],
-    mutationFn: (data: LoginFormInputs) => login(data.email, data.password),
+    mutationFn: (data: LoginFormInputs) => {
+      return login(data.email, data.password);
+    },
     onSuccess: () => {
       router.replace("/");
     },

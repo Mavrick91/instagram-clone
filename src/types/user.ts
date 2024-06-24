@@ -5,9 +5,16 @@ export const currentUserSelect = {
   avatar: true,
   username: true,
   initiatedFollows: true,
+  receivedFollows: true,
   firstName: true,
   lastName: true,
   bio: true,
+  _count: {
+    select: {
+      initiatedFollows: true,
+      receivedFollows: true,
+    },
+  },
   thought: {
     select: {
       id: true,

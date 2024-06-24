@@ -7,7 +7,7 @@ import { FormControl, FormField } from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 
-export default function AdvancedSettingsExpand() {
+const AdvancedSettingsExpand = () => {
   const form = useFormContext();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -15,7 +15,9 @@ export default function AdvancedSettingsExpand() {
     <div className="border-b border-elevated-separator">
       <button
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          return setIsOpen(!isOpen);
+        }}
         className="flex w-full items-center justify-between px-3 py-4"
       >
         <div
@@ -42,22 +44,24 @@ export default function AdvancedSettingsExpand() {
                 <FormField
                   control={form.control}
                   name="hideLikesAndViewCounts"
-                  render={({ field }) => (
-                    <FormControl>
-                      <Switch
-                        {...field}
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                  )}
+                  render={({ field }) => {
+                    return (
+                      <FormControl>
+                        <Switch
+                          {...field}
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    );
+                  }}
                 />
               </div>
               <div className="p-3 text-xs text-zinc-500">
-                Only you will see the total number of likes and views on this
-                post. You can change this later by going to the ··· menu at the
-                top of the post. To hide like counts on other people's posts, go
-                to your account settings.
+                {`Only you will see the total number of likes and views on this
+                  post. You can change this later by going to the ··· menu at the
+                  top of the post. To hide like counts on other people's posts, go
+                  to your account settings.`}
               </div>
             </div>
             <div className="flex flex-col">
@@ -66,18 +70,20 @@ export default function AdvancedSettingsExpand() {
                 <FormField
                   control={form.control}
                   name="disableComments"
-                  render={({ field }) => (
-                    <FormControl>
-                      <Switch
-                        {...field}
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                        className={cn({
-                          "!bg-black": field.value,
-                        })}
-                      />
-                    </FormControl>
-                  )}
+                  render={({ field }) => {
+                    return (
+                      <FormControl>
+                        <Switch
+                          {...field}
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          className={cn({
+                            "!bg-black": field.value,
+                          })}
+                        />
+                      </FormControl>
+                    );
+                  }}
                 />
               </div>
               <div className="p-3 text-xs text-zinc-500">
@@ -90,4 +96,6 @@ export default function AdvancedSettingsExpand() {
       </AnimatePresence>
     </div>
   );
-}
+};
+
+export default AdvancedSettingsExpand;

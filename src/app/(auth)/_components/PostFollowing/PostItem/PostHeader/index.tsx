@@ -3,33 +3,19 @@
 import { Ellipsis } from "lucide-react";
 import moment from "moment";
 import Link from "next/link";
-import { useState } from "react";
 
-import ButtonFollow from "@/components/ButtonFollow";
-import Modal from "@/components/Modal";
-import PostAction from "@/components/PostDetailsDialog/PostAction";
 import UserAvatar from "@/components/UserAvatar";
-import { cn } from "@/lib/utils";
+import { useModal } from "@/providers/ModalProvider";
 import { UserPictureDetails } from "@/types/picture";
 
 type Props = {
   avatar?: string | null;
   username: string;
   picture: UserPictureDetails;
-  isFollowingCurrentProfile: boolean;
 };
 
-export default function PostHeader({
-  avatar,
-  username,
-  picture,
-  isFollowingCurrentProfile,
-}: Props) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleModal = () => {
-    setIsOpen((prev) => !prev);
-  };
+const PostHeader = ({ avatar, username, picture }: Props) => {
+  const { showModal } = useModal();
 
   return (
     <>
@@ -44,31 +30,23 @@ export default function PostHeader({
               •{" "}
               <span className="text-sm font-medium text-zinc-500">
                 {moment(picture.createdAt).fromNow()}
-                {!isFollowingCurrentProfile && (
-                  <>
-                    {" "}
-                    •{" "}
-                    <ButtonFollow
-                      isFollowing={isFollowingCurrentProfile}
-                      targetUserId={picture.user.id}
-                      className={cn(
-                        "bg-transparent p-0 hover:bg-transparent text-blue-400 hover:text-blue-600",
-                      )}
-                    />
-                  </>
-                )}
               </span>
             </p>
           </div>
         </div>
-        <button type="button" onClick={toggleModal}>
+        <button
+          type="button"
+          onClick={() => {
+            return showModal("PostActionDialog", {
+              picture,
+            });
+          }}
+        >
           <Ellipsis />
         </button>
       </div>
-
-      <Modal isOpen={isOpen} onClose={toggleModal}>
-        <PostAction picture={picture} onClose={toggleModal} />
-      </Modal>
     </>
   );
-}
+};
+
+export default PostHeader;

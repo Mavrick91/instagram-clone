@@ -37,7 +37,6 @@ export const getIsPictureInUserCollection = async (
 
 export const removePictureFromDefaultCollection = async (
   pictureId: number,
-  options?: RevalidatePath,
 ): Promise<void> => {
   try {
     const currentUser = await getCurrentUser();
@@ -66,8 +65,6 @@ export const removePictureFromDefaultCollection = async (
         },
       },
     });
-
-    options && revalidatePath(options.originalPath, options?.type);
   } catch (error) {
     console.error("Error removing picture from the default saved:", error);
     throw new Error("Unable to remove picture from the collection.");
@@ -77,7 +74,6 @@ export const removePictureFromDefaultCollection = async (
 export const addPictureToCollectionById = async (
   collectionId: number,
   pictureId: number[],
-  options?: RevalidatePath,
 ): Promise<void> => {
   try {
     const existingPictures = await prisma.pictureOnCollection.findMany({
@@ -89,24 +85,24 @@ export const addPictureToCollectionById = async (
       },
     });
 
-    const existingPictureIds = existingPictures.map((pic) => pic.pictureId);
+    const existingPictureIds = existingPictures.map((pic) => {
+      return pic.pictureId;
+    });
 
-    const newPictureIds = pictureId.filter(
-      (picId) => !existingPictureIds.includes(picId),
-    );
+    const newPictureIds = pictureId.filter((picId) => {
+      return !existingPictureIds.includes(picId);
+    });
 
     await Promise.all(
-      newPictureIds.map((pictureId) =>
-        prisma.pictureOnCollection.create({
+      newPictureIds.map((pictureId) => {
+        return prisma.pictureOnCollection.create({
           data: {
             collectionId: collectionId,
             pictureId,
           },
-        }),
-      ),
+        });
+      }),
     );
-
-    options && revalidatePath(options.originalPath, options?.type);
   } catch (error) {
     console.error("Error adding picture to collection:", error);
     throw new Error("Unable to add picture to the collection.");
@@ -161,10 +157,12 @@ export const getCollectionsByUserId = async (
     select: lightCollectionByUserIdSelect,
   });
 
-  return collections.map((collection) => ({
-    ...collection,
-    pictures: transformCollectionPictures(collection.pictures),
-  }));
+  return collections.map((collection) => {
+    return {
+      ...collection,
+      pictures: transformCollectionPictures(collection.pictures),
+    };
+  });
 };
 
 export const getDefaultCollectionByUsername = async (
@@ -210,9 +208,11 @@ export const getUserCollectionDetails = async (
 
   return {
     ...collection,
-    pictures: collection.pictures.map((p) => ({
-      picture: transformLightPicture(p.picture),
-    })),
+    pictures: collection.pictures.map((p) => {
+      return {
+        picture: transformLightPicture(p.picture),
+      };
+    }),
   };
 };
 
@@ -246,21 +246,23 @@ export const createCollectionAndAddPictures = async (
       },
     });
 
-    const existingPictureIds = existingPictures.map((pic) => pic.pictureId);
+    const existingPictureIds = existingPictures.map((pic) => {
+      return pic.pictureId;
+    });
 
-    const newPictureIds = pictureIds.filter(
-      (picId) => !existingPictureIds.includes(picId),
-    );
+    const newPictureIds = pictureIds.filter((picId) => {
+      return !existingPictureIds.includes(picId);
+    });
 
     await Promise.all(
-      newPictureIds.map((pictureId) =>
-        prisma.pictureOnCollection.create({
+      newPictureIds.map((pictureId) => {
+        return prisma.pictureOnCollection.create({
           data: {
             collectionId: newCollection.id,
             pictureId,
           },
-        }),
-      ),
+        });
+      }),
     );
 
     return newCollection;

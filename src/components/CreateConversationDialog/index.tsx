@@ -21,7 +21,9 @@ export default function CreateConversationDialog() {
 
   const { data: users } = useQuery({
     queryKey: ["usersByUsername"],
-    queryFn: async () => getUserByUsername(debouncedInputValue),
+    queryFn: async () => {
+      return getUserByUsername(debouncedInputValue);
+    },
     enabled: !!debouncedInputValue,
   });
 
@@ -62,7 +64,9 @@ export default function CreateConversationDialog() {
             placeholder="Search..."
             className="grow bg-transparent focus:outline-none"
             value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+            onChange={(e) => {
+              return setInputValue(e.target.value);
+            }}
           />
         </div>
       </div>
@@ -71,23 +75,27 @@ export default function CreateConversationDialog() {
         {!users ? (
           <div className="px-6 text-sm text-secondary">No account found.</div>
         ) : (
-          users.map((user) => (
-            <button
-              key={user.id}
-              className="w-full hover:bg-hover-overlay"
-              onClick={() => handleStartConversation(user.id)}
-            >
-              <div className="px-4 py-2">
-                <UserListItem
-                  subText={user.username}
-                  firstName={user.firstName}
-                  lastName={user.lastName}
-                  avatar={user.avatar}
-                  subTextSize="sm"
-                />
-              </div>
-            </button>
-          ))
+          users.map((user) => {
+            return (
+              <button
+                key={user.id}
+                className="w-full hover:bg-hover-overlay"
+                onClick={() => {
+                  return handleStartConversation(user.id);
+                }}
+              >
+                <div className="px-4 py-2">
+                  <UserListItem
+                    subText={user.username}
+                    firstName={user.firstName}
+                    lastName={user.lastName}
+                    avatar={user.avatar}
+                    subTextSize="sm"
+                  />
+                </div>
+              </button>
+            );
+          })
         )}
       </div>
       <div className="p-6">

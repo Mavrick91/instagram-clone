@@ -1,7 +1,6 @@
 import { Prisma } from "@prisma/client";
 
 import { CommentsPicture } from "./comment";
-import { CurrentUserType } from "./user";
 
 export type Sizes = {
   small: string;
@@ -10,8 +9,6 @@ export type Sizes = {
   thumbnail: string;
 };
 
-export type ExtendPictureWithSizes<T> = Omit<T, "sizes"> & { sizes: Sizes };
-
 export const userPictureDetailsSelect = {
   id: true,
   createdAt: true,
@@ -19,6 +16,7 @@ export const userPictureDetailsSelect = {
   sizes: true,
   description: true,
   hideLikesAndViewCounts: true,
+  fileName: true,
   altText: true,
   _count: {
     select: {
@@ -51,6 +49,10 @@ export const pictureLightSelect = {
   id: true,
   altText: true,
   sizes: true,
+  fileName: true,
+  description: true,
+  hideLikesAndViewCounts: true,
+  disableComments: true,
   _count: {
     select: {
       comments: true,
@@ -63,13 +65,11 @@ export type UserPictureDetailsSelect = Prisma.PictureGetPayload<{
   select: typeof userPictureDetailsSelect;
 }>;
 
-export type UserPictureDetails = {
-  currentUser: CurrentUserType;
-  isCurrentUserFollowingProfile: boolean;
+export type UserPictureDetails = UserPictureDetailsSelect & {
   comments: CommentsPicture[];
   isLiked: boolean;
   isSaved: boolean;
-} & UserPictureDetailsSelect & { sizes: Sizes };
+} & { sizes: Sizes };
 
 export type PictureLightWithJsonSizes = Prisma.PictureGetPayload<{
   select: typeof pictureLightSelect;

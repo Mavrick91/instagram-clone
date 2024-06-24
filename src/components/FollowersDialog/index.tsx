@@ -10,10 +10,7 @@ export type FollowersDialogProps = {
   isFollowers?: boolean;
 };
 
-export default function FollowersDialog({
-  followers,
-  isFollowers,
-}: FollowersDialogProps) {
+const FollowersDialog = ({ followers, isFollowers }: FollowersDialogProps) => {
   return (
     <div
       className="flex max-h-[400px] min-h-[200px] w-[400px] flex-col gap-0 p-0"
@@ -51,4 +48,6 @@ export default function FollowersDialog({
       </div>
     </div>
   );
-}
+};
+
+export default FollowersDialog;

@@ -22,7 +22,9 @@ export default function PostComments({ commentCount, picture }: Props) {
         <button
           className="text-sm text-secondary"
           type="button"
-          onClick={() => showModal("PostDetails", { pictureId: picture.id })}
+          onClick={() => {
+            return showModal("PostDetails", { pictureId: picture.id });
+          }}
         >
           View all <Pluralize count={commentCount} singular="comment" />
         </button>

@@ -77,7 +77,9 @@ const NewCollectionForm = ({
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         {currentStep === 0 && (
           <CreateCollectionStep
-            onClickNext={() => setCurrentStep(1)}
+            onClickNext={() => {
+              return setCurrentStep(1);
+            }}
             labelSubmit="Next"
           />
         )}

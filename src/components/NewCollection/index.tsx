@@ -16,7 +16,9 @@ const NewCollection = ({ defaultCollection }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleModal = useCallback(() => {
-    setIsOpen((prev) => !prev);
+    setIsOpen((prev) => {
+      return !prev;
+    });
   }, []);
 
   return (

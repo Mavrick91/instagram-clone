@@ -1,28 +1,28 @@
-import { getFollowings } from "@/actions/follow";
 import { getFollowedUsersPictures } from "@/actions/picture";
-import { getAllUsers } from "@/actions/user";
+import { getAllUsers, getCurrentUser } from "@/actions/user";
+import PostItem from "@/app/(auth)/_components/PostFollowing/PostItem";
 
 import PostFollowing from "./_components/PostFollowing";
 import SuggestFollowList from "./_components/SuggestFollowList";
 
 const HomePage = async () => {
-  const [allUsers, followings] = await Promise.all([
-    getAllUsers(),
-    getFollowings(),
-  ]);
+  const currentUser = await getCurrentUser();
 
-  if (followings.length <= 3) {
-    return <SuggestFollowList allUsers={allUsers} followings={followings} />;
+  if (currentUser.initiatedFollows.length <= 3) {
+    const allUsers = await getAllUsers();
+
+    return <SuggestFollowList allUsers={allUsers} />;
   }
 
   const picturesFromFollowing = await getFollowedUsersPictures();
 
   return (
     <div className="mt-4">
-      <PostFollowing
-        picturesFromFollowing={picturesFromFollowing}
-        followings={followings}
-      />
+      <div className="space-y-4">
+        {picturesFromFollowing.map((picture) => {
+          return <PostFollowing key={picture.id} serverPicture={picture} />;
+        })}
+      </div>
     </div>
   );
 };

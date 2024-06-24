@@ -21,7 +21,9 @@ export default function MockedForm({ setValue }: Props) {
     isError,
   } = useQuery({
     queryKey: ["mockedUser"],
-    queryFn: () => getMockedUser(),
+    queryFn: () => {
+      return getMockedUser();
+    },
   });
 
   const handleOnChange = (email: string) => {
@@ -42,11 +44,13 @@ export default function MockedForm({ setValue }: Props) {
         {isPending ? (
           <SelectItem value="Loading...">Loading...</SelectItem>
         ) : (
-          mockedUser.map((user) => (
-            <SelectItem key={user.id} value={user.email}>
-              {user.email}
-            </SelectItem>
-          ))
+          mockedUser.map((user) => {
+            return (
+              <SelectItem key={user.id} value={user.email}>
+                {user.email}
+              </SelectItem>
+            );
+          })
         )}
       </SelectContent>
     </Select>

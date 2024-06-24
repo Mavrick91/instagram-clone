@@ -22,7 +22,9 @@ const NotificationBadge: React.FC<NotificationBadgeProps> = ({
 }) => {
   const [isVisible, setIsVisible] = useState(true);
 
-  const notificationIds = notificationsCount.flatMap((item) => item.count);
+  const notificationIds = notificationsCount.flatMap((item) => {
+    return item.count;
+  });
 
   useEffect(() => {
     const displayTimer = setTimeout(() => {
@@ -55,7 +57,9 @@ const NotificationBadge: React.FC<NotificationBadgeProps> = ({
             initial={{ opacity: 0, scale: 0.7 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setIsVisible(false)}
+            onClick={() => {
+              return setIsVisible(false);
+            }}
           >
             <div className="flex space-x-3">
               {notificationsCount.map(({ id, count }, index) => {

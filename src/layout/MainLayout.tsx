@@ -1,9 +1,11 @@
 "use client";
 
-import { ReactNode } from "react";
+import { usePathname } from "next/navigation";
+import { ReactNode, useEffect } from "react";
 
 import SideNav from "@/components/SideNav";
 import { cn } from "@/lib/utils";
+import { useModal } from "@/providers/ModalProvider";
 import { useSideNav } from "@/providers/SideNavProvider";
 
 type MainLayoutProps = {
@@ -12,6 +14,12 @@ type MainLayoutProps = {
 
 const MainLayout = ({ children }: MainLayoutProps) => {
   const { sideNavOpen, isConversationPage } = useSideNav();
+  const pathname = usePathname();
+  const { closeAllModal } = useModal();
+
+  useEffect(() => {
+    closeAllModal();
+  }, [closeAllModal, pathname]);
 
   return (
     <>

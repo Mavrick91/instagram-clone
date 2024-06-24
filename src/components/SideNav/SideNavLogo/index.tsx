@@ -8,7 +8,7 @@ type Props = {
   displaySmallNav: boolean;
 };
 
-export default function SideNavLogo({ displaySmallNav }: Props) {
+const SideNavLogo = ({ displaySmallNav }: Props) => {
   return (
     <Link
       href="/"
@@ -43,4 +43,6 @@ export default function SideNavLogo({ displaySmallNav }: Props) {
       </motion.div>
     </Link>
   );
-}
+};
+
+export default SideNavLogo;

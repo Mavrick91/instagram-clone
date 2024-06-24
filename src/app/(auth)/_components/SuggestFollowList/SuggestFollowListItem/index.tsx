@@ -3,7 +3,6 @@ import Link from "next/link";
 
 import ButtonFollow from "@/components/ButtonFollow";
 import UserListItem from "@/components/UserListItem";
-import { revalidateAuth } from "@/constants/revalidate";
 
 type SuggestFollowListItemProps = Pick<
   User,
@@ -38,8 +37,8 @@ const SuggestFollowListItem = ({
       </div>
       <ButtonFollow
         isFollowing={isFollowing}
-        revalidateOptions={revalidateAuth}
-        targetUserId={id}
+        userProfileId={id}
+        userProfileUsername={username}
         buttonProps={{
           variant: "blue",
           size: "xs",

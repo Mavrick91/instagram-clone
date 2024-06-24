@@ -51,13 +51,13 @@ interface SideNavItemProps {
   notificationsCount: NotificationCountProps[];
 }
 
-export default function SideNavItem({
+const SideNavItem = ({
   item,
   isSmall,
   isSearchVisible,
   isNotificationVisible,
   notificationsCount,
-}: SideNavItemProps) {
+}: SideNavItemProps) => {
   const { sideNavOpen, toggleSearch } = useSideNav();
   const pathname = usePathname();
   const { name, path, Icon, isActive, onClick, userAvatarProps } = item;
@@ -67,55 +67,57 @@ export default function SideNavItem({
     isActiveItem = isActive(pathname);
   }
 
-  const hasNotifications = notificationsCount.some(
-    ({ count }) => count.length > 0,
-  );
+  const hasNotifications = notificationsCount.some(({ count }) => {
+    return count.length > 0;
+  });
 
-  const renderContent = () => (
-    <div
-      className={cn("flex items-center", {
-        "font-bold": isActiveItem,
-      })}
-    >
-      <div className="relative">
-        <Icon
-          className={cn(
-            "size-6 transition-transform ease-out group-hover:scale-[1.1] text-primary-text",
-            {
-              "scale-110": isActiveItem && sideNavOpen,
-              "mx-auto": isSmall,
-            },
-          )}
-          strokeWidth={
-            (isActiveItem && !isSearchVisible && !isNotificationVisible) ||
-            (name === "Search" && isSearchVisible) ||
-            (name === "Notifications" && isNotificationVisible)
-              ? 2.3
-              : 1.5
-          }
-          {...userAvatarProps}
-        />
-        {name === "Notifications" && hasNotifications && (
-          <NotificationBadge
-            isSmall={isSmall}
-            notificationsCount={notificationsCount}
+  const renderContent = () => {
+    return (
+      <div
+        className={cn("flex items-center", {
+          "font-bold": isActiveItem,
+        })}
+      >
+        <div className="relative">
+          <Icon
+            className={cn(
+              "size-6 transition-transform ease-out group-hover:scale-[1.1] text-primary-text",
+              {
+                "scale-110": isActiveItem && sideNavOpen,
+                "mx-auto": isSmall,
+              },
+            )}
+            strokeWidth={
+              (isActiveItem && !isSearchVisible && !isNotificationVisible) ||
+              (name === "Search" && isSearchVisible) ||
+              (name === "Notifications" && isNotificationVisible)
+                ? 2.3
+                : 1.5
+            }
+            {...userAvatarProps}
           />
+          {name === "Notifications" && hasNotifications && (
+            <NotificationBadge
+              isSmall={isSmall}
+              notificationsCount={notificationsCount}
+            />
+          )}
+        </div>
+        {!isSmall && (
+          <motion.span
+            className={cn(
+              "transition-colors text-primary-text duration-200 ml-4 ease-out",
+            )}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isSmall ? 0 : 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            {name}
+          </motion.span>
         )}
       </div>
-      {!isSmall && (
-        <motion.span
-          className={cn(
-            "transition-colors text-primary-text duration-200 ml-4 ease-out",
-          )}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isSmall ? 0 : 1 }}
-          transition={{ delay: 0.2 }}
-        >
-          {name}
-        </motion.span>
-      )}
-    </div>
-  );
+    );
+  };
 
   const linkOrButtonProps: LinkOrButtonProps = {
     className: cn(
@@ -134,4 +136,5 @@ export default function SideNavItem({
   }
 
   return <LinkOrButton {...linkOrButtonProps} />;
-}
+};
+export default SideNavItem;

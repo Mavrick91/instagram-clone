@@ -88,11 +88,13 @@ async function main() {
   });
 
   // Create mock comments
-  const mockComments = Array.from({ length: 50 }, () => ({
-    content: faker.lorem.paragraph(),
-    userId: faker.helpers.arrayElement(userIds).id,
-    pictureId: faker.helpers.arrayElement(pictureIds).id,
-  }));
+  const mockComments = Array.from({ length: 50 }, () => {
+    return {
+      content: faker.lorem.paragraph(),
+      userId: faker.helpers.arrayElement(userIds).id,
+      pictureId: faker.helpers.arrayElement(pictureIds).id,
+    };
+  });
 
   await prisma.comment.createMany({
     data: mockComments,

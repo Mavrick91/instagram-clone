@@ -1,18 +1,12 @@
+import { ReactElement } from "react";
+
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 interface UploadPostHeaderParams {
   currentStep: number;
   onClick: () => void;
-  backButton:
-    | React.ReactElement<any, string | React.JSXElementConstructor<any>>
-    | string
-    | number
-    | Iterable<React.ReactNode>
-    | React.ReactPortal
-    | undefined
-    | null
-    | boolean;
+  backButton: ReactElement;
   title: string;
   uploadStatus: boolean;
   uploadLoading: boolean;
@@ -20,7 +14,7 @@ interface UploadPostHeaderParams {
   buttonSubmitText: string;
 }
 
-export function UploadPostHeader({
+export const UploadPostHeader = ({
   uploadStatus,
   uploadLoading,
   updateLoading,
@@ -29,7 +23,7 @@ export function UploadPostHeader({
   title,
   onClick,
   currentStep,
-}: UploadPostHeaderParams) {
+}: UploadPostHeaderParams) => {
   return (
     <div
       className={cn("flex text-center", {
@@ -55,4 +49,4 @@ export function UploadPostHeader({
       )}
     </div>
   );
-}
+};

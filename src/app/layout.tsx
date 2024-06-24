@@ -1,4 +1,3 @@
-import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 
 import moment from "moment";
@@ -36,11 +35,11 @@ export const metadata: Metadata = {
   description: "Instagram clone",
 };
 
-export default function RootLayout({
+const RootLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>) => {
   return (
     <html lang="en">
       <body className={inter.className}>
@@ -60,4 +59,6 @@ export default function RootLayout({
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;

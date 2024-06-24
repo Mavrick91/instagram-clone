@@ -12,7 +12,7 @@ type Props = {
   errors: FieldErrors<FormData>;
 };
 
-export default function LoginForm({ register, errors }: Props) {
+const LoginForm = ({ register, errors }: Props) => {
   return (
     <div className="space-y-4">
       <div className="space-y-2">
@@ -38,4 +38,6 @@ export default function LoginForm({ register, errors }: Props) {
       </div>
     </div>
   );
-}
+};
+
+export default LoginForm;

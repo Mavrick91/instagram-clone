@@ -27,7 +27,9 @@ import UserAvatar from "@/components/UserAvatar";
 import { useUserInfo } from "@/providers/UserInfoProvider";
 
 const schema = z.object({
-  thought: z.string().transform((val) => val.trim()),
+  thought: z.string().transform((val) => {
+    return val.trim();
+  }),
   visibility: z.string().optional(),
 });
 
@@ -80,7 +82,11 @@ const UpdateNote = () => {
         className="flex w-full flex-col"
       >
         <div className="flex w-full items-center justify-between border-b border-separator p-4 py-5">
-          <button onClick={() => router.push("/direct/inbox")}>
+          <button
+            onClick={() => {
+              return router.push("/direct/inbox");
+            }}
+          >
             <X />
           </button>
           <h2 className="text-xl font-bold">New note</h2>
@@ -114,9 +120,9 @@ const UpdateNote = () => {
               <button className="flex items-center gap-x-1 text-sm text-primary-text">
                 <Users size={14} /> <span>Shared with</span>{" "}
                 <b>
-                  {activeShareOptions.find(
-                    (option) => option.value === visibilityWatch,
-                  )?.label || "Followers that you follow back"}
+                  {activeShareOptions.find((option) => {
+                    return option.value === visibilityWatch;
+                  })?.label || "Followers that you follow back"}
                 </b>{" "}
                 <ChevronDown size={14} />
               </button>
@@ -125,31 +131,38 @@ const UpdateNote = () => {
               <FormField
                 control={form.control}
                 name="visibility"
-                render={({ field }) => (
-                  <FormItem className="space-y-3">
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={(value) => {
-                          field.onChange(value);
-                          setDropdownOpen(false);
-                        }}
-                        defaultValue={field.value}
-                        className="flex flex-col gap-0"
-                      >
-                        {activeShareOptions.map(({ value, label }) => (
-                          <FormItem key={value} className="block gap-x-2 py-3">
-                            <FormControl>
-                              <RadioGroupItem value={value} />
-                            </FormControl>
-                            <FormLabel className="ml-3 mt-0 text-base font-normal">
-                              {label}
-                            </FormLabel>
-                          </FormItem>
-                        ))}
-                      </RadioGroup>
-                    </FormControl>
-                  </FormItem>
-                )}
+                render={({ field }) => {
+                  return (
+                    <FormItem className="space-y-3">
+                      <FormControl>
+                        <RadioGroup
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            setDropdownOpen(false);
+                          }}
+                          defaultValue={field.value}
+                          className="flex flex-col gap-0"
+                        >
+                          {activeShareOptions.map(({ value, label }) => {
+                            return (
+                              <FormItem
+                                key={value}
+                                className="block gap-x-2 py-3"
+                              >
+                                <FormControl>
+                                  <RadioGroupItem value={value} />
+                                </FormControl>
+                                <FormLabel className="ml-3 mt-0 text-base font-normal">
+                                  {label}
+                                </FormLabel>
+                              </FormItem>
+                            );
+                          })}
+                        </RadioGroup>
+                      </FormControl>
+                    </FormItem>
+                  );
+                }}
               />
             </DropdownMenuContent>
           </DropdownMenu>

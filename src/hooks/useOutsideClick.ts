@@ -19,7 +19,9 @@ const useClickOutside = (): UseClickOutside => {
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   const toggleDropdown = useCallback(() => {
-    setIsDropdownOpen((prev) => !prev);
+    setIsDropdownOpen((prev) => {
+      return !prev;
+    });
   }, []);
 
   const handleClickOutside = useCallback((event: MouseEvent) => {
@@ -34,9 +36,9 @@ const useClickOutside = (): UseClickOutside => {
   }, []);
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [handleClickOutside]);
 

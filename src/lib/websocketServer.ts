@@ -4,8 +4,8 @@ import { ThreadMessage } from "@/types/thread";
 
 const wss = new WebSocketServer({ port: 8081 }); // Change to 8081 or another available port
 
-wss.on("connection", function connection(ws) {
-  ws.on("message", function message(data) {
+wss.on("connection", (ws) => {
+  ws.on("message", (data) => {
     console.log("received: %s", data);
   });
 });

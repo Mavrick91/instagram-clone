@@ -1,210 +1,189 @@
+"use memo";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ReactNode, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import { z } from "zod";
 
-import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
+import { createPicture, updatePicture } from "@/actions/picture";
+import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { UploadPostHeader } from "@/components/UploadPostDialog/UploadPostHeader";
-import { cn } from "@/lib/utils";
-import { useUserInfo } from "@/providers/UserInfoProvider";
+import { useOptimisticActions } from "@/hooks/useOptimisticActions";
+import { useModal } from "@/providers/ModalProvider";
+import { UserPictureDetails } from "@/types/picture";
 
-import ExitDialog from "../ExitDialog";
+import Modal from "../Modal";
 import AddCaptionPost from "./AddCaptionPost";
 import UploadPostFromComputer from "./UploadPostFromComputer";
 
 const schema = z.object({
-  picture: z.any(),
+  picture: z.union([z.instanceof(File), z.string()]),
   description: z
     .string()
     .max(2200, "Description is too long")
-    .transform((v) => v.trim()),
+    .transform((v) => {
+      return v.trim();
+    }),
   altText: z.string(),
   hideLikesAndViewCounts: z.boolean().optional(),
   disableComments: z.boolean().optional(),
 });
 
-type FormData = z.infer<typeof schema>;
+type RHFFormData = z.infer<typeof schema>;
 
-type Props = {
-  onClose: () => void;
-  // picture?: PictureFragmentFragment;
+export type UploadPostDialogProps = {
+  picture?: UserPictureDetails;
   title: string;
   buttonSubmitText: string;
-  backButton: ReactNode;
 };
 
-export default function UploadPostDialog({
-  onClose,
-  // picture,
+const UploadPostDialog = ({
+  picture,
   title,
   buttonSubmitText,
-  backButton,
-}: Props) {
-  const [isOpen, setIsOpen] = useState(true);
-  const [uploadStatus, setUploadStatus] = useState(false);
-  const [currentStep, setCurrentStep] = useState(-1);
+}: UploadPostDialogProps) => {
+  const [currentStep, setCurrentStep] = useState(picture ? 1 : 0);
   const [previewPicture, setPreviewPicture] = useState<string | null>(null);
-  const user = useUserInfo();
-  const [showExitDialog, setShowExitDialog] = useState(false);
-  const [callbackClickDiscard, setCallbackClickDiscard] =
-    useState<() => void>();
+  const { closeModal, showModal } = useModal();
+  const { optimisticUpdate } = useOptimisticActions();
 
-  // const [uploadPicture, { loading: uploadLoading }] = useUploadPicture(
-  //   user.username,
-  // );
-  // const [updatePicture, { loading: updateLoading }] = useUpdatePicture();
+  const { mutate: createPictureMut, isPending: createPending } = useMutation({
+    mutationFn: (data: FormData) => {
+      return createPicture(data);
+    },
+  });
 
-  // const defaultValues = useMemo(() => {
-  //   if (picture) {
-  //     return {
-  //       picture: {
-  //         name: picture.fileName,
-  //       },
-  //       description: picture.description || "",
-  //       altText: picture.altText,
-  //       hideLikesAndViewCounts: picture.hideLikesAndViewCounts,
-  //       disableComments: picture.disableComments,
-  //     };
-  //   }
+  const defaultValues: RHFFormData = useMemo(() => {
+    if (picture) {
+      return {
+        picture: picture.fileName,
+        description: picture.description || "",
+        altText: picture.altText || "",
+        hideLikesAndViewCounts: picture.hideLikesAndViewCounts,
+        disableComments: picture.disableComments,
+      };
+    }
 
-  //   return {
-  //     picture: null,
-  //     description: "",
-  //     altText: "",
-  //     hideLikesAndViewCounts: false,
-  //     disableComments: false,
-  //   };
-  // }, [picture]);
+    return {
+      picture: "",
+      description: "",
+      altText: "",
+      hideLikesAndViewCounts: false,
+      disableComments: false,
+    };
+  }, [picture]);
 
-  const methods = useForm<FormData>({
+  const methods = useForm<RHFFormData>({
     resolver: zodResolver(schema),
-    defaultValues: defaultValues,
+    defaultValues,
   });
 
   const pictureWatch = methods.watch("picture");
 
-  const handleDiscardChanges = () => {
-    onClose();
-    setIsOpen(false);
-  };
-
-  const handleCloseModal = () => {
-    if (pictureWatch?.name) {
-      setCallbackClickDiscard(() => handleDiscardChanges);
-      setShowExitDialog(true);
-    } else {
-      handleDiscardChanges();
-    }
-  };
-
   const handleGoBackPreviousStep = () => {
     setCurrentStep(0);
     setPreviewPicture(null);
-    methods.setValue("picture", null);
+    methods.setValue("picture", "");
+  };
+
+  const handleDiscardChange = () => {
+    if (pictureWatch) {
+      showModal("ExitDialog", {
+        handleDiscard: handleGoBackPreviousStep,
+      });
+    } else {
+      closeModal();
+    }
   };
 
   const handleClickArrowLeft = () => {
-    // if (picture) handleDiscardChanges();
-    // else {
-    //   setCallbackClickDiscard(() => handleGoBackPreviousStep);
-    //   setShowExitDialog(true);
-    // }
+    handleDiscardChange();
   };
 
-  // useEffect(() => {
-  //   if (pictureWatch?.name) {
-  //     setCurrentStep(1);
-  //     // if (picture) setPreviewPicture(picture.sizes.original);
-  //     // else setPreviewPicture(URL.createObjectURL(pictureWatch));
-  //   } else {
-  //     setCurrentStep(0);
-  //   }
-  // }, [picture, pictureWatch]);
+  useEffect(() => {
+    if (pictureWatch) {
+      setCurrentStep(1);
+      if (picture) setPreviewPicture(picture.sizes.original);
+      else if (pictureWatch instanceof File)
+        setPreviewPicture(URL.createObjectURL(pictureWatch));
+    } else {
+      setCurrentStep(0);
+    }
+  }, [picture, pictureWatch]);
 
-  const onSubmit = async (data: FormData) => {
-    // try {
-    //   if (picture) {
-    //     const variables = {
-    //       id: picture.id,
-    //       input: {
-    //         description: data.description,
-    //         altText: data.altText,
-    //         hideLikesAndViewCounts: data.hideLikesAndViewCounts,
-    //         disableComments: data.disableComments,
-    //       },
-    //     };
-    //     await updatePicture({ variables });
-    //   } else {
-    //     setUploadStatus(true);
-    //     const { fileName, sizes } = await uploadImage(data.picture);
-    //     const defaultAltText = `Photo by ${user.firstName} ${user.lastName} on ${moment().format("MMMM Do, YYYY")}. May be an image of text.`;
-    //     const variables = {
-    //       input: {
-    //         description: data.description,
-    //         altText: data.altText ? data.altText : defaultAltText,
-    //         fileName,
-    //         sizes,
-    //         hideLikesAndViewCounts: data.hideLikesAndViewCounts,
-    //         disableComments: data.disableComments,
-    //       },
-    //     };
-    //     await uploadPicture({ variables });
-    //   }
-    // } catch (error) {
-    //   toast.error("Failed to upload image");
-    // } finally {
-    //   setUploadStatus(false);
-    //   onClose();
-    // }
+  const onSubmit = async (data: RHFFormData) => {
+    const formData = new FormData();
+    formData.append("picture", data.picture);
+    formData.append("description", data.description);
+    formData.append("altText", data.altText);
+    formData.append(
+      "hideLikesAndViewCounts",
+      data.hideLikesAndViewCounts ? "true" : "false",
+    );
+    formData.append("disableComments", data.disableComments ? "true" : "false");
+
+    try {
+      if (picture) {
+        optimisticUpdate<UserPictureDetails>({
+          queryKey: ["picture", picture.id],
+          updateFn: (prev) => {
+            return {
+              ...prev,
+              description: data.description,
+              altText: data.altText,
+            };
+          },
+          action: async () => {
+            await updatePicture(picture!.id, {
+              description: data.description,
+              altText: data.altText,
+            });
+          },
+        });
+      } else createPictureMut(formData);
+      closeModal();
+    } catch (error) {
+      toast.error("Failed to upload image");
+    }
   };
-
-  if (currentStep === -1) return null;
 
   return (
     <>
-      <Dialog open={isOpen} onOpenChange={handleCloseModal}>
-        <DialogContent
-          className={cn(
-            "p-0 gap-0 flex flex-col bg-elevated-background text-primary-text",
-            {
-              "min-w-[755px]": !previewPicture,
-              "max-w-[1095px]": previewPicture,
-            },
-          )}
-        >
-          <Form {...methods}>
-            <form onSubmit={methods.handleSubmit(onSubmit)}>
-              <DialogHeader>
-                <UploadPostHeader
-                  currentStep={currentStep}
-                  onClick={handleClickArrowLeft}
-                  // backButton={backButton}
-                  title={title}
-                  uploadStatus={uploadStatus}
-                  uploadLoading={uploadLoading}
-                  updateLoading={updateLoading}
-                  buttonSubmitText={buttonSubmitText}
-                />
-              </DialogHeader>
-              {!previewPicture && <UploadPostFromComputer />}
-              {previewPicture && (
-                <AddCaptionPost
-                  previewPicture={previewPicture}
-                  // isEdit={!!picture}
-                />
+      <div className="flex min-w-[755px] max-w-[1095px] flex-col gap-0 bg-elevated-background p-0 text-primary-text">
+        <Form {...methods}>
+          <form onSubmit={methods.handleSubmit(onSubmit)}>
+            <Modal.Header>
+              {currentStep === 1 && !picture && (
+                <Modal.Header.ArrowBack onClick={handleClickArrowLeft} />
               )}
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
-
-      {showExitDialog && callbackClickDiscard && (
-        <ExitDialog
-          handleDiscardChanges={callbackClickDiscard}
-          onClose={() => setShowExitDialog(false)}
-        />
-      )}
+              <Modal.Header.Title>{title}</Modal.Header.Title>
+              {currentStep === 1 && (
+                <Modal.Header.Action>
+                  <Button
+                    variant="ghost"
+                    type="submit"
+                    className="font-semibold"
+                    loading={createPending}
+                  >
+                    {buttonSubmitText}
+                  </Button>
+                </Modal.Header.Action>
+              )}
+            </Modal.Header>
+            {currentStep === 0 && <UploadPostFromComputer />}
+            {currentStep === 1 && previewPicture && (
+              <AddCaptionPost
+                previewPicture={previewPicture}
+                isEdit={!!picture}
+              />
+            )}
+          </form>
+        </Form>
+      </div>
     </>
   );
-}
+};
+
+export default UploadPostDialog;

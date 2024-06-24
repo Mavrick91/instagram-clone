@@ -10,14 +10,16 @@ type Props = {
   previewPicture: string;
 };
 
-export default function AccessibilityExpand({ previewPicture }: Props) {
+const AccessibilityExpand = ({ previewPicture }: Props) => {
   const { register } = useFormContext();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="border-b border-elevated-separator">
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          return setIsOpen(!isOpen);
+        }}
         className="flex w-full items-center justify-between px-3 py-4"
         type="button"
       >
@@ -61,4 +63,6 @@ export default function AccessibilityExpand({ previewPicture }: Props) {
       </AnimatePresence>
     </div>
   );
-}
+};
+
+export default AccessibilityExpand;

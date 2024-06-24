@@ -13,6 +13,8 @@ type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
+  isSecondary?: boolean;
+  hasSecondary?: boolean;
 };
 
 const modalVariants = {
@@ -44,10 +46,24 @@ const backdropVariants = {
   exit: { opacity: 0, transition: { duration: 0.3 } },
 };
 
-const Modal = ({ isOpen, onClose, children }: ModalProps) => {
+const Modal = ({
+  isOpen,
+  onClose,
+  children,
+  isSecondary,
+  hasSecondary,
+}: ModalProps) => {
   const modalRef = useRef(null);
+  const canClose = !hasSecondary || isSecondary;
 
-  useClickOutside(modalRef, onClose);
+  useClickOutside(
+    modalRef,
+    canClose
+      ? onClose
+      : () => {
+          return null;
+        },
+  );
 
   useEffect(() => {
     if (isOpen) {
@@ -113,9 +129,19 @@ Header.Title = ({ children }: { children: ReactNode }) => {
 
 Header.ArrowBack = ({ onClick }: { onClick: () => void }) => {
   return (
-    <button onClick={onClick} className="absolute top-1/2 -translate-y-1/2">
+    <button
+      onClick={onClick}
+      type="button"
+      className="absolute top-1/2 -translate-y-1/2"
+    >
       <ArrowLeft size={18} />
     </button>
+  );
+};
+
+Header.Action = ({ children }: { children: ReactNode }) => {
+  return (
+    <div className="absolute right-0 top-1/2 -translate-y-1/2">{children}</div>
   );
 };
 

@@ -1,8 +1,8 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import { BookmarkIcon, HeartIcon, MessageCircle, SendIcon } from "lucide-react";
-import { memo, useCallback, useMemo } from "react";
-import { toast } from "react-toastify";
+import { useCallback, useMemo } from "react";
 
 import {
   addPictureToDefaultCollection,
@@ -10,95 +10,89 @@ import {
 } from "@/actions/collection";
 import { likePicture, unlikePicture } from "@/actions/like";
 import { Pluralize } from "@/components/Pluralize";
-import useOptimisticTransition from "@/hooks/useOptimisticTransition";
+import { useOptimisticActions } from "@/hooks/useOptimisticActions";
 import { cn } from "@/lib/utils";
 import { useModal } from "@/providers/ModalProvider";
 import { useUserInfo } from "@/providers/UserInfoProvider";
-import { RevalidatePath } from "@/types/global";
 import { UserPictureDetails } from "@/types/picture";
-import { getErrorMessage } from "@/utils";
 
 type Props = {
-  picture: UserPictureDetails;
   showMessageIcon?: boolean;
-  revalidatePath: RevalidatePath;
+  pictureId: number;
 };
 
-type LikeState = {
-  isLiked: boolean;
-  likeCount: number;
-};
-
-const PostCTA = ({
-  picture,
-  showMessageIcon = true,
-  revalidatePath,
-}: Props) => {
+const PostCTA = ({ pictureId, showMessageIcon = true }: Props) => {
   const user = useUserInfo();
   const { showModal } = useModal();
+  const queryClient = useQueryClient();
+  const { optimisticUpdate } = useOptimisticActions();
 
-  const [optimisticLikeState, setOptimisticLikeState, setRealLikeState] =
-    useOptimisticTransition<LikeState, LikeState>(
-      { isLiked: picture.isLiked, likeCount: picture._count?.likes ?? 0 },
-      (_, newState) => newState,
-    );
-
-  const [optimisticSaved, setOptimisticSaved, setRealSaved] =
-    useOptimisticTransition<boolean, boolean>(
-      picture.isSaved,
-      (_, newValue) => newValue,
-    );
+  const picture = queryClient.getQueryData<UserPictureDetails>([
+    "picture",
+    pictureId,
+  ])!;
+  const {
+    isLiked,
+    isSaved,
+    _count,
+    hideLikesAndViewCounts,
+    likes,
+    user: pictureUser,
+  } = picture;
 
   const handleClickLikePicture = useCallback(async () => {
-    try {
-      const newLikedState = !optimisticLikeState.isLiked;
-      const newLikeCount =
-        optimisticLikeState.likeCount + (newLikedState ? 1 : -1);
+    await optimisticUpdate<UserPictureDetails>({
+      queryKey: ["picture", pictureId],
+      updateFn: (oldData) => {
+        return {
+          ...oldData,
+          isLiked: !oldData.isLiked,
+          _count: {
+            ...oldData._count,
+            likes: oldData._count.likes + (oldData.isLiked ? -1 : 1),
+          },
+        };
+      },
+      action: async (oldData) => {
+        if (oldData.isLiked) {
+          await unlikePicture(pictureId);
+        } else {
+          await likePicture(pictureId);
+        }
+      },
+    });
+  }, [pictureId, optimisticUpdate]);
 
-      setOptimisticLikeState({
-        isLiked: newLikedState,
-        likeCount: newLikeCount,
-      });
-
-      if (newLikedState) await likePicture(picture.id, revalidatePath);
-      else await unlikePicture(picture.id, revalidatePath);
-
-      setRealLikeState({ isLiked: newLikedState, likeCount: newLikeCount });
-    } catch (error) {
-      toast(getErrorMessage(error), { type: "error" });
-    }
-  }, [
-    optimisticLikeState.isLiked,
-    optimisticLikeState.likeCount,
-    picture.id,
-    revalidatePath,
-    setOptimisticLikeState,
-    setRealLikeState,
-  ]);
-
-  const handleClickAddToCollection = async () => {
-    try {
-      const newState = !optimisticSaved;
-
-      setOptimisticSaved(newState);
-
-      if (optimisticSaved)
-        await removePictureFromDefaultCollection(picture.id, revalidatePath);
-      else await addPictureToDefaultCollection(picture.id, revalidatePath);
-
-      setRealSaved(newState);
-    } catch (error) {
-      toast(getErrorMessage(error), { type: "error" });
-    }
-  };
+  const handleClickAddToCollection = useCallback(async () => {
+    await optimisticUpdate<UserPictureDetails>({
+      queryKey: ["picture", pictureId],
+      updateFn: (oldData) => {
+        return {
+          ...oldData,
+          isSaved: !oldData.isSaved,
+        };
+      },
+      action: async (oldData) => {
+        if (oldData.isSaved) {
+          await removePictureFromDefaultCollection(pictureId);
+        } else {
+          await addPictureToDefaultCollection(pictureId);
+        }
+      },
+    });
+  }, [pictureId, optimisticUpdate]);
 
   const renderLikeCount = useMemo(() => {
-    if (picture.hideLikesAndViewCounts) {
-      if (picture.likes.some((like) => like.userId === user.id)) {
+    if (hideLikesAndViewCounts) {
+      if (
+        likes.some((like) => {
+          return like.userId === user.id;
+        })
+      ) {
         return (
           <p className="text-sm">
-            Liked by <b>{picture.user.username}</b>
-            {optimisticLikeState.likeCount > 1 ? (
+            Liked by <b>{pictureUser.username}</b>
+            {_count.likes > 1 ? (
               <span>
                 {" "}
                 and <b>others</b>
@@ -108,12 +102,12 @@ const PostCTA = ({
         );
       }
 
-      if (optimisticLikeState.likeCount) {
-        const firstLiker = picture.likes[0].user;
+      if (likes?.[0]?.user) {
+        const firstLiker = likes[0].user;
         return (
           <p className="text-sm">
             Liked by <b>{firstLiker.username}</b>
-            {optimisticLikeState.likeCount > 1 ? " and others" : null}
+            {_count.likes > 1 ? " and others" : null}
           </p>
         );
       }
@@ -121,10 +115,10 @@ const PostCTA = ({
       return null;
     }
 
-    if (optimisticLikeState.likeCount) {
+    if (_count.likes) {
       return (
         <p className="text-sm font-semibold">
-          <Pluralize count={optimisticLikeState.likeCount} singular="like" />
+          <Pluralize count={_count.likes} singular="like" />
         </p>
       );
     }
@@ -145,10 +139,10 @@ const PostCTA = ({
     );
   }, [
     handleClickLikePicture,
-    optimisticLikeState.likeCount,
-    picture.hideLikesAndViewCounts,
-    picture.likes,
-    picture.user.username,
+    _count.likes,
+    hideLikesAndViewCounts,
+    likes,
+    pictureUser.username,
     user.id,
   ]);
 
@@ -163,18 +157,18 @@ const PostCTA = ({
           >
             <HeartIcon
               className={cn("text-primary-text", {
-                "text-destructive": optimisticLikeState.isLiked,
-                "hover:text-secondary": !optimisticLikeState.isLiked,
+                "text-destructive": isLiked,
+                "hover:text-secondary": !isLiked,
               })}
-              fill={optimisticLikeState.isLiked ? "currentColor" : "none"}
+              fill={isLiked ? "currentColor" : "none"}
             />
           </button>
           {showMessageIcon && (
             <button
               type="button"
-              onClick={() =>
-                showModal("PostDetails", { pictureId: picture.id })
-              }
+              onClick={() => {
+                return showModal("PostDetails", { pictureId: pictureId });
+              }}
             >
               <MessageCircle className="cursor-pointer text-primary-text hover:text-secondary" />
             </button>
@@ -184,9 +178,9 @@ const PostCTA = ({
         <button type="button" onClick={handleClickAddToCollection}>
           <BookmarkIcon
             className={cn("text-primary-text", {
-              "hover:text-secondary": !optimisticSaved,
+              "hover:text-secondary": !isSaved,
             })}
-            fill={optimisticSaved ? "currentColor" : "none"}
+            fill={isSaved ? "currentColor" : "none"}
           />
         </button>
       </div>
@@ -195,4 +189,4 @@ const PostCTA = ({
   );
 };
 
-export default memo(PostCTA);
+export default PostCTA;

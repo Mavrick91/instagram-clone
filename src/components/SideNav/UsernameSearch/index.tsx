@@ -49,7 +49,9 @@ const UsernameSearch = () => {
         />
         <button
           className="absolute right-8 top-1/2 -translate-y-1/2"
-          onClick={() => setInputValue("")}
+          onClick={() => {
+            return setInputValue("");
+          }}
         >
           <CircleX size={20} color="gray" />
         </button>
@@ -61,43 +63,47 @@ const UsernameSearch = () => {
       <div className="flex grow flex-col gap-1 overflow-y-auto">
         {isFetching ? (
           <div className="flex flex-col gap-4">
-            {Array.from({ length: 10 }).map((_, index) => (
-              <div key={index} className="flex items-center gap-1 px-6 py-1">
-                <div
-                  className="size-11 animate-pulse rounded-full bg-highlight-background"
-                  style={{ animationDelay: `${index * 0.3}s` }}
-                />
-                <div className="flex grow flex-col gap-2">
+            {Array.from({ length: 10 }).map((_, index) => {
+              return (
+                <div key={index} className="flex items-center gap-1 px-6 py-1">
                   <div
-                    className="h-4 animate-pulse rounded bg-highlight-background"
+                    className="size-11 animate-pulse rounded-full bg-highlight-background"
                     style={{ animationDelay: `${index * 0.3}s` }}
                   />
-                  <div
-                    className="h-4 animate-pulse rounded bg-highlight-background"
-                    style={{ animationDelay: `${index * 0.3}s` }}
-                  />
+                  <div className="flex grow flex-col gap-2">
+                    <div
+                      className="h-4 animate-pulse rounded bg-highlight-background"
+                      style={{ animationDelay: `${index * 0.3}s` }}
+                    />
+                    <div
+                      className="h-4 animate-pulse rounded bg-highlight-background"
+                      style={{ animationDelay: `${index * 0.3}s` }}
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
-          data.map((user) => (
-            <Link key={user.id} href={`/${user.username}`}>
-              <div className="w-full overflow-hidden px-6 py-2 hover:!bg-hover-overlay">
-                <UserListItem
-                  avatar={user.avatar}
-                  firstName={user.username}
-                  subText={
-                    <div>
-                      {user.firstName} {user.lastName}
-                    </div>
-                  }
-                  subTextSize="sm"
-                  username={user.username}
-                />
-              </div>
-            </Link>
-          ))
+          data.map((user) => {
+            return (
+              <Link key={user.id} href={`/${user.username}`}>
+                <div className="w-full overflow-hidden px-6 py-2 hover:!bg-hover-overlay">
+                  <UserListItem
+                    avatar={user.avatar}
+                    firstName={user.username}
+                    subText={
+                      <div>
+                        {user.firstName} {user.lastName}
+                      </div>
+                    }
+                    subTextSize="sm"
+                    username={user.username}
+                  />
+                </div>
+              </Link>
+            );
+          })
         )}
       </div>
     </>

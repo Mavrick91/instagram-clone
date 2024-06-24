@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useFormContext } from "react-hook-form";
 import TextareaAutosize from "react-textarea-autosize";
 
+import ImageClient from "@/components/ImageClient";
 import UserAvatar from "@/components/UserAvatar";
 import { useUserInfo } from "@/providers/UserInfoProvider";
 
@@ -13,7 +14,7 @@ type Props = {
   isEdit: boolean;
 };
 
-export default function AddCaptionPost({ previewPicture, isEdit }: Props) {
+const AddCaptionPost = ({ previewPicture, isEdit }: Props) => {
   const user = useUserInfo();
   const { register, watch } = useFormContext();
 
@@ -21,10 +22,9 @@ export default function AddCaptionPost({ previewPicture, isEdit }: Props) {
 
   return (
     <div className="flex">
-      <img
-        src={previewPicture}
-        className="aspect-square w-full max-w-[755px] object-cover"
-      />
+      <div className="relative aspect-[1440/1607] w-screen max-w-[755px]">
+        <ImageClient src={previewPicture} fill alt="Preview picture" priority />
+      </div>
       <motion.div
         className="border-l border-elevated-separator"
         initial={{ width: 0 }}
@@ -54,4 +54,5 @@ export default function AddCaptionPost({ previewPicture, isEdit }: Props) {
       </motion.div>
     </div>
   );
-}
+};
+export default AddCaptionPost;

@@ -49,10 +49,9 @@ export default function ConversationThreadMessages({
       try {
         const data = JSON.parse(event.data);
         if (data.type === "messageAdded") {
-          setDisplayedMessages((prevMessages) => [
-            ...prevMessages,
-            data.message,
-          ]);
+          setDisplayedMessages((prevMessages) => {
+            return [...prevMessages, data.message];
+          });
         }
       } catch (error) {
         console.error("Error parsing WebSocket message:", error);

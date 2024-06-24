@@ -4,21 +4,26 @@ import { MessageCircle } from "lucide-react";
 import { memo } from "react";
 
 import ImageClient from "@/components/ImageClient";
+import getQueryClient from "@/lib/queryClient";
 import { useModal } from "@/providers/ModalProvider";
-import { PictureLight } from "@/types/picture";
+import { UserPictureDetails } from "@/types/picture";
 
 type Props = {
-  picture: PictureLight;
+  picture: UserPictureDetails;
 };
 
-function ThumbnailGridItem({ picture }: Props) {
+const ThumbnailGridItem = ({ picture }: Props) => {
   const { showModal } = useModal();
+  const queryClient = getQueryClient();
+  queryClient.setQueryData(["picture", picture.id], picture);
 
   return (
     <>
       <button
         type="button"
-        onClick={() => showModal("PostDetails", { pictureId: picture.id })}
+        onClick={() => {
+          return showModal("PostDetails", { pictureId: picture.id });
+        }}
         key={picture.id}
         className="group relative col-span-1 aspect-square overflow-hidden bg-highlight-background"
       >
@@ -37,6 +42,6 @@ function ThumbnailGridItem({ picture }: Props) {
       </button>
     </>
   );
-}
+};
 
 export default memo(ThumbnailGridItem);

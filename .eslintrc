@@ -6,8 +6,23 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended"
   ],
-  "plugins": ["@typescript-eslint", "react", "simple-import-sort", "prettier"],
+  "plugins": [
+    "@typescript-eslint",
+    "prefer-arrow",
+    "react",
+    "simple-import-sort",
+    "prettier"
+  ],
   "rules": {
+    "prefer-arrow/prefer-arrow-functions": [
+      "error",
+      {
+        "disallowPrototype": true,
+        "singleReturnOnly": false,
+        "classPropertiesAllowed": false
+      }
+    ],
+    "arrow-body-style": ["error", "always"],
     "simple-import-sort/imports": "error",
     "simple-import-sort/exports": "error",
     "react/display-name": "off",
@@ -20,7 +35,9 @@
         "paths": [
           {
             "name": "react",
-            "importNames": ["default"],
+            "importNames": [
+              "default"
+            ],
             "message": "React is automatically imported in React 18 and does not need to be explicitly imported."
           }
         ],

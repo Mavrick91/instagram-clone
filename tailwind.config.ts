@@ -146,7 +146,7 @@ const config = {
   },
   plugins: [
     require("tailwindcss-animate"),
-    plugin(function ({ addComponents }) {
+    plugin(({ addComponents }) => {
       addComponents({
         ".debug": {
           border: "1px solid red",

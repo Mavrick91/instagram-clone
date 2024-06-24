@@ -22,15 +22,11 @@ export const getCommentsForPicture = async (
   });
 };
 
-export const createComment = async (
-  pictureId: number,
-  content: string,
-  options?: RevalidatePath,
-) => {
+export const createComment = async (pictureId: number, content: string) => {
   try {
     const currentUser = await getCurrentUser();
 
-    const newComment = await prisma.comment.create({
+    return await prisma.comment.create({
       data: {
         content,
         pictureId,
@@ -41,10 +37,6 @@ export const createComment = async (
         createdAt: true,
       },
     });
-
-    options && revalidatePath(options.originalPath, options?.type);
-
-    return newComment;
   } catch (error) {
     console.error("Error creating comment:", error);
     throw new Error("Unable to create comment");

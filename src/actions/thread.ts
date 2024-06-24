@@ -27,7 +27,9 @@ export const createThread = async (userIds: number[]): Promise<NewThread> => {
   return prisma.thread.create({
     data: {
       users: {
-        connect: userIds.map((userId) => ({ id: userId })),
+        connect: userIds.map((userId) => {
+          return { id: userId };
+        }),
       },
     },
     select: createThreadSelect,
