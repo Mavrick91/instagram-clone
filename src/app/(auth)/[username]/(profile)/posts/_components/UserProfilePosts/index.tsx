@@ -1,4 +1,4 @@
-import { getPictureDetails, getPicturesByUser } from "@/actions/picture";
+import { getPicturesByUser } from "@/actions/picture";
 import ThumbnailGrid from "@/components/ThumbnailGrid";
 
 type UserProfilePostsProps = {
