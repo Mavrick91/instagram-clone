@@ -26,6 +26,7 @@ const PostActionDialog = ({ picture }: PostActionProps) => {
   const handleUpdatePicture = async (
     field: "hideLikesAndViewCounts" | "disableComments",
   ) => {
+    closeModal();
     await optimisticUpdate<UserPictureDetails>({
       queryKey: ["picture", picture.id],
       updateFn: (oldData) => {
@@ -38,7 +39,6 @@ const PostActionDialog = ({ picture }: PostActionProps) => {
         await updatePicture(picture.id, { [field]: !picture[field] });
       },
     });
-    closeModal();
   };
 
   const { mutate: deletePictureMut, isPending } = useMutation({
