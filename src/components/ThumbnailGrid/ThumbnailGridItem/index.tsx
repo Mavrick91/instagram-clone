@@ -1,21 +1,33 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import { MessageCircle } from "lucide-react";
 import { memo } from "react";
 
+import { getPictureDetails } from "@/actions/picture";
 import ImageClient from "@/components/ImageClient";
 import getQueryClient from "@/lib/queryClient";
 import { useModal } from "@/providers/ModalProvider";
 import { UserPictureDetails } from "@/types/picture";
 
 type Props = {
-  picture: UserPictureDetails;
+  serverPicture: UserPictureDetails;
 };
 
-const ThumbnailGridItem = ({ picture }: Props) => {
+const ThumbnailGridItem = ({ serverPicture }: Props) => {
+  console.log("😀😀 serverPicture ~ ", serverPicture);
   const { showModal } = useModal();
-  const queryClient = getQueryClient();
-  queryClient.setQueryData(["picture", picture.id], picture);
+
+  const { data: picture, isLoading } = useQuery<UserPictureDetails>({
+    queryKey: ["picture", serverPicture.id],
+    queryFn: () => {
+      return getPictureDetails(serverPicture.id);
+    },
+    initialData: serverPicture,
+  });
+  console.log("😀😀 isLoading ~ ", isLoading);
+
+  if (!picture) return null;
 
   return (
     <>

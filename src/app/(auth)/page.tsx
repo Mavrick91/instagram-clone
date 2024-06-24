@@ -1,6 +1,5 @@
 import { getFollowedUsersPictures } from "@/actions/picture";
 import { getAllUsers, getCurrentUser } from "@/actions/user";
-import PostItem from "@/app/(auth)/_components/PostFollowing/PostItem";
 
 import PostFollowing from "./_components/PostFollowing";
 import SuggestFollowList from "./_components/SuggestFollowList";

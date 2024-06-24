@@ -12,7 +12,7 @@ type PostFollowingProps = {
 
 const PostFollowing = async ({ serverPicture }: PostFollowingProps) => {
   const queryClient = getQueryClient();
-  await queryClient.prefetchQuery({
+  await queryClient.ensureQueryData({
     queryKey: ["picture", serverPicture.id],
     queryFn: () => {
       return getPictureDetails(serverPicture.id);
