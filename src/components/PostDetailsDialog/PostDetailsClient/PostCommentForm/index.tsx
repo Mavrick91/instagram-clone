@@ -43,7 +43,12 @@ const PostCommentForm = ({ handleAddComment }: Props) => {
           {...register("content")}
           maxRows={4}
         />
-        <Button type="submit" variant="ghost" disabled={!content}>
+        <Button
+          type="submit"
+          variant="ghost"
+          className="h-auto py-0"
+          disabled={!content}
+        >
           Post
         </Button>
       </div>
