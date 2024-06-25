@@ -5,7 +5,7 @@ type Props = {
   setLoginChoice: (value: "custom" | "mocked") => void;
 };
 
-export default function LoginMode({ loginChoice, setLoginChoice }: Props) {
+const LoginMode = ({ loginChoice, setLoginChoice }: Props) => {
   return (
     <div className="relative flex h-16 items-center rounded-full bg-slate-50 shadow-md">
       <div
@@ -37,4 +37,6 @@ export default function LoginMode({ loginChoice, setLoginChoice }: Props) {
       </button>
     </div>
   );
-}
+};
+
+export default LoginMode;

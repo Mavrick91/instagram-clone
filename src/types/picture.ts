@@ -18,6 +18,7 @@ export const userPictureDetailsSelect = {
   hideLikesAndViewCounts: true,
   fileName: true,
   altText: true,
+  isInAnyCollection: true,
   _count: {
     select: {
       comments: true,

@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export const GET = async () => {
   const authorization = headers().get("Authorization");
   const accessToken = authorization?.split("Bearer ")[1];
 
@@ -30,4 +30,4 @@ export async function GET() {
     });
     return response;
   }
-}
+};

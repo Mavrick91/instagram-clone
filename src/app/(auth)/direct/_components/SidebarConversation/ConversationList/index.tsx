@@ -3,7 +3,7 @@ import { getCurrentUser } from "@/actions/user";
 
 import ConversationListItem from "../ConversationListItem";
 
-async function ConversationList() {
+const ConversationList = async () => {
   const [threads, currentUser] = await Promise.all([
     getThreads(),
     getCurrentUser(),
@@ -30,6 +30,6 @@ async function ConversationList() {
       })}
     </div>
   );
-}
+};
 
 export default ConversationList;

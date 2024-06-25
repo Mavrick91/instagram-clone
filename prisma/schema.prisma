@@ -131,6 +131,7 @@ model Picture {
   collection             PictureOnCollection[]
   sizes                  Json
   notifications          Notification[]
+  isInAnyCollection      Boolean               @default(false) // For any collection
 
   @@index([userId])
 }

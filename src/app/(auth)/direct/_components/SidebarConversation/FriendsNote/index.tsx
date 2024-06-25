@@ -10,7 +10,8 @@ type Props = {
   thoughtContent?: string;
   userAvatar?: string | null;
 };
-export function FriendsNote({ thoughtContent, userAvatar }: Props) {
+
+export const FriendsNote = ({ thoughtContent, userAvatar }: Props) => {
   const { isDropdownOpen, toggleDropdown, dropdownRef, buttonRef } =
     useOutsideClick();
   const user = useUserInfo();
@@ -43,4 +44,4 @@ export function FriendsNote({ thoughtContent, userAvatar }: Props) {
       )}
     </div>
   );
-}
+};

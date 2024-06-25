@@ -1,13 +1,11 @@
 "use server";
 
-import { Picture, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import moment from "moment/moment";
 
 import { uploadFile } from "@/actions/upload";
 import prisma from "@/lib/prisma";
 import {
-  PictureLight,
-  pictureLightSelect,
   Sizes,
   UserPictureDetails,
   userPictureDetailsSelect,

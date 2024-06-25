@@ -1,6 +1,10 @@
 import { Prisma } from "@prisma/client";
 
-import { PictureLight, pictureLightSelect } from "./picture";
+import {
+  PictureLight,
+  pictureLightSelect,
+  userPictureDetailsSelect,
+} from "./picture";
 
 export const lightCollectionByUserIdSelect = {
   nameId: true,
@@ -35,7 +39,7 @@ export const userCollectionDetailsSelect = {
   pictures: {
     select: {
       picture: {
-        select: pictureLightSelect,
+        select: userPictureDetailsSelect,
       },
     },
   },

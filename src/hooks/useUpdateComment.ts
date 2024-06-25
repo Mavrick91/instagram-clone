@@ -13,43 +13,55 @@ const useUpdateComment = (
   const currentUser = useUserInfo();
   const { optimisticUpdate } = useOptimisticActions();
 
-  const handleCreateComment = useCallback(async (comment: string) => {
-    const newComment = {
-      id: new Date().getTime(),
-      content: comment,
-      createdAt: new Date(),
-      user: {
-        id: currentUser.id,
-        username: currentUser.username,
-        firstName: currentUser.firstName,
-        lastName: currentUser.lastName,
-        avatar: currentUser.avatar,
-      },
-    };
+  const handleCreateComment = useCallback(
+    async (comment: string) => {
+      const newComment = {
+        id: new Date().getTime(),
+        content: comment,
+        createdAt: new Date(),
+        user: {
+          id: currentUser.id,
+          username: currentUser.username,
+          firstName: currentUser.firstName,
+          lastName: currentUser.lastName,
+          avatar: currentUser.avatar,
+        },
+      };
 
-    if (ref && ref.current)
-      ref.current.scroll({
-        top: 0,
-        behavior: "smooth",
+      if (ref && ref.current)
+        ref.current.scroll({
+          top: 0,
+          behavior: "smooth",
+        });
+
+      await optimisticUpdate<UserPictureDetails>({
+        queryKey: ["picture", pictureId],
+        updateFn: (oldData) => {
+          return {
+            ...oldData,
+            comments: [newComment, ...oldData.comments],
+            _count: {
+              ...oldData._count,
+              comments: oldData._count.comments + 1,
+            },
+          };
+        },
+        action: async () => {
+          await createComment(pictureId, comment);
+        },
       });
-
-    await optimisticUpdate<UserPictureDetails>({
-      queryKey: ["picture", pictureId],
-      updateFn: (oldData) => {
-        return {
-          ...oldData,
-          comments: [newComment, ...oldData.comments],
-          _count: {
-            ...oldData._count,
-            comments: oldData._count.comments + 1,
-          },
-        };
-      },
-      action: async () => {
-        await createComment(pictureId, comment);
-      },
-    });
-  }, []);
+    },
+    [
+      currentUser.avatar,
+      currentUser.firstName,
+      currentUser.id,
+      currentUser.lastName,
+      currentUser.username,
+      optimisticUpdate,
+      pictureId,
+      ref,
+    ],
+  );
 
   return { handleCreateComment };
 };

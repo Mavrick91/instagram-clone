@@ -1,30 +1,32 @@
-import { ChevronLeft, Ellipsis } from "lucide-react";
-import Link from "next/link";
-import { redirect } from "next/navigation";
+"use client";
+
+import { useQuery } from "@tanstack/react-query";
 
 import { getUserCollectionDetails } from "@/actions/collection";
 import ThumbnailGrid from "@/components/ThumbnailGrid";
-import { LightCollectionByUserId } from "@/types/collection";
+import { UserCollectionDetails } from "@/types/collection";
 
-import CollectionAction from "../CollectionAction";
+import UserProfileCollectionDetailsHeader from "./UserProfileCollectionDetailsHeader";
 
 type UserProfileCollectionDetailsProps = {
-  collectionName: string;
+  serverUserCollectionDetails: UserCollectionDetails;
   username: string;
-  defaultCollection: LightCollectionByUserId;
 };
 
-const UserProfileCollectionDetails = async ({
-  collectionName,
+const UserProfileCollectionDetails = ({
   username,
-  defaultCollection,
+  serverUserCollectionDetails,
 }: UserProfileCollectionDetailsProps) => {
-  const userCollectionDetails = await getUserCollectionDetails(
-    username,
-    collectionName,
-  );
-
-  if (!userCollectionDetails) redirect(`/${username}/saved`);
+  const { data: userCollectionDetails } = useQuery({
+    queryKey: ["collection", username, serverUserCollectionDetails.nameId],
+    queryFn: async () => {
+      return await getUserCollectionDetails(
+        username,
+        serverUserCollectionDetails.nameId,
+      );
+    },
+    initialData: serverUserCollectionDetails,
+  });
 
   const pictures = userCollectionDetails.pictures.map((p) => {
     return p.picture;
@@ -32,25 +34,10 @@ const UserProfileCollectionDetails = async ({
 
   return (
     <div className="mx-auto mt-6 flex max-w-lg-page flex-col">
-      <Link
-        href={`/${username}/saved`}
-        className="mb-4 flex items-center gap-2 text-sm font-semibold text-secondary"
-      >
-        <ChevronLeft size={28} strokeWidth={1.25} />{" "}
-        <span className="-ml-2">Saved</span>
-      </Link>
-      <div className="flex items-center justify-between">
-        <h2 className="mb-3 text-xl">{userCollectionDetails.name}</h2>
-        {!userCollectionDetails.isDefault && (
-          <CollectionAction
-            collectionId={userCollectionDetails.id}
-            collectionName={userCollectionDetails.name}
-            defaultCollection={defaultCollection}
-          >
-            <Ellipsis />
-          </CollectionAction>
-        )}
-      </div>
+      <UserProfileCollectionDetailsHeader
+        serverUserCollectionDetails={userCollectionDetails}
+        username={username}
+      />
       <div>
         <ThumbnailGrid pictures={pictures} />
       </div>

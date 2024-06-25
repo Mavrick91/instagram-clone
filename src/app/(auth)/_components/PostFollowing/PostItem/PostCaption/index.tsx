@@ -10,7 +10,7 @@ type Props = {
   description?: string | null;
 };
 
-export default function PostCaption({ username, description }: Props) {
+const PostCaption = ({ username, description }: Props) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [canExpand, setCanExpand] = useState(false);
 
@@ -60,4 +60,6 @@ export default function PostCaption({ username, description }: Props) {
       )}
     </div>
   );
-}
+};
+
+export default PostCaption;

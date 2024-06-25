@@ -3,6 +3,7 @@ import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 
+import ImageClient from "@/components/ImageClient";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
@@ -48,8 +49,8 @@ const AccessibilityExpand = ({ previewPicture }: Props) => {
             </div>
             <div>
               <div className="px-3 py-4">
-                <div className="flex h-11 items-center gap-3">
-                  <img className="size-11 object-cover" src={previewPicture} />
+                <div className="flex size-11 items-center gap-3">
+                  <ImageClient src={previewPicture} alt="icon alt" />
                   <Input
                     placeholder="Write alt text..."
                     className="h-full grow bg-transparent placeholder:text-secondary"

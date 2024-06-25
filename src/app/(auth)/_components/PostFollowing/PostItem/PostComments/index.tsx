@@ -9,7 +9,7 @@ type Props = {
   picture: UserPictureDetails;
 };
 
-export default function PostComments({ commentCount, picture }: Props) {
+const PostComments = ({ commentCount, picture }: Props) => {
   const { showModal } = useModal();
 
   if (commentCount === 0) {
@@ -31,4 +31,6 @@ export default function PostComments({ commentCount, picture }: Props) {
       </div>
     </>
   );
-}
+};
+
+export default PostComments;

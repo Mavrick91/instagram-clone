@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import axios from "axios";
 import * as bcrypt from "bcrypt";
 
-import { convertAndUploadImage } from "../src/image-upload.util";
+import { convertAndUploadImage } from "../src/actions/upload";
 
 const prisma = new PrismaClient();
 

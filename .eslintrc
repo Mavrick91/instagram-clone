@@ -4,16 +4,20 @@
     "next/core-web-vitals",
     "plugin:tailwindcss/recommended",
     "eslint:recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react-hooks/recommended"
   ],
   "plugins": [
     "@typescript-eslint",
     "prefer-arrow",
     "react",
     "simple-import-sort",
+    "react-hooks",
     "prettier"
   ],
   "rules": {
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
     "prefer-arrow/prefer-arrow-functions": [
       "error",
       {

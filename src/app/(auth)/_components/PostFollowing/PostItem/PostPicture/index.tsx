@@ -5,7 +5,7 @@ type Props = {
   picture: UserPictureDetails;
 };
 
-export default function PostPicture({ picture }: Props) {
+const PostPicture = ({ picture }: Props) => {
   return (
     <div className="group relative col-span-1 aspect-square size-[512px] min-h-96 bg-highlight-background">
       <div className="mb-1">
@@ -19,4 +19,6 @@ export default function PostPicture({ picture }: Props) {
       </div>
     </div>
   );
-}
+};
+
+export default PostPicture;

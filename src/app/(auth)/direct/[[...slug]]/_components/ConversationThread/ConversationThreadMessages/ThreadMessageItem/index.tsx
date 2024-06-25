@@ -10,12 +10,12 @@ interface ThreadMessageItemParams {
   showTimestamp: boolean;
 }
 
-export function ThreadMessageItem({
+export const ThreadMessageItem = ({
   message,
   isFirstMessage,
   isLastMessage,
   showTimestamp,
-}: ThreadMessageItemParams) {
+}: ThreadMessageItemParams) => {
   const user = useUserInfo();
 
   const isMessageLeftSide = message.user.id !== user.id;
@@ -49,4 +49,4 @@ export function ThreadMessageItem({
       </div>
     </>
   );
-}
+};

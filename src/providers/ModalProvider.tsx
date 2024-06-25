@@ -11,22 +11,38 @@ import {
   useState,
 } from "react";
 
+import CollectionActionDialog, {
+  CollectionActionProps,
+} from "@/components/CollectionActionDialog";
 // Import your modal components here
 import CreateConversationDialog from "@/components/CreateConversationDialog";
+import {
+  EditCollectionName,
+  EditCollectionNameProps,
+} from "@/components/EditCollectionName";
 import EditProfileDialog from "@/components/EditProfileDialog";
-import ExitDialog, { ExitDialogProps } from "@/components/ExitDialog";
 import FollowersDialog, {
   FollowersDialogProps,
 } from "@/components/FollowersDialog";
+import NewCollectionForm, {
+  NewCollectionFormProps,
+} from "@/components/NewCollectionForm";
 import PostActionDialog, {
   PostActionProps,
 } from "@/components/PostActionDialog";
 import PostDetailsDialog, {
   PostDetailsDialogProps,
 } from "@/components/PostDetailsDialog";
+import SecondaryDialog, {
+  SecondaryDialogProps,
+} from "@/components/SecondaryDialog";
 import UploadPostDialog, {
   UploadPostDialogProps,
 } from "@/components/UploadPostDialog";
+
+import AddPicturesDialog, {
+  AddPicturesDialogProps,
+} from "../components/AddPicturesDialog";
 
 const Modal = dynamic(
   () => {
@@ -42,16 +58,18 @@ type ModalProps = {
   CreateConversation: undefined;
   UploadPostDialog: UploadPostDialogProps;
   PostActionDialog: PostActionProps;
-  ExitDialog: ExitDialogProps;
+  SecondaryDialog: SecondaryDialogProps;
+  NewCollectionForm: NewCollectionFormProps;
+  EditCollectionName: EditCollectionNameProps;
+  CollectionActionDialog: CollectionActionProps;
+  AddPicturesDialog: AddPicturesDialogProps;
 };
 
 type ModalKeys = keyof ModalProps;
 type ModalPropsType<K extends ModalKeys> = ModalProps[K];
 
 type ModalComponentType = {
-  [K in ModalKeys]: (
-    props: ModalPropsType<K> & { onClose: () => void },
-  ) => ReactElement;
+  [K in ModalKeys]: (props: ModalPropsType<K>) => ReactElement;
 };
 
 const modals: ModalComponentType = {
@@ -61,22 +79,32 @@ const modals: ModalComponentType = {
   Followers: (props: FollowersDialogProps) => {
     return <FollowersDialog {...props} />;
   },
-  EditProfile: ({ onClose }) => {
-    return <EditProfileDialog onClose={onClose} />;
+  EditProfile: () => {
+    return <EditProfileDialog />;
   },
   CreateConversation: () => {
     return <CreateConversationDialog />;
   },
-  UploadPostDialog: (
-    props: UploadPostDialogProps & { onClose: () => void },
-  ) => {
+  UploadPostDialog: (props: UploadPostDialogProps) => {
     return <UploadPostDialog {...props} />;
   },
-  PostActionDialog: (props: PostActionProps & { onClose: () => void }) => {
+  PostActionDialog: (props: PostActionProps) => {
     return <PostActionDialog {...props} />;
   },
-  ExitDialog: (props: ExitDialogProps) => {
-    return <ExitDialog {...props} />;
+  SecondaryDialog: (props: SecondaryDialogProps) => {
+    return <SecondaryDialog {...props} />;
+  },
+  NewCollectionForm: (props: NewCollectionFormProps) => {
+    return <NewCollectionForm {...props} />;
+  },
+  EditCollectionName: (props: EditCollectionNameProps) => {
+    return <EditCollectionName {...props} />;
+  },
+  CollectionActionDialog: (props: CollectionActionProps) => {
+    return <CollectionActionDialog {...props} />;
+  },
+  AddPicturesDialog: (props: AddPicturesDialogProps) => {
+    return <AddPicturesDialog {...props} />;
   },
 };
 
@@ -124,14 +152,9 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
   const showModal = useCallback(
     <K extends ModalKeys>(key: K, props?: ModalPropsType<K>) => {
       const ModalComponent = modals[key];
+
       if (ModalComponent) {
-        const content = (
-          // @ts-expect-error
-          <ModalComponent
-            {...(props as ModalPropsType<K>)}
-            onClose={isPrimaryOpen ? closeSecondaryModal : closePrimaryModal}
-          />
-        );
+        const content = <ModalComponent {...(props as ModalPropsType<K>)} />;
         if (isPrimaryOpen) {
           setSecondaryContent(content);
           setIsSecondaryOpen(true);
@@ -141,7 +164,7 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
         }
       }
     },
-    [isPrimaryOpen, closePrimaryModal, closeSecondaryModal],
+    [isPrimaryOpen],
   );
 
   const modalFunctionsValue = useMemo(() => {

@@ -5,7 +5,7 @@ import AddPictureSVG from "@/components/SVG/AddPictureSVG";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export default function UploadPostFromComputer() {
+const UploadPostFromComputer = () => {
   const { setValue, register } = useFormContext();
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -30,4 +30,6 @@ export default function UploadPostFromComputer() {
       </label>
     </div>
   );
-}
+};
+
+export default UploadPostFromComputer;

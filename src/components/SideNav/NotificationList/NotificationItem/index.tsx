@@ -1,55 +1,52 @@
-import moment from "moment";
-
-import UserAvatar from "@/components/UserAvatar";
 // import { useUserInfo } from "@/providers/UserInfoProvider";
 
 type Props = {
   notification: any;
 };
 
-export default function NotificationItem({ notification }: Props) {
-  const renderContentBasedOnType = () => {
-    switch (notification.type) {
-      case "COMMENT":
-        return (
-          <>
-            <div className="text-primary-text">
-              <span className="mr-1 font-semibold">
-                {notification.sender.username}
-              </span>
-              <span className="text-sm">
-                commented: {notification.comment?.content}
-              </span>
-            </div>
-          </>
-        );
-      case "LIKE":
-        return (
-          <>
-            <div className="text-primary-text">
-              <span className="mr-1 font-semibold">
-                {notification.sender.username}
-              </span>
-              <span className="text-sm">liked your photo.</span>
-            </div>
-          </>
-        );
-      case "FOLLOW":
-        return (
-          <>
-            <div className="text-primary-text">
-              <span className="mr-1 font-semibold">
-                {notification.sender.username}
-              </span>
-              <span className="text-sm">started following you.</span>
-            </div>
-          </>
-        );
-      // Handle other types as necessary
-      default:
-        return null;
-    }
-  };
+const NotificationItem = ({ notification }: Props) => {
+  // const renderContentBasedOnType = () => {
+  //   switch (notification.type) {
+  //     case "COMMENT":
+  //       return (
+  //         <>
+  //           <div className="text-primary-text">
+  //             <span className="mr-1 font-semibold">
+  //               {notification.sender.username}
+  //             </span>
+  //             <span className="text-sm">
+  //               commented: {notification.comment?.content}
+  //             </span>
+  //           </div>
+  //         </>
+  //       );
+  //     case "LIKE":
+  //       return (
+  //         <>
+  //           <div className="text-primary-text">
+  //             <span className="mr-1 font-semibold">
+  //               {notification.sender.username}
+  //             </span>
+  //             <span className="text-sm">liked your photo.</span>
+  //           </div>
+  //         </>
+  //       );
+  //     case "FOLLOW":
+  //       return (
+  //         <>
+  //           <div className="text-primary-text">
+  //             <span className="mr-1 font-semibold">
+  //               {notification.sender.username}
+  //             </span>
+  //             <span className="text-sm">started following you.</span>
+  //           </div>
+  //         </>
+  //       );
+  //     // Handle other types as necessary
+  //     default:
+  //       return null;
+  //   }
+  // };
 
   // const user = useUserInfo();
 
@@ -94,4 +91,5 @@ export default function NotificationItem({ notification }: Props) {
   //     </div>
   //   </button>
   // );
-}
+};
+export default NotificationItem;

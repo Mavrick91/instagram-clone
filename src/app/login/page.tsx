@@ -28,7 +28,7 @@ const loginSchema = z.object({
 
 type LoginFormInputs = z.infer<typeof loginSchema>;
 
-export default function Login() {
+const Login = () => {
   const [loginChoice, setLoginChoice] = useState<"custom" | "mocked">("custom");
   const router = useRouter();
   const {
@@ -91,4 +91,6 @@ export default function Login() {
       </div>
     </main>
   );
-}
+};
+
+export default Login;

@@ -1,14 +1,17 @@
+"use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { z } from "zod";
 
 import { createCollectionAndAddPictures } from "@/actions/collection";
-import { UserDefaultCollectionPictures } from "@/types/collection";
-import { RevalidatePath } from "@/types/global";
+import { useModal } from "@/providers/ModalProvider";
+import { LightCollectionByUserId } from "@/types/collection";
 
-import AddPicturesStep from "../AddPicturesStep";
+import AddPicturesStep from "../AddPicturesDialog/AddPicturesStep";
 import { CreateCollectionStep } from "../CreateCollectionStep";
 
 const formSchema = z.object({
@@ -18,25 +21,36 @@ const formSchema = z.object({
 
 export type FormDataNewCollection = z.infer<typeof formSchema>;
 
-const revalidatePath: RevalidatePath = {
-  originalPath: "/(auth)/[username]/(profile)/saved",
-  type: "page",
-};
-
-type NewCollectionFormProps = {
-  onClose: () => void;
-  defaultCollection: UserDefaultCollectionPictures;
+export type NewCollectionFormProps = {
+  defaultCollection: LightCollectionByUserId;
+  profileUsername: string;
 };
 
 const NewCollectionForm = ({
-  onClose,
   defaultCollection,
+  profileUsername,
 }: NewCollectionFormProps) => {
+  const { closeModal } = useModal();
   const [selectedPictures, setSelectedPictures] = useState<number[]>([]);
   const [currentStep, setCurrentStep] = useState(0);
+  const queryClient = useQueryClient();
 
   const methods = useForm<FormDataNewCollection>({
     resolver: zodResolver(formSchema),
+  });
+
+  const { mutate: createCollection, isPending } = useMutation({
+    mutationFn: async (data: FormDataNewCollection) => {
+      return await createCollectionAndAddPictures(
+        data.collectionName,
+        data.selectedPictures,
+      );
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["collections", profileUsername],
+      });
+    },
   });
 
   useEffect(() => {
@@ -59,13 +73,18 @@ const NewCollectionForm = ({
 
   const onSubmit = async (data: FormDataNewCollection) => {
     try {
-      await createCollectionAndAddPictures(
-        data.collectionName,
-        data.selectedPictures,
-        revalidatePath,
-      );
+      createCollection({
+        collectionName: data.collectionName,
+        selectedPictures: data.selectedPictures,
+      });
 
-      onClose();
+      // await createCollectionAndAddPictures(
+      //   data.collectionName,
+      //   data.selectedPictures,
+      // );
+      // await handleRefetchCollection();
+
+      closeModal();
     } catch (error) {
       if (error instanceof Error)
         toast.error("Failed to create saved " + error.message);
@@ -91,6 +110,7 @@ const NewCollectionForm = ({
             handlePictureClick={handlePictureClick}
             setCurrentStep={setCurrentStep}
             onSubmit={onSubmit}
+            isLoading={isPending}
           />
         )}
       </form>

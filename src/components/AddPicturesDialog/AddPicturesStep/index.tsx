@@ -8,23 +8,25 @@ import Separator from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { LightCollectionByUserId } from "@/types/collection";
 
-import { FormDataNewCollection } from "../NewCollectionForm";
+import { FormDataNewCollection } from "../../NewCollectionForm";
 
-type AddPicturesStepProps = {
+export type AddPicturesStepDialogProps = {
   defaultCollection: LightCollectionByUserId;
   selectedPictures: number[];
   handlePictureClick: (pic: number) => void;
   setCurrentStep?: (step: number) => void;
   onSubmit: (data: FormDataNewCollection) => void;
+  isLoading: boolean;
 };
 
-const AddPicturesStep = ({
+const AddPicturesDialog = ({
   defaultCollection,
   selectedPictures,
   handlePictureClick,
   setCurrentStep,
   onSubmit,
-}: AddPicturesStepProps) => {
+  isLoading,
+}: AddPicturesStepDialogProps) => {
   const { handleSubmit } = useFormContext<FormDataNewCollection>();
 
   return (
@@ -76,6 +78,7 @@ const AddPicturesStep = ({
       <Separator />
       <div className="flex justify-center">
         <Button
+          loading={isLoading}
           onClick={handleSubmit(onSubmit)}
           type="submit"
           variant="blue-link"
@@ -88,4 +91,4 @@ const AddPicturesStep = ({
   );
 };
 
-export default AddPicturesStep;
+export default AddPicturesDialog;

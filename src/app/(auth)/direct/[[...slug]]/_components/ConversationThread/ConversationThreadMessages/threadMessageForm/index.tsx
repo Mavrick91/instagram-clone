@@ -18,7 +18,7 @@ type FormData = z.infer<typeof schema>;
 type Props = {
   threadId: number;
 };
-export function ThreadMessageForm({ threadId }: Props) {
+export const ThreadMessageForm = ({ threadId }: Props) => {
   const user = useUserInfo();
 
   const { register, handleSubmit, watch, reset } = useForm<FormData>({
@@ -53,4 +53,4 @@ export function ThreadMessageForm({ threadId }: Props) {
       </form>
     </div>
   );
-}
+};

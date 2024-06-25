@@ -20,11 +20,11 @@ type Params = {
   slug: string[];
 };
 
-function ConversationListItem({
+const ConversationListItem = ({
   threadId,
   lastMessage,
   recipientUser,
-}: ConversationListProps) {
+}: ConversationListProps) => {
   const user = useUserInfo();
   const params = useParams() as Params;
 
@@ -61,6 +61,6 @@ function ConversationListItem({
       </div>
     </Link>
   );
-}
+};
 
 export default ConversationListItem;

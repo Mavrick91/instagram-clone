@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { revalidateUserProfilePage } from "@/constants/revalidate";
 import { cn } from "@/lib/utils";
+import { useModal } from "@/providers/ModalProvider";
 import { useUserInfo } from "@/providers/UserInfoProvider";
 
 const ProfileSchema = z.object({
@@ -38,10 +39,8 @@ const ProfileSchema = z.object({
 
 type FormData = z.infer<typeof ProfileSchema>;
 
-type EditProfileDialogProps = {
-  onClose: () => void;
-};
-const EditProfileDialog = ({ onClose }: EditProfileDialogProps) => {
+const EditProfileDialog = () => {
+  const { closeModal } = useModal();
   const user = useUserInfo();
   const {
     register,
@@ -72,7 +71,7 @@ const EditProfileDialog = ({ onClose }: EditProfileDialogProps) => {
         revalidateUserProfilePage,
       );
 
-      onClose();
+      closeModal();
     } catch (error) {
       console.error("Failed to update user posts:", error);
     }

@@ -12,10 +12,10 @@ import { ThreadMessageItem } from "./ThreadMessageItem";
 
 const TIMESTAMP_THRESHOLD = 5 * 60 * 1000; // 5 minutes in milliseconds
 
-function shouldShowTimestamp(
+const shouldShowTimestamp = (
   currentMessage: ThreadMessage,
   previousMessage: ThreadMessage | undefined,
-): boolean {
+): boolean => {
   if (!previousMessage || !currentMessage) {
     return true;
   }
@@ -25,7 +25,7 @@ function shouldShowTimestamp(
   const timeDifference = currentTimestamp - previousTimestamp;
 
   return timeDifference >= TIMESTAMP_THRESHOLD;
-}
+};
 
 type Props = {
   messages: ThreadMessage[];
@@ -33,11 +33,11 @@ type Props = {
   recipientUser: ThreadUser;
 };
 
-export default function ConversationThreadMessages({
+const ConversationThreadMessages = ({
   messages,
   threadId,
   recipientUser,
-}: Props) {
+}: Props) => {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [displayedMessages, setDisplayedMessages] =
     useState<ThreadMessage[]>(messages);
@@ -115,4 +115,6 @@ export default function ConversationThreadMessages({
       <ThreadMessageForm threadId={threadId} />
     </>
   );
-}
+};
+
+export default ConversationThreadMessages;

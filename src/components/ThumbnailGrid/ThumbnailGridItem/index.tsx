@@ -6,23 +6,22 @@ import { memo } from "react";
 
 import { getPictureDetails } from "@/actions/picture";
 import ImageClient from "@/components/ImageClient";
-import getQueryClient from "@/lib/queryClient";
 import { useModal } from "@/providers/ModalProvider";
 import { UserPictureDetails } from "@/types/picture";
 
 type Props = {
-  serverPicture: UserPictureDetails;
+  initialPicture: UserPictureDetails;
 };
 
-const ThumbnailGridItem = ({ serverPicture }: Props) => {
+const ThumbnailGridItem = ({ initialPicture }: Props) => {
   const { showModal } = useModal();
 
-  const { data: picture, isLoading } = useQuery<UserPictureDetails>({
-    queryKey: ["picture", serverPicture.id],
+  const { data: picture } = useQuery<UserPictureDetails>({
+    queryKey: ["picture", initialPicture.id],
     queryFn: () => {
-      return getPictureDetails(serverPicture.id);
+      return getPictureDetails(initialPicture.id);
     },
-    initialData: serverPicture,
+    initialData: initialPicture,
   });
 
   if (!picture) return null;

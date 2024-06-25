@@ -18,7 +18,7 @@ type Props = {
   pictureId: number;
 };
 
-export default function PostAddComment({ pictureId }: Props) {
+const PostAddComment = ({ pictureId }: Props) => {
   const { reset, register, handleSubmit, watch } = useForm<Inputs>({
     resolver: zodResolver(schema),
   });
@@ -49,4 +49,6 @@ export default function PostAddComment({ pictureId }: Props) {
       )}
     </form>
   );
-}
+};
+
+export default PostAddComment;

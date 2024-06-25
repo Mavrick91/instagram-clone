@@ -1,8 +1,8 @@
 "use server";
 
 import { Collection } from "@prisma/client";
-import { revalidatePath } from "next/cache";
 
+import { getPictureDetails } from "@/actions/picture";
 import { getCurrentUser } from "@/actions/user";
 import prisma from "@/lib/prisma";
 import {
@@ -11,11 +11,7 @@ import {
   UserCollectionDetails,
   userCollectionDetailsSelect,
 } from "@/types/collection";
-import { RevalidatePath } from "@/types/global";
-import {
-  transformCollectionPictures,
-  transformLightPicture,
-} from "@/utils/picture";
+import { transformCollectionPictures } from "@/utils/picture";
 
 export const getIsPictureInUserCollection = async (
   pictureId: number,
@@ -71,16 +67,114 @@ export const removePictureFromDefaultCollection = async (
   }
 };
 
-export const addPictureToCollectionById = async (
-  collectionId: number,
-  pictureId: number[],
+export const removePictureFromCollection = async (
+  pictureId: number,
+  collectionNameId?: string,
 ): Promise<void> => {
   try {
+    const currentUser = await getCurrentUser();
+
+    await prisma.$transaction(async (prisma) => {
+      if (!collectionNameId) {
+        // Removing from all of the user's collections
+        await prisma.pictureOnCollection.deleteMany({
+          where: {
+            pictureId: pictureId,
+            collection: {
+              userId: currentUser.id,
+            },
+          },
+        });
+
+        // Update isInAnyCollection and isSaved
+        await prisma.picture.update({
+          where: { id: pictureId },
+          data: {
+            isInAnyCollection: false,
+          },
+        });
+      } else {
+        const collectionPicture = await prisma.collection.findFirst({
+          where: {
+            userId: currentUser.id,
+            nameId: collectionNameId,
+          },
+        });
+        console.log("😀😀 collectionPicture ~ ", collectionPicture);
+        if (!collectionPicture) throw new Error("Collection not found");
+
+        // Removing from a specific collection
+        const pictureExisting = await prisma.pictureOnCollection.findFirst({
+          where: {
+            pictureId: pictureId,
+            collectionId: collectionPicture.id,
+            collection: {
+              userId: currentUser.id,
+            },
+          },
+        });
+
+        if (!pictureExisting) {
+          throw new Error("Picture not in collection");
+        }
+
+        await prisma.pictureOnCollection.delete({
+          where: {
+            pictureId_collectionId: {
+              pictureId: pictureId,
+              collectionId: collectionPicture.id,
+            },
+          },
+        });
+
+        // Check if the picture is still in any collection
+        const remainingCollections = await prisma.pictureOnCollection.findFirst(
+          {
+            where: {
+              pictureId: pictureId,
+              collection: {
+                userId: currentUser.id,
+                isDefault: false,
+              },
+            },
+          },
+        );
+        console.log("😀😀 remainingCollections ~ ", remainingCollections);
+
+        // Update isInAnyCollection if no collections left
+        if (!remainingCollections) {
+          await prisma.picture.update({
+            where: { id: pictureId },
+            data: { isInAnyCollection: false },
+          });
+        }
+      }
+    });
+  } catch (error) {
+    console.error("Error removing picture from collection(s):", error);
+    throw new Error("Unable to remove picture from the collection(s).");
+  }
+};
+
+export const addPictureToCollectionById = async (
+  collectionId: number,
+  pictureIds: number[],
+): Promise<void> => {
+  try {
+    // First, get the collection to check if it's the default collection
+    const collection = await prisma.collection.findUnique({
+      where: { id: collectionId },
+      select: { isDefault: true },
+    });
+
+    if (!collection) {
+      throw new Error("Collection not found");
+    }
+
+    // Find existing pictures in the collection
     const existingPictures = await prisma.pictureOnCollection.findMany({
       where: {
-        pictureId: {
-          in: pictureId,
-        },
+        pictureId: { in: pictureIds },
         collectionId: collectionId,
       },
     });
@@ -89,29 +183,40 @@ export const addPictureToCollectionById = async (
       return pic.pictureId;
     });
 
-    const newPictureIds = pictureId.filter((picId) => {
+    // Filter out pictures that are already in the collection
+    const newPictureIds = pictureIds.filter((picId) => {
       return !existingPictureIds.includes(picId);
     });
 
-    await Promise.all(
-      newPictureIds.map((pictureId) => {
-        return prisma.pictureOnCollection.create({
-          data: {
+    // Perform operations in a transaction to ensure consistency
+    await prisma.$transaction(async (prisma) => {
+      // Add new pictures to the collection
+      await prisma.pictureOnCollection.createMany({
+        data: newPictureIds.map((pictureId) => {
+          return {
             collectionId: collectionId,
             pictureId,
-          },
-        });
-      }),
-    );
+          };
+        }),
+        skipDuplicates: true,
+      });
+
+      // Update isInAnyCollection for all new pictures
+      await prisma.picture.updateMany({
+        where: { id: { in: newPictureIds } },
+        data: {
+          isInAnyCollection: true,
+        },
+      });
+    });
   } catch (error) {
-    console.error("Error adding picture to collection:", error);
-    throw new Error("Unable to add picture to the collection.");
+    console.error("Error adding pictures to collection:", error);
+    throw new Error("Unable to add pictures to the collection.");
   }
 };
 
 export const addPictureToDefaultCollection = async (
   pictureId: number,
-  options?: RevalidatePath,
 ): Promise<void> => {
   try {
     const currentUser = await getCurrentUser();
@@ -139,8 +244,6 @@ export const addPictureToDefaultCollection = async (
         collectionId: defaultCollection.id,
       },
     });
-
-    options && revalidatePath(options.originalPath, options?.type);
   } catch (error) {
     console.error("Error adding picture to the default saved:", error);
     throw new Error("Unable to add picture to the collection.");
@@ -190,7 +293,7 @@ export const getDefaultCollectionByUsername = async (
 
 export const getUserCollectionDetails = async (
   username: string,
-  collectionName: string,
+  collectionNameId: string,
 ): Promise<UserCollectionDetails> => {
   const user = await prisma.user.findFirstOrThrow({
     where: {
@@ -201,25 +304,28 @@ export const getUserCollectionDetails = async (
   const collection = await prisma.collection.findFirstOrThrow({
     where: {
       userId: user.id,
-      nameId: collectionName,
+      nameId: collectionNameId,
     },
     select: userCollectionDetailsSelect,
   });
 
-  return {
-    ...collection,
-    pictures: collection.pictures.map((p) => {
+  const picturesWithDetails = await Promise.all(
+    collection.pictures.map(async (p) => {
       return {
-        picture: transformLightPicture(p.picture),
+        picture: await getPictureDetails(p.picture.id),
       };
     }),
+  );
+
+  return {
+    ...collection,
+    pictures: picturesWithDetails,
   };
 };
 
 export const createCollectionAndAddPictures = async (
   collectionName: string,
   pictureIds: number[],
-  options?: RevalidatePath,
 ): Promise<Collection> => {
   const currentUser = await getCurrentUser();
 
@@ -249,61 +355,103 @@ export const createCollectionAndAddPictures = async (
     const existingPictureIds = existingPictures.map((pic) => {
       return pic.pictureId;
     });
-
     const newPictureIds = pictureIds.filter((picId) => {
       return !existingPictureIds.includes(picId);
     });
 
-    await Promise.all(
-      newPictureIds.map((pictureId) => {
-        return prisma.pictureOnCollection.create({
-          data: {
-            collectionId: newCollection.id,
-            pictureId,
-          },
-        });
+    // Add pictures to the new collection
+    await prisma.pictureOnCollection.createMany({
+      data: newPictureIds.map((pictureId) => {
+        return {
+          collectionId: newCollection.id,
+          pictureId,
+        };
       }),
-    );
+      skipDuplicates: true,
+    });
+
+    // Update the state of the newly added pictures
+    if (newPictureIds.length > 0) {
+      await prisma.picture.updateMany({
+        where: { id: { in: newPictureIds } },
+        data: {
+          isInAnyCollection: true,
+        },
+      });
+    }
 
     return newCollection;
   };
 
   try {
-    const newCollection = await prisma.$transaction(transaction);
-
-    options && revalidatePath(options.originalPath, options?.type);
-
-    return newCollection;
+    return await prisma.$transaction(transaction);
   } catch (error) {
-    console.error("Error creating saved and adding pictures:", error);
+    console.error("Error creating collection and adding pictures:", error);
     throw new Error("Unable to create collection.");
   }
 };
 
-export const deleteCollection = async (
-  collectionId: number,
-  options?: RevalidatePath,
-): Promise<void> => {
+export const deleteCollection = async (collectionId: number): Promise<void> => {
   if (!collectionId) {
     throw new Error("Invalid collectionId provided.");
   }
 
-  const transaction = async () => {
-    await prisma.pictureOnCollection.deleteMany({
-      where: { collectionId },
-    });
-
-    await prisma.collection.delete({
-      where: { id: collectionId },
-    });
-  };
-
   try {
-    await prisma.$transaction(transaction);
+    const currentUser = await getCurrentUser();
 
-    options && revalidatePath(options.originalPath, options?.type);
+    await prisma.$transaction(async (prisma) => {
+      // Check if the collection to be deleted is not the default one
+      const collectionToDelete = await prisma.collection.findUnique({
+        where: { id: collectionId },
+        select: { isDefault: true },
+      });
+
+      if (!collectionToDelete || collectionToDelete.isDefault) {
+        throw new Error("Cannot delete the default collection.");
+      }
+
+      // Get all pictures in the collection
+      const picturesInCollection = await prisma.pictureOnCollection.findMany({
+        where: { collectionId },
+        select: { pictureId: true },
+      });
+
+      // Delete all picture-collection associations
+      await prisma.pictureOnCollection.deleteMany({
+        where: { collectionId },
+      });
+
+      // Delete the collection
+      await prisma.collection.delete({
+        where: { id: collectionId },
+      });
+
+      // Check and update isInAnyCollection for each picture
+      for (const { pictureId } of picturesInCollection) {
+        const remainingCollections = await prisma.pictureOnCollection.findFirst(
+          {
+            where: {
+              pictureId,
+              collection: {
+                userId: currentUser.id,
+                isDefault: false, // Exclude the default collection
+              },
+            },
+          },
+        );
+
+        if (!remainingCollections) {
+          await prisma.picture.update({
+            where: { id: pictureId },
+            data: {
+              isInAnyCollection: false,
+            },
+          });
+        }
+      }
+    });
   } catch (error) {
-    console.error("Error deleting saved:", error);
+    console.error("Error deleting collection:", error);
     throw new Error("Unable to delete the collection.");
   }
 };
@@ -311,7 +459,6 @@ export const deleteCollection = async (
 export const updateCollectionName = async (
   collectionId: number,
   newName: string,
-  options?: RevalidatePath,
 ): Promise<void> => {
   try {
     await prisma.collection.update({
@@ -323,8 +470,6 @@ export const updateCollectionName = async (
         nameId: newName.toLowerCase().replace(/ /g, "-"),
       },
     });
-
-    options && revalidatePath(options.originalPath, options?.type);
   } catch (error) {
     console.error("Error updating saved name:", error);
     throw new Error("Unable to update saved name.");

@@ -10,7 +10,7 @@ import UserListItem from "@/components/UserListItem";
 import { useModal } from "@/providers/ModalProvider";
 import { useUserInfo } from "@/providers/UserInfoProvider";
 
-export default function CreateConversationDialog() {
+const CreateConversationDialog = () => {
   const user = useUserInfo();
   const { closeModal } = useModal();
 
@@ -103,4 +103,6 @@ export default function CreateConversationDialog() {
       </div>
     </div>
   );
-}
+};
+
+export default CreateConversationDialog;

@@ -41,7 +41,7 @@ const EditThoughtDialog = forwardRef<HTMLDivElement, Props>(
                     />
                     <div className="flex w-full flex-col items-center">
                       <div className="rounded-full">
-                        <span className="pointer-events-none inset-0 box-border block size-[160px] shrink-0 overflow-hidden rounded-full border border-opacity-10 bg-secondary-background content-none">
+                        <span className="pointer-events-none inset-0 block size-[160px] shrink-0 overflow-hidden rounded-full bg-secondary-background content-none">
                           <ImageClient
                             src={user.avatar!}
                             width={160}
@@ -52,7 +52,7 @@ const EditThoughtDialog = forwardRef<HTMLDivElement, Props>(
                         </span>
                       </div>
                       <div className="mt-2 w-full">
-                        <span className="overflow-wrap font-400 relative block min-w-0 max-w-full break-words text-center text-[20px] leading-6 text-ig-primary-text">
+                        <span className="relative block min-w-0 max-w-full break-words text-center text-[20px] leading-6 text-ig-primary-text">
                           {user.username}
                         </span>
                       </div>

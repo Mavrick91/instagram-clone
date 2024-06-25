@@ -12,14 +12,14 @@ type Props = {
   username: string;
 };
 
-export default function PostCommentItem({
+const PostCommentItem = ({
   avatar,
   firstName,
   lastName,
   content,
   createdAt,
   username,
-}: Props) {
+}: Props) => {
   if (!content) return null;
 
   return (
@@ -41,4 +41,6 @@ export default function PostCommentItem({
       </div>
     </div>
   );
-}
+};
+
+export default PostCommentItem;

@@ -5,7 +5,6 @@ const AddPictureSVG = () => {
       height={77}
       fill="currentColor"
       aria-label="Icon to represent media such as images or videos"
-      className="x1lliihq x1n2onr6 x5n08af"
       viewBox="0 0 97.6 77.3"
     >
       <title>{"Icon to represent media such as images or videos"}</title>

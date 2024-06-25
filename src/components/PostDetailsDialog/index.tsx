@@ -1,4 +1,4 @@
-import { useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import PostDetailsClient from "@/components/PostDetailsDialog/PostDetailsClient";
 import PostDetailsHeader from "@/components/PostDetailsDialog/PostDetailsHeader";

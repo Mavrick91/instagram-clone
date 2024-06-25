@@ -90,8 +90,19 @@ const UploadPostDialog = ({
 
   const handleDiscardChange = () => {
     if (pictureWatch) {
-      showModal("ExitDialog", {
-        handleDiscard: handleGoBackPreviousStep,
+      showModal("SecondaryDialog", {
+        title: "Abandon publication?",
+        description: "If you leave the post, your changes will not be saved.",
+        contents: [
+          <Button
+            key={1}
+            variant="ghost"
+            className="font-bold text-red-500"
+            onClick={handleGoBackPreviousStep}
+          >
+            Discard changes
+          </Button>,
+        ],
       });
     } else {
       closeModal();

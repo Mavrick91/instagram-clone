@@ -15,11 +15,11 @@ type ImageUrls = {
   [key: string]: string;
 };
 
-export async function convertAndUploadImage(
+export const convertAndUploadImage = async (
   imageBuffer: Buffer,
   baseKey: string,
   sizes: { name: string; width?: number; height?: number }[],
-) {
+) => {
   const urls: ImageUrls = {};
 
   for (const size of sizes) {
@@ -53,9 +53,9 @@ export async function convertAndUploadImage(
   }
 
   return urls;
-}
+};
 
-export async function uploadFile(formData: FormData) {
+export const uploadFile = async (formData: FormData) => {
   const file = formData.get("picture") as File;
 
   if (!file) {
@@ -79,4 +79,4 @@ export async function uploadFile(formData: FormData) {
     console.error("Failed to upload file:", error);
     throw error;
   }
-}
+};

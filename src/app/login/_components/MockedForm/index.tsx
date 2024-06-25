@@ -14,7 +14,7 @@ type Props = {
   setValue: UseFormSetValue<{ email: string; password: string }>;
 };
 
-export default function MockedForm({ setValue }: Props) {
+const MockedForm = ({ setValue }: Props) => {
   const {
     data: mockedUser,
     isPending,
@@ -55,4 +55,6 @@ export default function MockedForm({ setValue }: Props) {
       </SelectContent>
     </Select>
   );
-}
+};
+
+export default MockedForm;

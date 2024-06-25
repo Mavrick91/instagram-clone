@@ -1,10 +1,7 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
-
 import prisma from "@/lib/prisma";
 import { CommentsPicture, commentsPictureSelect } from "@/types/comment";
-import { RevalidatePath } from "@/types/global";
 
 import { getCurrentUser } from "./user";
 

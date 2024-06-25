@@ -7,9 +7,9 @@ interface ConversationThreadHeaderProps {
   recipientUser: ThreadUser;
 }
 
-export default function ConversationThreadHeader({
+const ConversationThreadHeader = ({
   recipientUser,
-}: ConversationThreadHeaderProps) {
+}: ConversationThreadHeaderProps) => {
   const { username, avatar, firstName, lastName } = recipientUser;
 
   return (
@@ -22,4 +22,6 @@ export default function ConversationThreadHeader({
       </Link>
     </div>
   );
-}
+};
+
+export default ConversationThreadHeader;

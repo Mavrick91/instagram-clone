@@ -5,12 +5,12 @@ type Props = {
   className?: string;
 };
 
-function ErrorAlert({ error, className }: Props) {
+const ErrorAlert = ({ error, className }: Props) => {
   return (
     <Alert variant="destructive" className={className}>
       <AlertDescription>{error}</AlertDescription>
     </Alert>
   );
-}
+};
 
 export default ErrorAlert;
