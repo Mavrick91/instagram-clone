@@ -45,7 +45,7 @@ const BubbleThought = ({
   );
 
   const bubbleClasses = cn(
-    "flex min-h-[70px] w-fit min-w-5 break-words rounded-2xl bg-ig-bubble-background p-4",
+    "filter-shadow flex min-h-[70px] w-fit min-w-5 break-words rounded-2xl bg-ig-bubble-background p-4",
     "after:absolute after:bottom-[-8px] after:left-6 after:flex after:size-5 after:rounded-full after:bg-ig-bubble-background after:shadow-custom-bubble after:content-['']",
     size === "small" &&
       "min-h-[12px] p-1 px-1.5 rounded-[14px] after:bottom-[-4px] after:left-3.5 after:size-2 after:shadow-custom-bubble-small",

@@ -20,10 +20,10 @@ const PostComments = ({ commentCount, picture }: Props) => {
     <>
       <div className="mt-2">
         <button
-          className="text-sm text-secondary"
+          className="text-sm text-ig-secondary-text"
           type="button"
           onClick={() => {
-            return showModal("PostDetails", { pictureId: picture.id });
+            showModal("PostDetails", { pictureId: picture.id });
           }}
         >
           View all <Pluralize count={commentCount} singular="comment" />

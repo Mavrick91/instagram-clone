@@ -23,9 +23,9 @@ const PostCommentItem = ({
   if (!content) return null;
 
   return (
-    <div className="flex text-primary-text">
+    <div className="flex text-ig-primary-text">
       <div className="mr-4 shrink-0">
-        <UserAvatar avatar={avatar} username={username} size="size-8" />
+        <UserAvatar avatar={avatar} width={32} />
       </div>
       <div className="text-sm">
         <Link
@@ -35,7 +35,7 @@ const PostCommentItem = ({
           {firstName} {lastName}{" "}
         </Link>
         <span className="align-middle">{content}</span>
-        <p className="mb-1 mt-2 text-xs text-secondary">
+        <p className="mb-1 mt-2 text-xs text-ig-secondary-text">
           <time>{moment(createdAt).fromNow()}</time>
         </p>
       </div>

@@ -36,14 +36,14 @@ const PostAddComment = ({ pictureId }: Props) => {
       className="relative mt-2 flex items-center"
     >
       <TextareaAutosize
-        className="max-h-52 min-h-5 w-full resize-none bg-transparent pr-12 text-sm text-primary-text outline-none placeholder:text-secondary"
+        className="max-h-52 min-h-5 w-full resize-none bg-transparent pr-12 text-sm text-ig-primary-text outline-none placeholder:text-ig-secondary-text"
         placeholder="Add a comment"
         {...register("comment")}
         maxRows={4}
       />
 
       {watchComment && (
-        <Button variant="ghost" type="submit" className="h-auto py-0">
+        <Button type="submit" padding="none" text="sm">
           Post
         </Button>
       )}

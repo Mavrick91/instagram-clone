@@ -25,8 +25,8 @@ const SuggestFollowListItem = ({
         <Link href={`/${username}`}>
           <UserListItem
             avatar={avatar}
-            firstName={username}
-            subText={
+            topText={username}
+            bottomText={
               <p className="text-sm text-zinc-500">
                 {firstName} {lastName}
               </p>

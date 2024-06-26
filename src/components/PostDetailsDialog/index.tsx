@@ -30,9 +30,9 @@ const PostDetailsDialog = ({ pictureId }: PostDetailsDialogProps) => {
   return (
     <div className="flex">
       <PostDetailsPicture picture={picture} />
-      <div className="flex min-w-[405px] max-w-[500px] shrink-0 flex-col border-l border-separator bg-primary-background">
+      <div className="flex min-w-[405px] max-w-[500px] shrink-0 flex-col border-l border-post-separator bg-ig-primary-background">
         <PostDetailsHeader picture={picture} />
-        <Separator />
+        <Separator post />
         <PostDetailsClient picture={picture} />
       </div>
     </div>

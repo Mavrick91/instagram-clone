@@ -35,20 +35,15 @@ const PostCommentForm = ({ handleAddComment }: Props) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Separator />
+      <Separator ig />
       <div className="flex min-h-12 items-center py-2 pl-2 pr-4">
         <TextareaAutosize
-          className="w-full resize-none bg-transparent p-2 text-sm text-primary-text placeholder:text-secondary-text focus:outline-none"
+          className="w-full resize-none bg-transparent p-2 text-sm text-ig-primary-text placeholder:text-ig-secondary-text focus:outline-none"
           placeholder="Add a comment..."
           {...register("content")}
           maxRows={4}
         />
-        <Button
-          type="submit"
-          variant="ghost"
-          className="h-auto py-0"
-          disabled={!content}
-        >
+        <Button type="submit" padding="none" disabled={!content} text="sm">
           Post
         </Button>
       </div>

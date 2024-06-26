@@ -73,21 +73,21 @@ const CreateConversationDialog = () => {
       <Separator />
       <div className="h-96 overflow-y-auto py-3">
         {!users ? (
-          <div className="px-6 text-sm text-secondary">No account found.</div>
+          <div className="text-secondary px-6 text-sm">No account found.</div>
         ) : (
           users.map((user) => {
             return (
               <button
                 key={user.id}
-                className="w-full hover:bg-hover-overlay"
+                className="hover:bg-hover-overlay w-full"
                 onClick={() => {
                   return handleStartConversation(user.id);
                 }}
               >
                 <div className="px-4 py-2">
                   <UserListItem
-                    subText={user.username}
-                    firstName={user.firstName}
+                    bottomText={user.username}
+                    topText={user.firstName}
                     lastName={user.lastName}
                     avatar={user.avatar}
                     subTextSize="sm"

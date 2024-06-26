@@ -25,7 +25,7 @@ const PostCommentList = forwardRef<HTMLDivElement, Props>(
             />
           )}
           {!picture.comments.length || picture.disableComments ? (
-            <div className="flex h-full grow flex-col items-center justify-center text-primary-text">
+            <div className="flex h-full grow flex-col items-center justify-center text-ig-primary-text">
               <span className="text-2xl font-bold">No comments yet.</span>
               <span className="mt-2 text-sm">Start the conversation.</span>
             </div>
@@ -50,7 +50,7 @@ const PostCommentList = forwardRef<HTMLDivElement, Props>(
 
     return (
       <div
-        className="h-0 grow space-y-2 overflow-y-auto p-3 pr-6 text-primary-text"
+        className="h-0 grow space-y-2 overflow-y-auto p-3 pr-6 text-ig-primary-text"
         ref={ref}
       >
         {renderComments()}

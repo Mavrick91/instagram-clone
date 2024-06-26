@@ -1,45 +1,28 @@
 import { ReactNode } from "react";
 
 import UserAvatar from "@/components/UserAvatar";
-import { cn } from "@/lib/utils";
 
-type Props = {
+type UserListItemProps = {
   avatar?: string | null;
-  firstName: string;
-  lastName?: string;
-  subText: string | ReactNode;
-  size?: string;
-  username?: string;
-  subTextSize: "sm" | "xs";
+  topText: string;
+  bottomText: string | ReactNode;
+  width: number;
 };
 
 const UserListItem = ({
   avatar,
-  firstName,
-  lastName,
-  subText,
-  subTextSize,
-  username,
-  size = "size-11",
-}: Props) => {
+  topText,
+  bottomText,
+  width,
+}: UserListItemProps) => {
   return (
     <div className="flex w-full items-center overflow-hidden">
-      <UserAvatar avatar={avatar} size={size} username={username} />
-      <div className="ml-3 flex flex-col items-start overflow-hidden">
-        <span className="w-full truncate text-sm text-primary-text">
-          {firstName} {lastName}
-        </span>
-        {subText && (
-          <span
-            className={cn(
-              "w-full truncate text-left text-sm text-secondary-text",
-              {
-                "text-sm": subTextSize === "sm",
-                "text-xs mt-1": subTextSize === "xs",
-              },
-            )}
-          >
-            {subText}
+      <UserAvatar avatar={avatar} width={width} />
+      <div className="ml-3 flex flex-col items-start overflow-hidden text-system-14">
+        <span className="w-full truncate font-semibold">{topText}</span>
+        {bottomText && (
+          <span className={"w-full truncate text-left text-ig-secondary-text"}>
+            {bottomText}
           </span>
         )}
       </div>

@@ -1,52 +1,31 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
+import ImageClient from "@/components/ImageClient";
 
 type Props = {
   avatar?: string | null;
-  username?: string;
-  size: string;
-  onClick?: () => void;
+  width: number;
 };
 
-const UserAvatar = ({ avatar, username, size, onClick }: Props) => {
+const UserAvatar = ({ avatar, width }: Props) => {
   const avatarImage = avatar ?? "/placeholder-avatar.png";
-  const isLink = !!username;
-  const isButton = !!onClick;
 
-  const baseClassName = `${size} after:size-${size} after:bg-secondary-background shrink-0 flex after:border after:border-border-avatar after:absolute after:inset-0 after:z-10 relative after:rounded-full`;
-  const imageClassName = "w-full h-full rounded-full shrink-0 z-20 relative";
-
-  const renderAvatar = () => {
-    return (
-      <Image
+  return (
+    <div
+      style={{
+        width: `${width}px`,
+      }}
+      className="relative flex aspect-square shrink-0 overflow-hidden rounded-full after:absolute after:inset-0 after:z-10 after:rounded-full after:border after:border-ig-avatar-border after:bg-ig-secondary-background"
+    >
+      <ImageClient
+        className="z-50"
         src={avatarImage}
-        alt={username ? `${username} profile picture` : "User posts picture"}
-        className={imageClassName}
-        width={24}
-        height={24}
+        alt="Profile picture"
+        width={width}
+        height={width}
       />
-    );
-  };
-
-  if (isLink) {
-    return (
-      <Link href={`/${username}`} className={baseClassName}>
-        {renderAvatar()}
-      </Link>
-    );
-  }
-
-  if (isButton) {
-    return (
-      <button onClick={onClick} className={baseClassName}>
-        {renderAvatar()}
-      </button>
-    );
-  }
-
-  return <div className={baseClassName}>{renderAvatar()}</div>;
+    </div>
+  );
 };
 
 export default UserAvatar;

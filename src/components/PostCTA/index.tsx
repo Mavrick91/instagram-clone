@@ -26,7 +26,7 @@ const PostCTA = ({ pictureId, showMessageIcon = true }: PostCTAProps) => {
   return (
     <>
       <div className="flex items-center justify-between">
-        <div className="flex space-x-4 py-2">
+        <div className="flex gap-4 py-2">
           <IconButton
             onClick={handleToggleLike}
             icon={HeartIcon}

@@ -35,7 +35,7 @@ const PostCaption = ({ username, description }: Props) => {
   }
 
   return (
-    <div className="mt-2 text-sm text-primary-text">
+    <div className="mt-2 text-sm text-ig-primary-text">
       <div className="float-left mr-1 whitespace-nowrap font-semibold">
         <Link href={`/${username}`}>{username}</Link>
       </div>
@@ -49,7 +49,7 @@ const PostCaption = ({ username, description }: Props) => {
       </p>
       {canExpand && (
         <button
-          className="text-sm text-secondary"
+          className="text-sm text-ig-secondary-text"
           onClick={() => {
             setIsExpanded(!isExpanded);
             setCanExpand(false);

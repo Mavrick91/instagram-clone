@@ -16,7 +16,13 @@ const IconButton = ({
   activeColor = "text-primary-text",
 }: IconButtonProps) => {
   return (
-    <button type="button" onClick={onClick} className="hover:!text-secondary">
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn({
+        "hover:!text-ig-secondary-text": !isActive,
+      })}
+    >
       <Icon
         className={cn("text-primary-text", {
           [activeColor]: isActive,

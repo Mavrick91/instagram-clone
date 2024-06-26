@@ -22,14 +22,14 @@ const PostDetailsHeader = ({ picture }: PostDetailsHeaderProps) => {
     <div className="flex flex-col py-3 pl-3">
       <div className="flex items-center">
         <Link className="shrink-0" href={`/${picture.user.username}`}>
-          <UserAvatar avatar={picture.user.avatar} size="size-8" />
+          <UserAvatar avatar={picture.user.avatar} width={32} />
         </Link>
         <div className="flex w-full flex-col">
           <div className="flex items-center justify-between pr-5">
             <div>
               <Link
                 href={`/${picture.user.username}`}
-                className="ml-4 text-sm font-semibold text-primary-text"
+                className="ml-4 text-sm font-semibold text-ig-primary-text"
               >
                 {picture.user.firstName} {picture.user.lastName}
               </Link>
@@ -42,7 +42,7 @@ const PostDetailsHeader = ({ picture }: PostDetailsHeaderProps) => {
                     userProfileUsername={picture.user.username}
                     userProfileId={picture.user.id}
                     buttonProps={{
-                      variant: "ghost",
+                      padding: "none",
                     }}
                   />
                 </>

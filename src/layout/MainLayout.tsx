@@ -23,7 +23,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 
   return (
     <>
-      <div className="flex h-full bg-primary-background">
+      <div className="flex h-full bg-ig-primary-background">
         <SideNav />
         <div
           className={cn("overflow-y-auto h-full w-full", {

@@ -19,25 +19,21 @@ const PostHeader = ({ avatar, username, picture }: Props) => {
 
   return (
     <>
-      <div className="mb-3 ml-1 flex items-center justify-between text-primary-text">
-        <div className="flex items-center">
-          <UserAvatar avatar={avatar} username={username} size="size-8" />
-          <div className="ml-3">
-            <p className="text-sm font-semibold">
-              <Link href={`/${username}`} className="shrink-0">
-                <span>{username}</span>
-              </Link>{" "}
-              •{" "}
-              <span className="text-sm font-medium text-zinc-500">
-                {moment(picture.createdAt).fromNow()}
-              </span>
-            </p>
-          </div>
+      <div className="mb-3 ml-1 flex items-center justify-between text-ig-primary-text">
+        <div className="flex items-center gap-1 text-system-14">
+          <Link href={`/${username}`} className="flex items-center gap-2">
+            <UserAvatar avatar={avatar} width={32} />
+            <p className="font-semibold">{username}</p>
+          </Link>
+          <span className="flex items-center gap-1 font-normal text-ig-secondary-text">
+            <span> • </span>
+            {moment(picture.createdAt).fromNow()}
+          </span>
         </div>
         <button
           type="button"
           onClick={() => {
-            return showModal("PostActionDialog", {
+            showModal("PostActionDialog", {
               picture,
             });
           }}

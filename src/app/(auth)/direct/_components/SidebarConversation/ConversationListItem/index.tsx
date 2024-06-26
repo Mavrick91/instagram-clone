@@ -45,14 +45,14 @@ const ConversationListItem = ({
         })}
       >
         <UserListItem
-          subText={
+          bottomText={
             <>
               <span>{lastMessage?.user?.id === user.id ? "You: " : ""}</span>
               <span className="max-w-52 truncate">{lastMessage?.content}</span>
               <span> · {moment(lastMessage?.createdAt).fromNow()}</span>
             </>
           }
-          firstName={recipientUser.firstName}
+          topText={recipientUser.firstName}
           lastName={recipientUser.lastName}
           avatar={recipientUser?.avatar}
           size="size-14"

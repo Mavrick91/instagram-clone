@@ -27,8 +27,8 @@ const FollowersDialogItem = ({ follower }: Props) => {
         <Link href={`/${follower.username}`}>
           <UserListItem
             avatar={follower.avatar}
-            firstName={follower.username}
-            subText={
+            topText={follower.username}
+            bottomText={
               <>
                 {follower.firstName} {follower.lastName}
               </>
