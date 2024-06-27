@@ -1,3 +1,4 @@
+import { ChangeEvent, RefObject } from "react";
 import { UseFormRegister } from "react-hook-form";
 import TextareaAutosize from "react-textarea-autosize";
 
@@ -9,7 +10,7 @@ type BubbleThoughtProps = {
   canEdit: boolean;
   register?: UseFormRegister<{ thought: string }>;
   thoughtWatch?: string;
-  uniqueRef?: React.RefObject<HTMLDivElement>;
+  uniqueRef?: RefObject<HTMLDivElement>;
 };
 
 const BubbleThought = ({
@@ -22,16 +23,15 @@ const BubbleThought = ({
 }: BubbleThoughtProps) => {
   const { onChange, ...restRegister } = register?.("thought") ?? {};
 
-  const handleChangeInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChangeInput = (e: ChangeEvent<HTMLTextAreaElement>) => {
     if (onChange && (thoughtWatch?.length ?? 0) <= 60) {
       onChange(e);
     }
   };
 
   const containerClasses = cn(
-    "mb-[-80px] z-50 relative",
+    "mb-[-80px] z-[60] relative",
     size === "small" && "mb-[-34px]",
-    size === "big" && "-left-6",
   );
 
   const innerContainerClasses = cn(
@@ -40,44 +40,50 @@ const BubbleThought = ({
   );
 
   const bubbleContainerClasses = cn(
-    "relative min-w-[160px] max-w-[230px]",
+    "relative min-w-[160px] max-w-[192px]",
     size === "small" && "min-w-[72px] max-w-[96px] w-max",
   );
 
   const bubbleClasses = cn(
-    "filter-shadow flex min-h-[70px] w-fit min-w-5 break-words rounded-2xl bg-ig-bubble-background p-4",
-    "after:absolute after:bottom-[-8px] after:left-6 after:flex after:size-5 after:rounded-full after:bg-ig-bubble-background after:shadow-custom-bubble after:content-['']",
+    "shadow-custom text-xl flex min-h-[70px] w-fit min-w-5 break-words rounded-2xl bg-ig-bubble-background p-4",
+    "after:absolute after:bottom-[-8px] after:filter-big-bubble after:left-6 after:flex after:size-5 after:rounded-full after:bg-ig-bubble-background after:shadow-custom-bubble after:content-['']",
     size === "small" &&
-      "min-h-[12px] p-1 px-1.5 rounded-[14px] after:bottom-[-4px] after:left-3.5 after:size-2 after:shadow-custom-bubble-small",
+      "after:!filter-bubble min-h-[12px] p-2 rounded-[14px] after:bottom-[-4px] after:left-3.5 after:size-2 after:shadow-custom-bubble-small",
   );
 
   const textClasses = cn(
-    "relative overflow-hidden text-primary-text",
-    size === "small" && "text-[11px] leading-[20px]",
+    "relative overflow-hidden text-ig-primary-text",
+    size === "small" && "text-sm text-[11px] leading-[16px]",
   );
 
   return (
-    <div className={containerClasses} ref={uniqueRef}>
+    <div ref={uniqueRef} className={containerClasses}>
       <div className={innerContainerClasses}>
         <div className={bubbleContainerClasses}>
           <div className={bubbleClasses}>
-            <div className="flex min-w-[32px] items-center overflow-auto">
-              <div className="w-full">
+            <div className="w-fill flex min-w-[25px] items-center overflow-auto">
+              <div className="flex-center w-full text-center">
                 <span className={textClasses}>
                   {bubbleText && canEdit ? (
                     <TextareaAutosize
-                      className="block min-w-max resize-none bg-transparent placeholder:text-secondary focus:outline-none"
+                      className="block max-w-[162px] resize-none bg-transparent placeholder:text-center placeholder:text-ig-secondary-text focus:outline-none"
                       placeholder="Share a thought..."
                       {...restRegister}
-                      onChange={handleChangeInput}
                       autoFocus
-                      maxRows={4}
                       maxLength={60}
+                      maxRows={4}
+                      onChange={handleChangeInput}
                     />
-                  ) : bubbleText ? (
-                    bubbleText
                   ) : (
-                    <span className="text-secondary-text">Note...</span>
+                    <span
+                      className={cn("line-clamp-3", {
+                        "text-ig-secondary-text": !bubbleText,
+                        "max-w-[80px]": size === "small",
+                        "max-w-[198px]": size === "medium",
+                      })}
+                    >
+                      {bubbleText || `Note...`}
+                    </span>
                   )}
                 </span>
               </div>

@@ -16,7 +16,7 @@ const SidebarConversation = async () => {
           userAvatar={currentUser.avatar}
         />
 
-        <div className="px-6 py-4 font-bold text-primary-text">Messages</div>
+        <div className="px-6 py-4 font-bold text-ig-primary-text">Messages</div>
 
         <ConversationList />
       </div>

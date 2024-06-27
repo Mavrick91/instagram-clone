@@ -5,16 +5,18 @@ import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring focus-visible:ring-offset-2 disabled:pointer-events-none",
+  "inline-flex items-center justify-center whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
         default:
-          "text-ig-primary-button ring-ig-primary-button disabled:text-blue-2",
-      },
-      hover: {
-        default: "hover:text-ig-link",
-        none: "",
+          "text-ig-primary-button ring-ig-primary-button hover:text-ig-link disabled:text-blue-2",
+        ghost: "text-ig-primary-text",
+        destructive: "font-bold text-red-500",
+        primary:
+          "bg-ig-primary-button text-web-always-white hover:bg-ig-primary-button-hover",
+        "primary-ghost":
+          "text-ig-primary-button hover:text-ig-primary-button-hover",
       },
       rounded: {
         none: "rounded-none",
@@ -42,7 +44,6 @@ const buttonVariants = cva(
     },
     defaultVariants: {
       variant: "default",
-      hover: "default",
       text: "default",
       padding: "default",
       rounded: "sm",
@@ -63,10 +64,10 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     return (
       <button
+        ref={ref}
         className={cn(
           buttonVariants({ variant, rounded, text, className, padding }),
         )}
-        ref={ref}
         disabled={loading}
         type="button"
         {...props}

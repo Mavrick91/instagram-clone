@@ -14,22 +14,22 @@ const UserProfileCollectionsItem = ({
 }: UserProfileCollectionsItemProps) => {
   return (
     <Link
-      href={`/${profileUsername}/collection/${collection.nameId}`}
       key={collection.nameId}
-      type="button"
       prefetch
-      className="relative col-span-1 grid aspect-square grid-cols-2 overflow-hidden rounded-md border border-separator bg-gradient-to-t from-black/50 to-transparent hover:from-black/40"
+      className="relative col-span-1 grid aspect-square grid-cols-2 overflow-hidden rounded-md border border-ig-separator bg-gradient-to-t from-black/50 to-transparent hover:from-black/40"
+      href={`/${profileUsername}/collection/${collection.id}`}
+      type="button"
     >
       {collection.pictures.map((picture) => {
         return (
           <ImageClient
             key={picture.picture.id}
-            className="col-span-1 aspect-square"
-            src={picture.picture.sizes.small}
-            alt="collection"
             priority
-            width={150}
+            alt="collection"
+            className="col-span-1 aspect-square"
             height={150}
+            src={picture.picture.sizes.small}
+            width={150}
           />
         );
       })}

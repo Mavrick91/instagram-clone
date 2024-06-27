@@ -40,8 +40,8 @@ const SavedPage = async ({ params }: ServerPageProps<"username">) => {
           <div className="grid grid-cols-3 gap-1">
             <UserProfileCollections
               profileUsername={profileUsername}
-              userProfileId={userProfile.id}
               serverCollections={collections}
+              userProfileId={userProfile.id}
             />
           </div>
         </div>

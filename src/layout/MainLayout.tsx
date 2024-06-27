@@ -15,11 +15,11 @@ type MainLayoutProps = {
 const MainLayout = ({ children }: MainLayoutProps) => {
   const { sideNavOpen, isConversationPage } = useSideNav();
   const pathname = usePathname();
-  const { closeAllModal } = useModal();
+  const { closeAllModals } = useModal();
 
   useEffect(() => {
-    closeAllModal();
-  }, [closeAllModal, pathname]);
+    closeAllModals();
+  }, [closeAllModals, pathname]);
 
   return (
     <>

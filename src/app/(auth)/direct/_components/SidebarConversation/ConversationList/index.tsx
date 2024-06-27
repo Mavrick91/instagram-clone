@@ -22,9 +22,9 @@ const ConversationList = async () => {
         return (
           <ConversationListItem
             key={thread.id}
-            threadId={thread.id}
             lastMessage={lastMessage}
             recipientUser={recipientUser}
+            threadId={thread.id}
           />
         );
       })}

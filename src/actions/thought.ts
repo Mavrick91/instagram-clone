@@ -18,16 +18,11 @@ export const deleteThought = async (thoughtId: number) => {
   }
 };
 
-export const createThought = async (
-  content: string,
-  userId: number,
-  visibility: "FOLLOWERS" | "CLOSE_FRIENDS",
-) => {
+export const createThought = async (content: string, userId: number) => {
   try {
     await prisma.thought.create({
       data: {
         content,
-        visibility,
         user: {
           connect: { id: userId },
         },
@@ -49,15 +44,11 @@ export const createThought = async (
   }
 };
 
-export const updateThought = async (
-  id: number,
-  content: string,
-  visibility: "FOLLOWERS" | "CLOSE_FRIENDS",
-) => {
+export const updateThought = async (id: number, content: string) => {
   try {
     await prisma.thought.update({
       where: { id },
-      data: { content, visibility },
+      data: { content },
     });
 
     revalidatePath(revalidateDirect.originalPath);

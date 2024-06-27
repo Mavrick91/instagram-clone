@@ -1,7 +1,6 @@
 "use client";
 
 import { AnimatePresence } from "framer-motion";
-import { ArrowLeft } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { useModal } from "@/providers/ModalProvider";
@@ -9,7 +8,6 @@ import { useSideNav } from "@/providers/SideNavProvider";
 import { useUserInfo } from "@/providers/UserInfoProvider";
 
 import { NotificationCountProps } from "../NotificationBadge";
-import UploadPostDialog from "../UploadPostDialog";
 import DropdownMore from "./DropdownMore";
 import NotificationList from "./NotificationList";
 import { getNavigationItems } from "./sideNavConfig";
@@ -25,11 +23,9 @@ const SideNav = () => {
     toggleSearch,
     isNotificationVisible,
     toggleNotification,
-    isNewPostVisible,
-    toggleNewPost,
     displaySmallNav,
   } = useSideNav();
-  const { showModal } = useModal();
+  const { openModal } = useModal();
 
   // const { notifications, fetchNextPage, hasNextPage, setAllNotifications } =
   //   useInfiniteNotifications();
@@ -43,7 +39,7 @@ const SideNav = () => {
     user,
     toggleSearch,
     () => {
-      return showModal("UploadPostDialog", {
+      return openModal("uploadPostDialog", {
         buttonSubmitText: "Share",
         title: "Create new post",
       });
@@ -84,7 +80,7 @@ const SideNav = () => {
     <header className="fixed z-50 flex h-screen shrink-0 flex-col bg-white">
       <nav
         className={cn(
-          `bg-primary-background h-full z-20 absolute py-2.5 transition-all px-3 border-r border-separator`,
+          `bg-ig-primary-background h-full z-20 absolute py-2.5 transition-all px-3 border-r border-ig-separator`,
           {
             "w-nav-narrow-width": displaySmallNav,
             "w-nav-medium-width": !displaySmallNav,
@@ -100,10 +96,10 @@ const SideNav = () => {
                 return (
                   <SideNavItem
                     key={item.name}
-                    item={item}
-                    isSmall={displaySmallNav}
-                    isSearchVisible={isSearchVisible}
                     isNotificationVisible={isNotificationVisible}
+                    isSearchVisible={isSearchVisible}
+                    isSmall={displaySmallNav}
+                    item={item}
                     notificationsCount={notificationsCount}
                   />
                 );
@@ -134,15 +130,6 @@ const SideNav = () => {
           </SideNavOverlay>
         )}
       </AnimatePresence>
-
-      {isNewPostVisible && (
-        <UploadPostDialog
-          onClose={toggleNewPost}
-          buttonSubmitText="Share"
-          title="Create new post"
-          backButton={<ArrowLeft />}
-        />
-      )}
     </header>
   );
 };

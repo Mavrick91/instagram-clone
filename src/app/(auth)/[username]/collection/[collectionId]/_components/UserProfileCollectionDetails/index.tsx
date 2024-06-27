@@ -18,11 +18,11 @@ const UserProfileCollectionDetails = ({
   serverUserCollectionDetails,
 }: UserProfileCollectionDetailsProps) => {
   const { data: userCollectionDetails } = useQuery({
-    queryKey: ["collection", username, serverUserCollectionDetails.nameId],
+    queryKey: ["collection", username, serverUserCollectionDetails.id],
     queryFn: async () => {
       return await getUserCollectionDetails(
         username,
-        serverUserCollectionDetails.nameId,
+        serverUserCollectionDetails.id,
       );
     },
     initialData: serverUserCollectionDetails,
@@ -31,11 +31,10 @@ const UserProfileCollectionDetails = ({
   const pictures = userCollectionDetails.pictures.map((p) => {
     return p.picture;
   });
-
   return (
     <div className="mx-auto mt-6 flex max-w-lg-page flex-col">
       <UserProfileCollectionDetailsHeader
-        serverUserCollectionDetails={userCollectionDetails}
+        userCollectionDetails={userCollectionDetails}
         username={username}
       />
       <div>

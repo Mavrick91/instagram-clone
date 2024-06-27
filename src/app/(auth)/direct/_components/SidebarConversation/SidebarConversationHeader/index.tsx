@@ -7,19 +7,15 @@ import { useUserInfo } from "@/providers/UserInfoProvider";
 
 const SidebarConversationHeader = () => {
   const user = useUserInfo();
-  const { showModal } = useModal();
+  const { openModal } = useModal();
 
   return (
     <div className="flex items-center justify-between px-6 pb-3">
-      <span className="text-xl font-bold text-primary-text">
+      <span className="text-xl font-bold text-ig-primary-text">
         {user.username}
       </span>
-      <button
-        onClick={() => {
-          return showModal("CreateConversation");
-        }}
-      >
-        <SquarePen className="text-primary-text" />
+      <button onClick={() => openModal("createConversationDialog")}>
+        <SquarePen className="text-ig-primary-text" />
       </button>
     </div>
   );

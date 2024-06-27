@@ -8,7 +8,9 @@ const UserProfilePage = async ({ params }: ServerPageProps<"username">) => {
 
   const userProfile = await getUserProfile(userUsername);
 
-  return <UserProfilePosts userProfileId={userProfile!.id} />;
+  return (
+    <UserProfilePosts username={userUsername} userProfileId={userProfile!.id} />
+  );
 };
 
 export default UserProfilePage;

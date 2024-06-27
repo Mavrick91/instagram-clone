@@ -34,7 +34,7 @@ const UsernameSearch = () => {
 
   return (
     <>
-      <div className="pb-9 pl-6 pt-3 text-2xl font-semibold text-primary-text">
+      <div className="pb-9 pl-6 pt-3 text-2xl font-semibold text-ig-primary-text">
         Search
       </div>
       <div className="relative mb-6 px-4">
@@ -45,7 +45,7 @@ const UsernameSearch = () => {
           }}
           placeholder="Search"
           autoFocus
-          className="h-10 w-full rounded-md bg-highlight-background px-4 py-1 text-primary-text focus:outline-none"
+          className="h-10 w-full rounded-md bg-ig-highlight-background px-4 py-1 text-ig-primary-text focus:outline-none"
         />
         <button
           className="absolute right-8 top-1/2 -translate-y-1/2"
@@ -57,7 +57,7 @@ const UsernameSearch = () => {
         </button>
       </div>
       {(!data || (data && data.length === 0)) && !isFetching && (
-        <div className="border-b border-separator" />
+        <div className="border-b border-ig-separator" />
       )}
 
       <div className="flex grow flex-col gap-1 overflow-y-auto">
@@ -67,16 +67,16 @@ const UsernameSearch = () => {
               return (
                 <div key={index} className="flex items-center gap-1 px-6 py-1">
                   <div
-                    className="size-11 animate-pulse rounded-full bg-highlight-background"
+                    className="size-11 animate-pulse rounded-full bg-ig-highlight-background"
                     style={{ animationDelay: `${index * 0.3}s` }}
                   />
                   <div className="flex grow flex-col gap-2">
                     <div
-                      className="h-4 animate-pulse rounded bg-highlight-background"
+                      className="h-4 animate-pulse rounded bg-ig-highlight-background"
                       style={{ animationDelay: `${index * 0.3}s` }}
                     />
                     <div
-                      className="h-4 animate-pulse rounded bg-highlight-background"
+                      className="h-4 animate-pulse rounded bg-ig-highlight-background"
                       style={{ animationDelay: `${index * 0.3}s` }}
                     />
                   </div>
@@ -88,17 +88,12 @@ const UsernameSearch = () => {
           data.map((user) => {
             return (
               <Link key={user.id} href={`/${user.username}`}>
-                <div className="w-full overflow-hidden px-6 py-2 hover:!bg-hover-overlay">
+                <div className="w-full overflow-hidden px-6 py-2 hover:bg-ig-hover-overlay">
                   <UserListItem
                     avatar={user.avatar}
-                    firstName={user.username}
-                    subText={
-                      <div>
-                        {user.firstName} {user.lastName}
-                      </div>
-                    }
-                    subTextSize="sm"
-                    username={user.username}
+                    bottomText={`${user.firstName} ${user.lastName}`}
+                    topText={user.username}
+                    width={24}
                   />
                 </div>
               </Link>

@@ -1,13 +1,57 @@
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { faker } from "@faker-js/faker";
 import { PrismaClient } from "@prisma/client";
 import axios from "axios";
 import * as bcrypt from "bcrypt";
-
-import { convertAndUploadImage } from "../src/actions/upload";
+import sharp from "sharp";
 
 const prisma = new PrismaClient();
 
-async function fetchAndProcessImage(url: string, baseKey: string) {
+const s3Client = new S3Client({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
+});
+
+const convertAndUploadImage = async (imageBuffer, baseKey, sizes) => {
+  const urls = {};
+
+  for (const size of sizes) {
+    let resizeOptions = {};
+    if (size.width || size.height) {
+      resizeOptions = {
+        width: size.width,
+        height: size.height,
+        fit: "cover",
+        withoutEnlargement: true,
+      };
+    }
+
+    const webpData = await sharp(imageBuffer)
+      .resize(resizeOptions)
+      .toFormat("webp")
+      .toBuffer();
+
+    const key = `${baseKey}-${size.name}.webp`;
+
+    const params = {
+      Bucket: process.env.AWS_S3_BUCKET_NAME,
+      Key: key,
+      Body: webpData,
+      ContentType: "image/webp",
+    };
+
+    await s3Client.send(new PutObjectCommand(params));
+
+    urls[size.name] = `https://${params.Bucket}.s3.amazonaws.com/${params.Key}`;
+  }
+
+  return urls;
+};
+
+async function fetchAndProcessImage(url, baseKey) {
   const response = await axios.get(url, { responseType: "arraybuffer" });
   const imageBuffer = Buffer.from(response.data, "binary");
 
@@ -43,9 +87,7 @@ async function main() {
     data: mockUsers,
   });
 
-  type UserId = { id: number };
-
-  const userIds: UserId[] = await prisma.user.findMany({
+  const userIds = await prisma.user.findMany({
     select: { id: true },
     take: createdUsers.count,
   });
@@ -80,9 +122,7 @@ async function main() {
     data: mockPictures,
   });
 
-  type PictureId = { id: number };
-
-  const pictureIds: PictureId[] = await prisma.picture.findMany({
+  const pictureIds = await prisma.picture.findMany({
     select: { id: true },
     take: createdPictures.count,
   });

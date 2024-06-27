@@ -121,7 +121,7 @@ const SideNavItem = ({
 
   const linkOrButtonProps: LinkOrButtonProps = {
     className: cn(
-      "flex items-center group my-1 p-3 rounded-lg transition-colors duration-200 ease-out hover:bg-hover-overlay",
+      "flex items-center group my-1 p-3 rounded-lg transition-colors duration-200 ease-out hover:bg-ig-hover-overlay",
       {
         relative: onClick === toggleSearch,
       },

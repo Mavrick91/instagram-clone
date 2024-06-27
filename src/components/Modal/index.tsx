@@ -86,11 +86,11 @@ const Modal = ({
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-[1000] flex items-center justify-center overflow-y-auto bg-black/50 px-10"
-          variants={backdropVariants}
-          initial="hidden"
           animate="visible"
+          className="fixed inset-0 z-[1000] flex items-center justify-center overflow-y-auto bg-black/50 px-10"
           exit="exit"
+          initial="hidden"
+          variants={backdropVariants}
         >
           <Suspense
             fallback={
@@ -99,11 +99,11 @@ const Modal = ({
           >
             <motion.div
               ref={modalRef}
-              className="fixed z-50 overflow-hidden rounded-lg bg-white shadow-lg"
-              variants={modalVariants}
-              initial="hidden"
               animate="visible"
+              className="fixed z-50 overflow-hidden rounded-lg bg-white shadow-lg"
               exit="exit"
+              initial="hidden"
+              variants={modalVariants}
             >
               {children}
             </motion.div>
@@ -117,7 +117,7 @@ const Modal = ({
 
 const Header = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="relative border-b border-elevated-separator px-4 py-2.5">
+    <div className="relative border-b border-ig-elevated-separator px-4 py-2.5">
       {children}
     </div>
   );
@@ -130,9 +130,9 @@ Header.Title = ({ children }: { children: ReactNode }) => {
 Header.ArrowBack = ({ onClick }: { onClick: () => void }) => {
   return (
     <button
-      onClick={onClick}
-      type="button"
       className="absolute top-1/2 -translate-y-1/2"
+      type="button"
+      onClick={onClick}
     >
       <ArrowLeft size={18} />
     </button>

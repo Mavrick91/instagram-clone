@@ -1,7 +1,7 @@
 "use memo";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -12,7 +12,9 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { useOptimisticActions } from "@/hooks/useOptimisticActions";
 import { useModal } from "@/providers/ModalProvider";
+import { useUserInfo } from "@/providers/UserInfoProvider";
 import { UserPictureDetails } from "@/types/picture";
+import { updateCountForPosts } from "@/utils/user";
 
 import Modal from "../Modal";
 import AddCaptionPost from "./AddCaptionPost";
@@ -46,12 +48,24 @@ const UploadPostDialog = ({
 }: UploadPostDialogProps) => {
   const [currentStep, setCurrentStep] = useState(picture ? 1 : 0);
   const [previewPicture, setPreviewPicture] = useState<string | null>(null);
-  const { closeModal, showModal } = useModal();
+  const { closeModal } = useModal();
+  const queryClient = useQueryClient();
   const { optimisticUpdate } = useOptimisticActions();
+  const currentUser = useUserInfo();
 
   const { mutate: createPictureMut, isPending: createPending } = useMutation({
-    mutationFn: (data: FormData) => {
-      return createPicture(data);
+    mutationFn: async (data: FormData) => {
+      await createPicture(data);
+      await queryClient.invalidateQueries({
+        queryKey: ["user", currentUser.username, "posts"],
+      });
+      queryClient.setQueryData(
+        ["user", currentUser.username],
+        updateCountForPosts.add,
+      );
+    },
+    onSuccess: () => {
+      closeModal("uploadPostDialog");
     },
   });
 
@@ -82,35 +96,10 @@ const UploadPostDialog = ({
 
   const pictureWatch = methods.watch("picture");
 
-  const handleGoBackPreviousStep = () => {
+  const handleClickArrowLeft = () => {
     setCurrentStep(0);
     setPreviewPicture(null);
     methods.setValue("picture", "");
-  };
-
-  const handleDiscardChange = () => {
-    if (pictureWatch) {
-      showModal("SecondaryDialog", {
-        title: "Abandon publication?",
-        description: "If you leave the post, your changes will not be saved.",
-        contents: [
-          <Button
-            key={1}
-            variant="ghost"
-            className="font-bold text-red-500"
-            onClick={handleGoBackPreviousStep}
-          >
-            Discard changes
-          </Button>,
-        ],
-      });
-    } else {
-      closeModal();
-    }
-  };
-
-  const handleClickArrowLeft = () => {
-    handleDiscardChange();
   };
 
   useEffect(() => {
@@ -154,7 +143,6 @@ const UploadPostDialog = ({
           },
         });
       } else createPictureMut(formData);
-      closeModal();
     } catch (error) {
       toast.error("Failed to upload image");
     }
@@ -162,7 +150,7 @@ const UploadPostDialog = ({
 
   return (
     <>
-      <div className="flex min-w-[755px] max-w-[1095px] flex-col gap-0 bg-elevated-background p-0 text-primary-text">
+      <div className="min-w-[755px] max-w-[1095px]">
         <Form {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)}>
             <Modal.Header>
@@ -173,10 +161,9 @@ const UploadPostDialog = ({
               {currentStep === 1 && (
                 <Modal.Header.Action>
                   <Button
-                    variant="ghost"
-                    type="submit"
                     className="font-semibold"
                     loading={createPending}
+                    type="submit"
                   >
                     {buttonSubmitText}
                   </Button>
@@ -186,8 +173,8 @@ const UploadPostDialog = ({
             {currentStep === 0 && <UploadPostFromComputer />}
             {currentStep === 1 && previewPicture && (
               <AddCaptionPost
-                previewPicture={previewPicture}
                 isEdit={!!picture}
+                previewPicture={previewPicture}
               />
             )}
           </form>

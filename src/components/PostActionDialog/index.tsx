@@ -1,163 +1,142 @@
 "use client";
 
-import { useMutation } from "@tanstack/react-query";
-import { ReactNode } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useCallback, useMemo } from "react";
 
 import { unfollowUser } from "@/actions/follow";
 import { deletePicture, updatePicture } from "@/actions/picture";
 import { Button } from "@/components/ui/button";
-import Separator from "@/components/ui/separator";
 import { useOptimisticActions } from "@/hooks/useOptimisticActions";
-import getQueryClient from "@/lib/queryClient";
+import SecondaryDialogLayout from "@/layout/SecondaryDialogLayout";
 import { useModal } from "@/providers/ModalProvider";
 import { useUserInfo } from "@/providers/UserInfoProvider";
 import { UserPictureDetails } from "@/types/picture";
+import { updateCountForPosts } from "@/utils/user";
 
 export type PostActionProps = {
   picture: UserPictureDetails;
 };
 
 const PostActionDialog = ({ picture }: PostActionProps) => {
-  const queryClient = getQueryClient();
   const user = useUserInfo();
-  const { closeModal, closeAllModal, showModal } = useModal();
+  const { closeModal, closeAllModals, openModal } = useModal();
   const { optimisticUpdate } = useOptimisticActions();
+  const queryClient = useQueryClient();
 
-  const handleUpdatePicture = async (
-    field: "hideLikesAndViewCounts" | "disableComments",
-  ) => {
-    closeModal();
-    await optimisticUpdate<UserPictureDetails>({
-      queryKey: ["picture", picture.id],
-      updateFn: (oldData) => {
-        return {
-          ...oldData,
-          [field]: !oldData[field],
-        };
-      },
-      action: async () => {
-        await updatePicture(picture.id, { [field]: !picture[field] });
-      },
-    });
-  };
-
-  const { mutate: deletePictureMut, isPending } = useMutation({
-    mutationFn: () => {
-      return deletePicture(picture.id);
-    },
-    onSuccess: () => {
-      closeAllModal();
-      queryClient.removeQueries({
-        queryKey: ["picture", picture.id],
-      });
+  const { mutate: unfollowMut, isPending: unfollowPending } = useMutation({
+    mutationFn: () => deletePicture(picture.id),
+    onSuccess: async () => {
+      await unfollowUser(picture.user.id);
+      closeModal("postActionDialog");
     },
   });
 
-  const handleEditPicture = () => {
-    closeModal();
-    showModal("UploadPostDialog", {
-      picture: picture,
+  const handleUpdatePicture = useCallback(
+    async (field: "hideLikesAndViewCounts" | "disableComments") => {
+      closeModal("postActionDialog");
+      await optimisticUpdate<UserPictureDetails>({
+        queryKey: ["picture", picture.id],
+        updateFn: (oldData) => ({ ...oldData, [field]: !oldData[field] }),
+        action: () => updatePicture(picture.id, { [field]: !picture[field] }),
+      });
+    },
+    [closeModal, optimisticUpdate, picture],
+  );
+
+  const handleEditPicture = useCallback(() => {
+    closeModal("postActionDialog");
+    openModal("uploadPostDialog", {
+      picture,
       buttonSubmitText: "Done",
       title: "Edit info",
     });
-  };
+  }, [closeModal, openModal, picture]);
 
-  const getActionButtons = () => {
-    const actionButtons = [];
+  const actionButtons = useMemo(() => {
+    const buttons = [];
 
     if (user.id === picture.user.id) {
-      actionButtons.push(
-        <ActionButton
-          key="delete"
-          label="Delete"
-          isLoading={isPending}
-          onClick={deletePictureMut}
-          className="font-bold text-red-500"
-        />,
-        <ActionButton key="edit" label="Edit" onClick={handleEditPicture} />,
-        <ActionButton
-          key="toggle-like-count"
-          label={
-            picture.hideLikesAndViewCounts
-              ? "Unhide like count to others"
-              : "Hide like count to others"
-          }
-          onClick={() => {
-            return handleUpdatePicture("hideLikesAndViewCounts");
-          }}
-        />,
-        <ActionButton
-          key="toggle-comments"
-          label={
-            picture.disableComments
-              ? "Turn on commenting"
-              : "Turn off commenting"
-          }
-          onClick={() => {
-            return handleUpdatePicture("disableComments");
-          }}
-        />,
+      buttons.push(
+        {
+          key: "delete",
+          label: "Delete",
+          onClick: () => {
+            optimisticUpdate<UserPictureDetails[]>({
+              queryKey: ["user", picture.user.username, "posts"],
+              updateFn: (oldData) =>
+                oldData.filter((pic) => pic.id !== picture.id),
+              action: async () => {
+                await deletePicture(picture.id);
+                queryClient.setQueryData(
+                  ["user", picture.user.username],
+                  updateCountForPosts.remove,
+                );
+                closeAllModals();
+              },
+            });
+          },
+          destructive: true,
+        },
+        { key: "edit", label: "Edit", onClick: handleEditPicture },
+        {
+          key: "toggle-like-count",
+          label: picture.hideLikesAndViewCounts
+            ? "Unhide like count to others"
+            : "Hide like count to others",
+          onClick: () => handleUpdatePicture("hideLikesAndViewCounts"),
+        },
+        {
+          key: "toggle-comments",
+          label: picture.disableComments
+            ? "Turn on commenting"
+            : "Turn off commenting",
+          onClick: () => handleUpdatePicture("disableComments"),
+        },
       );
     } else {
-      actionButtons.push(
-        <ActionButton
-          key="unfollow"
-          label="Unfollow"
-          onClick={async () => {
-            await unfollowUser(picture.user.id);
-            closeModal();
-          }}
-          className="font-bold text-red-500"
-        />,
-      );
+      buttons.push({
+        key: "unfollow",
+        label: "Unfollow",
+        onClick: async () => unfollowMut(),
+        destructive: true,
+        isLoading: unfollowPending,
+      });
     }
 
-    actionButtons.push(
-      <ActionButton key="cancel" label="Cancel" onClick={closeModal} />,
-    );
+    return buttons;
+  }, [
+    user.id,
+    picture.user.id,
+    picture.user.username,
+    picture.hideLikesAndViewCounts,
+    picture.disableComments,
+    picture.id,
+    handleEditPicture,
+    optimisticUpdate,
+    closeAllModals,
+    handleUpdatePicture,
+    unfollowPending,
+    unfollowMut,
+  ]);
 
-    return actionButtons;
-  };
-
-  return (
-    <>
-      <div className="w-screen max-w-sm gap-0 rounded-lg p-0">
-        {getActionButtons().map((button, index) => {
-          return (
-            <div key={index}>
-              {button}
-              {index !== getActionButtons().length - 1 && <Separator />}
-            </div>
-          );
-        })}
-      </div>
-    </>
-  );
-};
-
-type ActionButtonProps = {
-  label: string | ReactNode;
-  onClick: () => void;
-  className?: string;
-  isLoading?: boolean;
-};
-
-const ActionButton = ({
-  label,
-  onClick,
-  className,
-  isLoading,
-}: ActionButtonProps) => {
-  return (
+  const enhancedButtons = actionButtons.map((button) => (
     <Button
-      loading={isLoading}
-      variant="ghost"
-      type="button"
-      className={`w-full py-3.5 text-center text-sm font-normal text-black ${className || ""}`}
-      onClick={onClick}
+      key={button.key}
+      className="py-3"
+      loading={button.isLoading}
+      text="sm"
+      variant={button.destructive ? "destructive" : "ghost"}
+      onClick={button.onClick}
     >
-      {label}
+      {button.label}
     </Button>
+  ));
+
+  return (
+    <SecondaryDialogLayout
+      closeModal={() => closeModal("postActionDialog")}
+      contents={enhancedButtons}
+    />
   );
 };
 

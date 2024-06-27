@@ -13,7 +13,7 @@ const UserProfileCollectionsHeader = ({
   defaultCollection,
   profileUsername,
 }: UserProfileCollectionsHeaderProps) => {
-  const { showModal } = useModal();
+  const { openModal, closeAllModals } = useModal();
 
   return (
     <div className="flex items-center justify-between">
@@ -22,13 +22,14 @@ const UserProfileCollectionsHeader = ({
       </span>
       {defaultCollection && (
         <Button
-          variant="blue-link"
-          onClick={() => {
-            return showModal("NewCollectionForm", {
-              defaultCollection,
-              profileUsername,
-            });
-          }}
+          variant="primary-ghost"
+          onClick={() =>
+            openModal("collectionFormManager", {
+              mode: "create",
+              username: profileUsername,
+              onClose: closeAllModals,
+            })
+          }
         >
           + New collection
         </Button>

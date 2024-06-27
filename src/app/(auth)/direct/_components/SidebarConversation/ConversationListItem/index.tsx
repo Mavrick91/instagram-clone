@@ -45,6 +45,7 @@ const ConversationListItem = ({
         })}
       >
         <UserListItem
+          avatar={recipientUser?.avatar}
           bottomText={
             <>
               <span>{lastMessage?.user?.id === user.id ? "You: " : ""}</span>
@@ -53,10 +54,7 @@ const ConversationListItem = ({
             </>
           }
           topText={recipientUser.firstName}
-          lastName={recipientUser.lastName}
-          avatar={recipientUser?.avatar}
-          size="size-14"
-          subTextSize="xs"
+          width={56}
         />
       </div>
     </Link>

@@ -10,7 +10,7 @@
     "format": "prettier --write .",
     "lint:fix": "eslint --fix .",
     "check": "tsc --noEmit",
-    "seed": "ts-node prisma/seed.ts",
+    "seed": "ts-node prisma/seed.js",
     "clear-s3": "node script/clearS3Bucket.js",
     "drop-db": "PGPASSWORD=postgres psql -h localhost -U postgres -c \"DROP DATABASE IF EXISTS \\\"instagram-clone\\\"\"",
     "create-db": "PGPASSWORD=postgres psql -h localhost -U postgres -c \"CREATE DATABASE \\\"instagram-clone\\\"\"",

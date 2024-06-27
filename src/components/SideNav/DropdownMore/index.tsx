@@ -1,21 +1,19 @@
 import { motion } from "framer-motion";
 import {
+  Activity,
+  AlertTriangle,
   AlignJustify,
   Bookmark,
-  OctagonAlert,
-  Settings2,
-  SquareActivity,
+  LucideIcon,
+  Settings,
   Sun,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Fragment } from "react/jsx-runtime";
 
 import { logout } from "@/actions/user";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
@@ -31,49 +29,25 @@ const DropdownMore = ({ displaySmallNav }: Props) => {
   const user = useUserInfo();
   const router = useRouter();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
   };
 
   const dropdownItems = [
-    {
-      name: "Settings",
-      Icon: Settings2,
-    },
-    {
-      name: "Your activity",
-      Icon: SquareActivity,
-    },
-    {
-      name: "Saved",
-      Icon: Bookmark,
-    },
-    {
-      name: "Switch appearance",
-      onClick: toggleTheme,
-      Icon: Sun,
-    },
-    {
-      name: "Report a problem",
-      Icon: OctagonAlert,
-    },
-    {
-      name: "Switch accounts",
-      onClick: () => {
-        return router.push(`/profile/${user.id}`);
-      },
-    },
-    {
-      name: "Log out",
-      onClick: handleLogout,
-      className: "text-red-500 p-4",
-    },
+    { label: "Settings", Icon: Settings },
+    { label: "Your activity", Icon: Activity },
+    { label: "Saved", Icon: Bookmark },
+    { label: "Switch appearance", onClick: toggleTheme, Icon: Sun },
+    { label: "Report a problem", Icon: AlertTriangle },
   ];
+
+  const commonClasses =
+    "flex cursor-pointer w-fill text-sm items-center space-x-4 rounded-lg p-4 hover:bg-ig-hover-overlay";
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="flex items-center rounded-lg p-3 text-primary-text hover:bg-hover-overlay">
+        <button className="flex items-center rounded-2xl p-3 text-ig-primary-text hover:bg-ig-hover-overlay">
           <AlignJustify />
           <motion.span
             className={cn("ml-4", {
@@ -87,23 +61,38 @@ const DropdownMore = ({ displaySmallNav }: Props) => {
           </motion.span>
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="ml-5 w-[266px] rounded-2xl">
-        {dropdownItems.map(({ name, Icon, onClick }) => {
-          return (
-            <Fragment key={name}>
-              {name === "Log out" && <DropdownMenuSeparator />}
-              <DropdownMenuItem
-                className="cursor-pointer rounded-lg p-4 hover:bg-hover-overlay"
+      <DropdownMenuContent className="absolute bottom-16 left-0 z-50 w-[266px] rounded-2xl bg-ig-banner-background shadow-custom">
+        <div className="p-2 pb-0">
+          {dropdownItems.map(({ label, Icon, onClick }) => {
+            const ItemComponent = onClick ? "button" : "div";
+
+            return (
+              <ItemComponent
+                key={label}
+                className={commonClasses}
                 onClick={onClick}
+                type={onClick ? "button" : undefined}
               >
-                <div className="flex items-center gap-2">
-                  {Icon ? <Icon /> : null}
-                  {name}
-                </div>
-              </DropdownMenuItem>
-            </Fragment>
-          );
-        })}
+                {Icon && <Icon size={18} />}
+                <span>{label}</span>
+              </ItemComponent>
+            );
+          })}
+        </div>
+        <div className="my-2 h-[6px] bg-ig-stroke/30" />
+        <div className="px-2 pb-2">
+          <button type="button" className={commonClasses}>
+            Switch accounts
+          </button>
+          <div className="my-2 h-[.5px] bg-ig-stroke/50" />
+          <button
+            type="button"
+            onClick={handleLogout}
+            className={commonClasses}
+          >
+            Log out
+          </button>
+        </div>
       </DropdownMenuContent>
     </DropdownMenu>
   );

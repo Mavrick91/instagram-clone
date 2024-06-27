@@ -28,7 +28,7 @@ const SideNavOverlay = ({ children, toggle }: Props) => {
       exit="closed"
       variants={variants}
       transition={{ duration: 0.3 }}
-      className="fixed z-10 flex h-full w-[397px] flex-col overflow-hidden rounded-r-2xl border border-separator bg-primary-background py-2 shadow-ig"
+      className="fixed z-10 flex h-full w-[397px] flex-col overflow-hidden rounded-r-2xl border border-ig-separator bg-ig-primary-background py-2 shadow-custom"
     >
       {children}
     </motion.div>

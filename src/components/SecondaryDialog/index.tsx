@@ -30,23 +30,23 @@ const SecondaryDialog = ({
   };
 
   return (
-    <div className="w-screen max-w-[400px] text-center">
+    <div className="w-screen max-w-[400px] bg-ig-elevated-background text-center">
       {(title || description) && (
         <div className="flex flex-col items-center p-8 pb-4">
           {title && <span className="text-center text-xl">{title}</span>}
           {description && (
-            <span className="mt-1 text-center text-sm text-secondary">
+            <span className="mt-1 text-center text-sm text-ig-secondary-text">
               {description}
             </span>
           )}
         </div>
       )}
-      <Separator />
+      <Separator elevated />
       {contents.map((content, index) => {
         return (
           <Fragment key={index}>
             {enhanceOnClick(content)}
-            <Separator />
+            <Separator elevated />
           </Fragment>
         );
       })}

@@ -16,13 +16,11 @@ const AccessibilityExpand = ({ previewPicture }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="border-b border-elevated-separator">
+    <div className="border-b border-ig-elevated-separator">
       <button
-        onClick={() => {
-          return setIsOpen(!isOpen);
-        }}
         className="flex w-full items-center justify-between px-3 py-4"
         type="button"
+        onClick={() => setIsOpen(!isOpen)}
       >
         <div
           className={cn({
@@ -38,9 +36,9 @@ const AccessibilityExpand = ({ previewPicture }: Props) => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
+            initial={{ opacity: 0, height: 0 }}
           >
             <div className="px-3 text-xs text-zinc-500">
               Alt text describes your photos for people with visual impairments.
@@ -49,11 +47,16 @@ const AccessibilityExpand = ({ previewPicture }: Props) => {
             </div>
             <div>
               <div className="px-3 py-4">
-                <div className="flex size-11 items-center gap-3">
-                  <ImageClient src={previewPicture} alt="icon alt" />
+                <div className="flex items-center gap-3 rounded">
+                  <ImageClient
+                    alt="icon alt"
+                    height={44}
+                    src={previewPicture}
+                    width={44}
+                  />
                   <Input
+                    className="h-full grow bg-transparent placeholder:text-ig-secondary-text"
                     placeholder="Write alt text..."
-                    className="h-full grow bg-transparent placeholder:text-secondary"
                     {...register("altText")}
                   />
                 </div>

@@ -9,16 +9,16 @@ import UserProfileCollectionDetails from "./_components/UserProfileCollectionDet
 
 const CollectionPage = async ({
   params,
-}: ServerPageProps<"username" | "collectionName">) => {
-  const collectionNameId = params.collectionName;
+}: ServerPageProps<"username" | "collectionId">) => {
+  const collectionId = params.collectionId;
   const username = params.username;
   const queryClient = getQueryClient();
 
   const serverUserCollectionDetails =
     await queryClient.ensureQueryData<UserCollectionDetails>({
-      queryKey: ["collection", username, collectionNameId],
+      queryKey: ["collection", username, collectionId],
       queryFn: async () => {
-        return await getUserCollectionDetails(username, collectionNameId);
+        return await getUserCollectionDetails(username, collectionId);
       },
     });
 

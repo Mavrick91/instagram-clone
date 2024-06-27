@@ -10,18 +10,18 @@ type PostDetailsActionProps = {
 };
 
 const PostDetailsAction = ({ picture }: PostDetailsActionProps) => {
-  const { showModal } = useModal();
+  const { openModal } = useModal();
 
   return (
     <button
       type="button"
       onClick={() => {
-        return showModal("PostActionDialog", {
+        return openModal("postActionDialog", {
           picture,
         });
       }}
     >
-      <Ellipsis className="text-primary-text" />
+      <Ellipsis className="text-ig-primary-text" />
     </button>
   );
 };

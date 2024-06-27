@@ -31,23 +31,23 @@ const EditThoughtDialog = forwardRef<HTMLDivElement, Props>(
       <div ref={ref} className="absolute top-0 translate-x-[100px]">
         <div className="relative">
           <div className="flex">
-            <div className="relative rounded-2xl bg-ig-banner-background shadow-ig">
+            <div className="relative rounded-2xl bg-ig-banner-background shadow-custom">
               <div className="w-[350px]">
                 <div className="flex justify-center py-8">
                   <div className="flex w-[230px] flex-col items-center">
                     <BubbleThought
-                      canEdit={false}
                       bubbleText={user.thought?.content}
+                      canEdit={false}
                     />
                     <div className="flex w-full flex-col items-center">
                       <div className="rounded-full">
-                        <span className="pointer-events-none inset-0 block size-[160px] shrink-0 overflow-hidden rounded-full bg-secondary-background content-none">
+                        <span className="pointer-events-none inset-0 block size-[160px] shrink-0 overflow-hidden rounded-full bg-ig-secondary-background content-none">
                           <ImageClient
+                            alt=""
+                            className="m-0 size-full border-0 object-cover p-0 align-baseline"
+                            height={160}
                             src={user.avatar!}
                             width={160}
-                            height={160}
-                            className="m-0 size-full border-0 object-cover p-0 align-baseline"
-                            alt=""
                           />
                         </span>
                       </div>
@@ -61,22 +61,25 @@ const EditThoughtDialog = forwardRef<HTMLDivElement, Props>(
                 </div>
                 <div className="mx-3 mb-3 mt-0 flex flex-col items-center justify-center">
                   <div className="mb-2">
-                    <span className="mb-1 text-center text-xs text-secondary">
+                    <span className="mb-1 text-center text-xs text-ig-secondary-text">
                       {followersOnly
                         ? "Shared with followers that you follow back"
                         : "Shared with Close friends"}
                     </span>
                   </div>
                   <Button
-                    onClick={handleClickEdit}
                     className="w-full font-semibold"
+                    padding="sm"
+                    rounded="lg"
+                    variant="primary"
+                    onClick={handleClickEdit}
                   >
                     Leave a new note
                   </Button>
                   <Button
-                    className="mt-2 w-full hover:text-primary-text"
-                    size="sm"
-                    variant="ghost"
+                    className="mt-2 w-full font-semibold"
+                    padding="none"
+                    text="sm"
                     onClick={handleClickDelete}
                   >
                     Delete note

@@ -5,48 +5,46 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Separator from "@/components/ui/separator";
 
-import { FormDataNewCollection } from "../NewCollectionForm";
-
-type Props = {
-  onClickNext: () => void;
-  labelSubmit: string;
+type CollectionNameStepProps = {
+  isLoading: boolean;
 };
 
-export const CreateCollectionStep = ({ onClickNext, labelSubmit }: Props) => {
+const CollectionNameStep = ({ isLoading }: CollectionNameStepProps) => {
   const {
     register,
     formState: { errors },
-  } = useFormContext<FormDataNewCollection>();
+  } = useFormContext();
 
   return (
     <div className="w-screen max-w-96 rounded-lg">
       <Modal.Header>
         <Modal.Header.Title>New collection</Modal.Header.Title>
       </Modal.Header>
-
       <div className="flex flex-col">
         <div className="mt-4 px-6">
           <Input
             {...register("collectionName")}
-            placeholder="Collection name"
-            autoComplete="off"
             autoFocus
-            error={errors.collectionName?.message}
-            className="border-separator bg-secondary-background placeholder:text-secondary"
+            autoComplete="off"
+            className="border-ig-separator bg-ig-secondary-background placeholder:text-ig-secondary-text"
+            error={errors.collectionName?.message as string}
+            placeholder="Collection name"
           />
         </div>
-        <Separator className="mt-4" />
-        <div className="flex justify-center">
+        <Separator elevated className="mt-4" />
+        <div className="flex justify-center py-2.5">
           <Button
-            type="button"
-            variant="blue-link"
-            className="p-0"
-            onClick={onClickNext}
+            loading={isLoading}
+            padding="none"
+            type="submit"
+            variant="primary-ghost"
           >
-            {labelSubmit}
+            Next
           </Button>
         </div>
       </div>
     </div>
   );
 };
+
+export default CollectionNameStep;

@@ -11,9 +11,9 @@ type CustomImageProps = ImageProps & {
 const ImageClient = ({ src, alt, className, ...props }: CustomImageProps) => {
   return (
     <Image
-      src={src}
       alt={alt}
       className={cn("object-cover", className)}
+      src={src}
       {...props}
     />
   );

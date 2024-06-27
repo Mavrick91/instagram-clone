@@ -11,6 +11,7 @@ import {
   UserCollectionDetails,
   userCollectionDetailsSelect,
 } from "@/types/collection";
+import { parseId } from "@/utils/IDParser";
 import { transformCollectionPictures } from "@/utils/picture";
 
 export const getIsPictureInUserCollection = async (
@@ -69,13 +70,13 @@ export const removePictureFromDefaultCollection = async (
 
 export const removePictureFromCollection = async (
   pictureId: number,
-  collectionNameId?: string,
+  collectionId?: string,
 ): Promise<void> => {
   try {
     const currentUser = await getCurrentUser();
 
     await prisma.$transaction(async (prisma) => {
-      if (!collectionNameId) {
+      if (!collectionId) {
         // Removing from all of the user's collections
         await prisma.pictureOnCollection.deleteMany({
           where: {
@@ -97,10 +98,9 @@ export const removePictureFromCollection = async (
         const collectionPicture = await prisma.collection.findFirst({
           where: {
             userId: currentUser.id,
-            nameId: collectionNameId,
+            id: parseInt(collectionId, 10),
           },
         });
-        console.log("😀😀 collectionPicture ~ ", collectionPicture);
         if (!collectionPicture) throw new Error("Collection not found");
 
         // Removing from a specific collection
@@ -139,7 +139,6 @@ export const removePictureFromCollection = async (
             },
           },
         );
-        console.log("😀😀 remainingCollections ~ ", remainingCollections);
 
         // Update isInAnyCollection if no collections left
         if (!remainingCollections) {
@@ -258,6 +257,7 @@ export const getCollectionsByUserId = async (
       userId: userId,
     },
     select: lightCollectionByUserIdSelect,
+    orderBy: { createdAt: "asc" },
   });
 
   return collections.map((collection) => {
@@ -293,7 +293,7 @@ export const getDefaultCollectionByUsername = async (
 
 export const getUserCollectionDetails = async (
   username: string,
-  collectionNameId: string,
+  collectionId: string | number,
 ): Promise<UserCollectionDetails> => {
   const user = await prisma.user.findFirstOrThrow({
     where: {
@@ -304,7 +304,7 @@ export const getUserCollectionDetails = async (
   const collection = await prisma.collection.findFirstOrThrow({
     where: {
       userId: user.id,
-      nameId: collectionNameId,
+      id: parseId(collectionId),
     },
     select: userCollectionDetailsSelect,
   });

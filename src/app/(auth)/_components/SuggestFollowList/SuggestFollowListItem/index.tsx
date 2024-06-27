@@ -25,24 +25,20 @@ const SuggestFollowListItem = ({
         <Link href={`/${username}`}>
           <UserListItem
             avatar={avatar}
+            bottomText={`${firstName} ${lastName}`}
             topText={username}
-            bottomText={
-              <p className="text-sm text-zinc-500">
-                {firstName} {lastName}
-              </p>
-            }
-            subTextSize="sm"
+            width={32}
           />
         </Link>
       </div>
       <ButtonFollow
+        buttonProps={{
+          variant: "primary",
+          rounded: "lg",
+        }}
         isFollowing={isFollowing}
         userProfileId={id}
         userProfileUsername={username}
-        buttonProps={{
-          variant: "blue",
-          size: "xs",
-        }}
       />
     </div>
   );

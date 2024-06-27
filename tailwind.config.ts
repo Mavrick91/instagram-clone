@@ -17,6 +17,9 @@ const config = {
       lg: "1264px",
     },
     extend: {
+      maxWidth: {
+        "lg-page": "935px",
+      },
       boxShadow: {
         custom: "0 4px 12px rgba(var(--web-always-black), 0.15)",
       },
@@ -292,8 +295,11 @@ const config = {
           alignItems: "center",
           justifyContent: "center",
         },
-        ".filter-shadow": {
-          filter: "drop-shadow(0 4px 12px rgba(var(--web-always-black), .15))",
+        ".filter-bubble": {
+          boxShadow: "4px 7px 0px -1.5px rgb(var(--ig-bubble-background))",
+        },
+        ".filter-big-bubble": {
+          boxShadow: "9px 15px 0px -4.5px rgb(var(--ig-bubble-background))",
         },
         ".w-fill": {
           width: "-webkit-fill-available",

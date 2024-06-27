@@ -22,11 +22,21 @@
       "error",
       {
         "disallowPrototype": true,
-        "singleReturnOnly": false,
+        "singleReturnOnly": true,
         "classPropertiesAllowed": false
       }
     ],
-    "arrow-body-style": ["error", "always"],
+    "react/jsx-sort-props": [
+      "error",
+      {
+        "callbacksLast": true,
+        "shorthandFirst": true,
+        "shorthandLast": false,
+        "ignoreCase": true,
+        "noSortAlphabetically": false,
+        "reservedFirst": true
+      }
+    ],
     "simple-import-sort/imports": "error",
     "simple-import-sort/exports": "error",
     "react/display-name": "off",

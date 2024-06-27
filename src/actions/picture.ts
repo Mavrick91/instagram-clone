@@ -67,14 +67,12 @@ export const getPicturesByUser = async (
     where: { userId: userId ? userId : undefined },
     orderBy: { createdAt: "desc" },
     select: userPictureDetailsSelect,
+    take: 12,
   });
 
-  return pictures.map((picture) => {
-    return {
-      ...picture,
-      sizes: picture.sizes as Sizes,
-    };
-  });
+  return await Promise.all(
+    pictures.map(async (picture) => getPictureDetails(picture.id)),
+  );
 };
 
 export const getPictureDetails = async (
@@ -121,7 +119,6 @@ export const getFollowedUsersPictures = async (): Promise<
   return prisma.picture.findMany({
     where: whereClause,
     select: userPictureDetailsSelect,
-    // take: 1,
   });
 };
 

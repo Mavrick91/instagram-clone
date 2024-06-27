@@ -7,6 +7,7 @@ import {
 } from "./picture";
 
 export const lightCollectionByUserIdSelect = {
+  id: true,
   nameId: true,
   name: true,
   isDefault: true,

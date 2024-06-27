@@ -19,12 +19,17 @@ const UploadPostFromComputer = () => {
     <div className="flex aspect-square max-w-[755px] flex-col items-center justify-center">
       <AddPictureSVG />
       <div className="my-4 text-xl">Drag photo here</div>
-      <label className={cn("cursor-pointer", buttonVariants({ size: "xs" }))}>
+      <label
+        className={cn(
+          "cursor-pointer",
+          buttonVariants({ variant: "primary", rounded: "lg", padding: "sm" }),
+        )}
+      >
         Select From Computer
         <input
-          type="file"
           accept="image/*"
           className="sr-only"
+          type="file"
           {...register("picture", { onChange: handleFileChange })}
         />
       </label>

@@ -1,16 +1,14 @@
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useCallback } from "react";
 
 import {
   addPictureToDefaultCollection,
-  removePictureFromCollection,
   removePictureFromDefaultCollection,
 } from "@/actions/collection";
 import { likePicture, unlikePicture } from "@/actions/like";
-import { Button } from "@/components/ui/button";
 import { useOptimisticActions } from "@/hooks/useOptimisticActions";
 import { useModal } from "@/providers/ModalProvider";
 import { useUserInfo } from "@/providers/UserInfoProvider";
@@ -18,11 +16,12 @@ import { UserPictureDetails } from "@/types/picture";
 
 const usePostCTALogic = (pictureId: number) => {
   const user = useUserInfo();
-  const { showModal, closeAllModal } = useModal();
+  const { openModal } = useModal();
   const queryClient = useQueryClient();
   const { optimisticUpdate } = useOptimisticActions();
   const params = useParams();
-  const collectionName = params.collectionName as string | undefined;
+  const collectionId = params.collectionId as string | undefined;
+  const username = params.username as string | undefined;
 
   const picture = queryClient.getQueryData<UserPictureDetails>([
     "picture",
@@ -37,21 +36,6 @@ const usePostCTALogic = (pictureId: number) => {
     user: pictureUser,
     isInAnyCollection,
   } = picture;
-
-  const { mutate: removeFromCollection } = useMutation({
-    mutationFn: (collectionNameId?: string) => {
-      return removePictureFromCollection(pictureId, collectionNameId);
-    },
-    onSuccess: async () => {
-      const collectionNameId = collectionName?.toLowerCase().replace(/ /g, "-");
-      if (collectionNameId) {
-        await queryClient.refetchQueries({
-          queryKey: ["collection", user.username, collectionNameId],
-        });
-      }
-      closeAllModal();
-    },
-  });
 
   const handleToggleLike = useCallback(() => {
     optimisticUpdate<UserPictureDetails>({
@@ -74,94 +58,6 @@ const usePostCTALogic = (pictureId: number) => {
     });
   }, [pictureId, optimisticUpdate]);
 
-  const showRemoveConfirmationModal = useCallback(() => {
-    const modalContent = collectionName
-      ? [
-          {
-            label: "Remove from collection",
-            action: () => {
-              return optimisticUpdate<UserPictureDetails>({
-                queryKey: ["picture", pictureId],
-                updateFn: (oldData) => {
-                  return {
-                    ...oldData,
-                    isSaved: !oldData.isSaved,
-                  };
-                },
-                action: async () => {
-                  return removeFromCollection(
-                    collectionName.toLowerCase().replace(/ /g, "-"),
-                  );
-                },
-              });
-            },
-          },
-          {
-            label: "Remove",
-            action: async () => {
-              return optimisticUpdate<UserPictureDetails>({
-                queryKey: ["picture", pictureId],
-                updateFn: (oldData) => {
-                  return {
-                    ...oldData,
-                    isSaved: !oldData.isSaved,
-                    isInAnyCollection: false,
-                  };
-                },
-                action: async () => {
-                  return removeFromCollection(undefined);
-                },
-              });
-            },
-          },
-        ]
-      : [
-          {
-            label: "Remove",
-            action: () => {
-              return optimisticUpdate<UserPictureDetails>({
-                queryKey: ["picture", pictureId],
-                updateFn: (oldData) => {
-                  return {
-                    ...oldData,
-                    isSaved: !oldData.isSaved,
-                    isInAnyCollection: false,
-                  };
-                },
-                action: async () => {
-                  return removeFromCollection(undefined);
-                },
-              });
-            },
-          },
-        ];
-
-    showModal("SecondaryDialog", {
-      title: "Delete records and collections?",
-      description: collectionName
-        ? "You can remove it from this collection or from all the items you have saved."
-        : "Removing this item from records will also remove it from collections.",
-      contents: modalContent.map(({ label, action }) => {
-        return (
-          <Button
-            key={label}
-            variant="ghost"
-            className="w-full py-3 text-sm font-bold text-destructive"
-            onClick={action}
-          >
-            {label}
-          </Button>
-        );
-      }),
-    });
-  }, [
-    collectionName,
-    optimisticUpdate,
-    pictureId,
-    removeFromCollection,
-    showModal,
-  ]);
-
   const handleToggleCollection = useCallback(() => {
     if (!isInAnyCollection) {
       optimisticUpdate<UserPictureDetails>({
@@ -179,7 +75,15 @@ const usePostCTALogic = (pictureId: number) => {
         },
       });
     } else {
-      showRemoveConfirmationModal();
+      openModal("removeFromCollectionDialog", {
+        title: "Delete records and collections?",
+        description: collectionId
+          ? "You can remove it from this collection or from all the items you have saved."
+          : "Removing this item from records will also remove it from collections.",
+        collectionId,
+        pictureId,
+        username,
+      });
     }
   }, [
     isInAnyCollection,
@@ -187,11 +91,13 @@ const usePostCTALogic = (pictureId: number) => {
     pictureId,
     queryClient,
     user.username,
-    showRemoveConfirmationModal,
+    openModal,
+    collectionId,
+    username,
   ]);
 
   const showPostDetails = () => {
-    return showModal("PostDetails", { pictureId });
+    return openModal("postDetailsDialog", { pictureId });
   };
 
   return {

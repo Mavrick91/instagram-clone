@@ -15,13 +15,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {label && <Label htmlFor={props.id}>{label}</Label>}
         <div className="h-full">
           <input
-            type={type}
+            ref={ref}
             className={cn(
               "flex items-start py-2 text-primary-text w-full rounded-md border border-elevated-separator bg-background px-3 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-secondary-text focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
               error ? "border-red-500 focus-visible:ring-red-500" : "",
               className,
             )}
-            ref={ref}
+            type={type}
             {...props}
           />
           {error && <p className="mt-1 text-sm text-red-500">{error}</p>}

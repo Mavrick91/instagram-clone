@@ -14,6 +14,6 @@ export const revalidateUserProfilePage: RevalidatePath = {
 };
 
 export const revalidateCollectionPage: RevalidatePath = {
-  originalPath: "/(auth)/[username]/collection/[collectionName]",
+  originalPath: "/(auth)/[username]/collection/[collectionId]",
   type: "page",
 };

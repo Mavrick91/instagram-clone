@@ -10,7 +10,9 @@ const UserProfilePage = async ({ params }: ServerPageProps<"username">) => {
 
   if (!userProfile) return null;
 
-  return <UserProfilePosts userProfileId={userProfile.id} />;
+  return (
+    <UserProfilePosts username={userUsername} userProfileId={userProfile.id} />
+  );
 };
 
 export default UserProfilePage;

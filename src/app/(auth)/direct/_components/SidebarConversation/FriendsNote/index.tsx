@@ -20,26 +20,26 @@ export const FriendsNote = ({ thoughtContent, userAvatar }: Props) => {
     <div className="relative flex h-[140px] items-end px-6">
       <button
         ref={buttonRef}
-        className="relative flex max-w-[72px] flex-col items-center"
-        onClick={toggleDropdown}
+        className="relative flex max-w-[96px] flex-col items-center"
         data-testid="update-note-button"
+        onClick={toggleDropdown}
       >
         <BubbleThought
-          size="small"
           bubbleText={thoughtContent}
           canEdit={false}
+          size="small"
         />
-        <UserAvatar avatar={userAvatar} size="size-[72px]" />
-        <span className="mt-1 break-words text-xs text-primary-text">
+        <UserAvatar avatar={userAvatar} width={72} />
+        <span className="mt-1 break-words text-xs text-ig-primary-text">
           {user.firstName} {user.lastName}
         </span>
       </button>
 
       {isDropdownOpen && (
         <EditThoughtDialog
+          ref={dropdownRef}
           followersOnly
           onClose={toggleDropdown}
-          ref={dropdownRef}
         />
       )}
     </div>

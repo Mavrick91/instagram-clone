@@ -15,7 +15,7 @@ type Props = {
 };
 
 const PostHeader = ({ avatar, username, picture }: Props) => {
-  const { showModal } = useModal();
+  const { openModal } = useModal();
 
   return (
     <>
@@ -33,7 +33,7 @@ const PostHeader = ({ avatar, username, picture }: Props) => {
         <button
           type="button"
           onClick={() => {
-            showModal("PostActionDialog", {
+            openModal("postActionDialog", {
               picture,
             });
           }}

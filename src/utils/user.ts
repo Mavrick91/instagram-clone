@@ -130,3 +130,20 @@ export const updateUserProfileFollowStatus = (
     _count: updateCount(oldData._count, followField, newFollowStatus),
   };
 };
+
+export const updateCountForPosts = {
+  add: (oldData: UserProfileType) => ({
+    ...oldData,
+    _count: {
+      ...oldData._count,
+      pictures: oldData._count.pictures + 1,
+    },
+  }),
+  remove: (oldData: UserProfileType) => ({
+    ...oldData,
+    _count: {
+      ...oldData._count,
+      pictures: oldData._count.pictures - 1,
+    },
+  }),
+};

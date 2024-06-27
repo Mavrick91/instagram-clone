@@ -14,7 +14,7 @@ type Props = {
 };
 
 const ThumbnailGridItem = ({ initialPicture }: Props) => {
-  const { showModal } = useModal();
+  const { openModal } = useModal();
 
   const { data: picture } = useQuery<UserPictureDetails>({
     queryKey: ["picture", initialPicture.id],
@@ -29,20 +29,20 @@ const ThumbnailGridItem = ({ initialPicture }: Props) => {
   return (
     <>
       <button
+        key={picture.id}
+        className="group relative col-span-1 aspect-square overflow-hidden bg-ig-highlight-background"
         type="button"
         onClick={() => {
-          return showModal("PostDetails", { pictureId: picture.id });
+          return openModal("postDetailsDialog", { pictureId: picture.id });
         }}
-        key={picture.id}
-        className="group relative col-span-1 aspect-square overflow-hidden bg-highlight-background"
       >
         <ImageClient
-          width={317}
-          height={317}
+          priority
           alt={picture.altText || "Picture"}
           className="size-full overflow-hidden object-cover"
+          height={317}
           src={picture.sizes.thumbnail}
-          priority
+          width={317}
         />
         <div className="absolute inset-0 z-20 hidden items-center justify-center gap-3 bg-black/50  text-white group-hover:flex">
           <MessageCircle fill="white" size={32} />

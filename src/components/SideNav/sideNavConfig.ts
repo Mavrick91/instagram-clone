@@ -14,7 +14,7 @@ export interface SideNavItem {
   onClick?: () => void;
   userAvatarProps?: {
     avatar?: string | null;
-    size: string;
+    width: number;
   };
 }
 
@@ -73,7 +73,7 @@ export const getNavigationItems = (
       },
       userAvatarProps: {
         avatar: user.avatar,
-        size: "size-6",
+        width: 24,
       },
       isActive: (path) => {
         return !["/", "/explore", "/direct", "/notifications"].includes(path);

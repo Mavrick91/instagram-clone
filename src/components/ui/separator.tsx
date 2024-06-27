@@ -4,9 +4,10 @@ type SeparatorProps = {
   className?: string;
   ig?: boolean;
   post?: boolean;
+  elevated?: boolean;
 };
 
-const Separator = ({ className, ig, post }: SeparatorProps) => {
+const Separator = ({ className, ig, post, elevated }: SeparatorProps) => {
   return (
     <hr
       className={cn(
@@ -14,6 +15,7 @@ const Separator = ({ className, ig, post }: SeparatorProps) => {
         {
           "border-ig-separator": ig,
           "border-post-separator": post,
+          "border-ig-elevated-separator": elevated,
         },
         className,
       )}

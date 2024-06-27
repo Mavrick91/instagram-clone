@@ -23,30 +23,30 @@ const AddCaptionPost = ({ previewPicture, isEdit }: Props) => {
   return (
     <div className="flex">
       <div className="relative aspect-[1440/1607] w-screen max-w-[755px]">
-        <ImageClient src={previewPicture} fill alt="Preview picture" priority />
+        <ImageClient fill priority alt="Preview picture" src={previewPicture} />
       </div>
       <motion.div
-        className="border-l border-elevated-separator"
-        initial={{ width: 0 }}
         animate={{ width: "507px" }}
+        className="border-l border-ig-elevated-separator"
+        initial={{ width: 0 }}
         transition={{ duration: 0.5 }}
       >
         <div className="mx-4 mb-3 mt-4">
           <div className="flex items-center gap-3">
-            <UserAvatar avatar={user.avatar} size="size-7" />
+            <UserAvatar avatar={user.avatar} width={28} />
             <div className="text-sm font-semibold">{user.username}</div>
           </div>
         </div>
         <div>
           <TextareaAutosize
-            className="w-full resize-none bg-transparent px-4 text-primary-text focus:outline-none"
+            className="w-full resize-none bg-transparent px-4 text-ig-primary-text focus:outline-none"
             placeholder="Write a caption..."
             {...register("description")}
-            minRows={7}
             maxRows={7}
+            minRows={7}
           />
         </div>
-        <div className="flex h-11 items-center justify-end border-b border-elevated-separator px-4 text-xs text-secondary">
+        <div className="flex h-11 items-center justify-end border-b border-ig-elevated-separator px-4 text-xs text-ig-secondary-text">
           {descriptionWatch.length}/2,200
         </div>
         <AccessibilityExpand previewPicture={previewPicture} />

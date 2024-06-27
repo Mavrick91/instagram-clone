@@ -28,20 +28,20 @@ const PostCTA = ({ pictureId, showMessageIcon = true }: PostCTAProps) => {
       <div className="flex items-center justify-between">
         <div className="flex gap-4 py-2">
           <IconButton
-            onClick={handleToggleLike}
+            activeColor="text-destructive"
             icon={HeartIcon}
             isActive={isLiked}
-            activeColor="text-destructive"
+            onClick={handleToggleLike}
           />
           {showMessageIcon && (
-            <IconButton onClick={showPostDetails} icon={MessageCircle} />
+            <IconButton icon={MessageCircle} onClick={showPostDetails} />
           )}
           <IconButton icon={SendIcon} />
         </div>
         <IconButton
-          onClick={handleToggleCollection}
           icon={BookmarkIcon}
           isActive={isSaved}
+          onClick={handleToggleCollection}
         />
       </div>
       <LikeCounter {...likeCounterProps} />
