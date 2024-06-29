@@ -12,13 +12,13 @@ const AdvancedSettingsExpand = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="border-b border-elevated-separator">
+    <div className="border-b border-ig-elevated-separator">
       <button
+        className="flex w-full items-center justify-between px-3 py-4"
         type="button"
         onClick={() => {
           return setIsOpen(!isOpen);
         }}
-        className="flex w-full items-center justify-between px-3 py-4"
       >
         <div
           className={cn({
@@ -34,9 +34,9 @@ const AdvancedSettingsExpand = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
+            initial={{ opacity: 0, height: 0 }}
           >
             <div className="flex flex-col">
               <div className="flex items-center justify-between gap-4 px-3">
@@ -76,10 +76,10 @@ const AdvancedSettingsExpand = () => {
                         <Switch
                           {...field}
                           checked={field.value}
-                          onCheckedChange={field.onChange}
                           className={cn({
                             "!bg-black": field.value,
                           })}
+                          onCheckedChange={field.onChange}
                         />
                       </FormControl>
                     );

@@ -71,11 +71,11 @@ const DropdownMenuContent = forwardRef<
     <DropdownMenuPrimitive.Portal>
       <DropdownMenuPrimitive.Content
         ref={ref}
-        sideOffset={sideOffset}
         className={cn(
           "z-50 min-w-[8rem] bg-banner-background overflow-hidden rounded-md text-popover-foreground shadow-custom",
           className,
         )}
+        sideOffset={sideOffset}
         {...props}
       />
     </DropdownMenuPrimitive.Portal>
@@ -93,7 +93,7 @@ const DropdownMenuItem = forwardRef<
     <DropdownMenuPrimitive.Item
       ref={ref}
       className={cn(
-        "relative flex cursor-default text-primary-text select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+        "relative flex cursor-default text-ig-primary-text select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
         inset && "pl-8",
         className,
       )}
@@ -110,11 +110,11 @@ const DropdownMenuCheckboxItem = forwardRef<
   return (
     <DropdownMenuPrimitive.CheckboxItem
       ref={ref}
+      checked={checked}
       className={cn(
         "relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
         className,
       )}
-      checked={checked}
       {...props}
     >
       <span className="absolute left-2 flex size-3.5 items-center justify-center">

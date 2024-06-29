@@ -38,10 +38,10 @@ const FollowersDialog = ({ followers, isFollowers }: FollowersDialogProps) => {
 
             if (!user) return null;
 
-            return <FollowersDialogItem follower={user} key={user.id} />;
+            return <FollowersDialogItem key={user.id} follower={user} />;
           })
         ) : (
-          <p className="pt-6 text-center text-sm text-secondary-text">
+          <p className="pt-6 text-center text-sm text-ig-secondary-text">
             {isFollowers ? "No followers" : "No followings"}
           </p>
         )}

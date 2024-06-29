@@ -1,25 +1,10 @@
-import {
-  PictureLight,
-  PictureLightWithJsonSizes,
-  Sizes,
-} from "@/types/picture";
+import { PictureWithSizes, Sizes, WithSizes } from "@/types/picture";
 
-export const transformLightPicture = (
-  picture: PictureLightWithJsonSizes,
-): PictureLight => {
+export const transformPictureSizes = <T extends WithSizes>(
+  picture: T,
+): PictureWithSizes<T> => {
   return {
     ...picture,
     sizes: picture.sizes as Sizes,
   };
-};
-
-export const transformCollectionPictures = (
-  pictures: { pictureId: number; picture: PictureLightWithJsonSizes }[],
-) => {
-  return pictures.map((p) => {
-    return {
-      pictureId: p.pictureId,
-      picture: transformLightPicture(p.picture),
-    };
-  });
 };

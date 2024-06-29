@@ -15,11 +15,11 @@ const PostDetailsAction = ({ picture }: PostDetailsActionProps) => {
   return (
     <button
       type="button"
-      onClick={() => {
-        return openModal("postActionDialog", {
+      onClick={() =>
+        openModal("postActionDialog", {
           picture,
-        });
-      }}
+        })
+      }
     >
       <Ellipsis className="text-ig-primary-text" />
     </button>

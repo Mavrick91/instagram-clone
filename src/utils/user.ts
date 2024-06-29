@@ -7,6 +7,26 @@ type FollowType = {
   targetUserId: number;
 };
 
+type UserSummary = {
+  id: number;
+  avatar: string | null;
+  firstName: string;
+  lastName: string;
+  username: string;
+};
+
+type FollowListItem = {
+  id: number;
+  initiator?: UserSummary;
+  targetUser?: UserSummary;
+};
+
+type CountType = {
+  pictures: number;
+  initiatedFollows: number;
+  receivedFollows: number;
+};
+
 export const getIsCurrentUserFollowingProfile = (
   currentUser: CurrentUserType,
   profileId: number,
@@ -73,11 +93,11 @@ export const removeFollowFromCache = (
 };
 
 const updateFollowList = (
-  followList: any[],
+  followList: FollowListItem[],
   currentUser: CurrentUserType,
   newFollowStatus: boolean,
   isReceived: boolean,
-) => {
+): FollowListItem[] => {
   const userField = isReceived ? "initiator" : "targetUser";
 
   return newFollowStatus
@@ -95,15 +115,15 @@ const updateFollowList = (
         },
       ]
     : followList.filter((follow) => {
-        return follow[userField].id !== currentUser.id;
+        return follow[userField]?.id !== currentUser.id;
       });
 };
 
 const updateCount = (
-  oldCount: { [key: string]: number },
-  field: string,
+  oldCount: CountType,
+  field: keyof CountType,
   increment: boolean,
-) => {
+): CountType => {
   return {
     ...oldCount,
     [field]: oldCount[field] + (increment ? 1 : -1),
@@ -127,19 +147,23 @@ export const updateUserProfileFollowStatus = (
       newFollowStatus,
       isReceived,
     ),
-    _count: updateCount(oldData._count, followField, newFollowStatus),
+    _count: updateCount(
+      oldData._count,
+      followField as keyof CountType,
+      newFollowStatus,
+    ),
   };
 };
 
 export const updateCountForPosts = {
-  add: (oldData: UserProfileType) => ({
+  add: (oldData: UserProfileType): UserProfileType => ({
     ...oldData,
     _count: {
       ...oldData._count,
       pictures: oldData._count.pictures + 1,
     },
   }),
-  remove: (oldData: UserProfileType) => ({
+  remove: (oldData: UserProfileType): UserProfileType => ({
     ...oldData,
     _count: {
       ...oldData._count,

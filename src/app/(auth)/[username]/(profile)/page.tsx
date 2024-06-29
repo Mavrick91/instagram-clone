@@ -7,7 +7,6 @@ const UserProfilePage = async ({ params }: ServerPageProps<"username">) => {
   const userUsername = params.username;
 
   const userProfile = await getUserProfile(userUsername);
-
   if (!userProfile) return null;
 
   return (

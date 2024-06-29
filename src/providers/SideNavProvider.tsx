@@ -1,5 +1,6 @@
 "use client";
 
+import { useViewportSize } from "@mantine/hooks";
 import { usePathname } from "next/navigation";
 import {
   createContext,
@@ -9,8 +10,6 @@ import {
   useEffect,
   useState,
 } from "react";
-
-import useWindowWidth from "@/hooks/useWindowWidth";
 
 type SideNavContextType = {
   sideNavOpen: boolean;
@@ -32,7 +31,7 @@ type SideNavProviderProps = {
 };
 
 const SideNavProvider = ({ children }: SideNavProviderProps) => {
-  const windowWidth = useWindowWidth();
+  const { width: windowWidth } = useViewportSize();
   const [sideNavOpen, setSideNavOpen] = useState(windowWidth < 1264);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [isNotificationVisible, setIsNotificationVisible] = useState(false);

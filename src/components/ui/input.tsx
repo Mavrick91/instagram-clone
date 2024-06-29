@@ -17,7 +17,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           <input
             ref={ref}
             className={cn(
-              "flex items-start py-2 text-primary-text w-full rounded-md border border-elevated-separator bg-background px-3 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-secondary-text focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+              "flex items-start py-2 text-ig-primary-text w-full rounded-md border border-ig-elevated-separator bg-background px-3 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-ig-secondary-text-text focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
               error ? "border-red-500 focus-visible:ring-red-500" : "",
               className,
             )}

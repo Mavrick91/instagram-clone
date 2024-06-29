@@ -10,6 +10,7 @@ import {
   getDefaultCollectionByUsername,
   updateCollectionName,
 } from "@/actions/collection";
+import { useModal } from "@/providers/ModalProvider";
 import { LightCollectionByUserId } from "@/types/collection";
 
 import CollectionNameStep from "./CollectionNameStep";
@@ -24,14 +25,13 @@ type FormData = z.infer<typeof formSchema>;
 
 type StepState = "name" | "pictures";
 
-interface CollectionFormManagerProps {
+export type CollectionFormManagerProps = {
   mode: "create" | "edit";
   editStep?: StepState;
   collectionId?: number;
   initialCollectionName?: string;
   username: string;
-  onClose: () => void;
-}
+};
 
 const CollectionFormManager = ({
   mode,
@@ -39,8 +39,8 @@ const CollectionFormManager = ({
   collectionId,
   initialCollectionName = "",
   username,
-  onClose,
 }: CollectionFormManagerProps) => {
+  const { closeModal } = useModal();
   const [step, setStep] = useState<StepState>(
     mode === "create" ? "name" : editStep ? editStep : "name",
   );
@@ -96,7 +96,7 @@ const CollectionFormManager = ({
   });
 
   const handleMutationSuccess = () => {
-    onClose();
+    closeModal("collectionFormManager");
   };
 
   const validationName = (newName: string) => {

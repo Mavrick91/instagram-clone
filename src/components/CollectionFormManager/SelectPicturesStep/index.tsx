@@ -15,12 +15,12 @@ interface SelectPicturesStepProps {
   onBack?: () => void;
 }
 
-const SelectPicturesStep: React.FC<SelectPicturesStepProps> = ({
+const SelectPicturesStep = ({
   defaultCollection,
   onPictureToggle,
   isLoading,
   onBack,
-}) => {
+}: SelectPicturesStepProps) => {
   const { getValues } = useFormContext();
   const selectedPictures = getValues("selectedPictures");
 

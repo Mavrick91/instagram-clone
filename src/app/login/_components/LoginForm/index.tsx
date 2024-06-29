@@ -18,21 +18,21 @@ const LoginForm = ({ register, errors }: Props) => {
       <div className="space-y-2">
         <Input
           {...register("email")}
-          label="Email"
           error={errors.email?.message}
           id="email"
+          label="Email"
           placeholder="m@example.com"
           type="email"
         />
       </div>
       <div className="space-y-2">
         <Input
-          id="password"
           required
+          id="password"
           type="password"
           {...register("password")}
-          label="Password"
           error={errors.password?.message}
+          label="Password"
           placeholder="********"
         />
       </div>

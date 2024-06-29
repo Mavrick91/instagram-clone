@@ -34,7 +34,6 @@ const SuggestFollowListItem = ({
       <ButtonFollow
         buttonProps={{
           variant: "primary",
-          rounded: "lg",
         }}
         isFollowing={isFollowing}
         userProfileId={id}

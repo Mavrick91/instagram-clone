@@ -1,14 +1,14 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { broadcastMessage } from "@/lib/websocketServer";
+import { ThreadMessage } from "@/types/thread";
 
 export const createMessage = async (
   content: string,
   userId: number,
   threadId: number,
-) => {
-  const message = await prisma.message.create({
+): Promise<ThreadMessage> => {
+  return prisma.message.create({
     data: {
       content,
       user: {
@@ -23,8 +23,4 @@ export const createMessage = async (
       thread: true,
     },
   });
-
-  broadcastMessage({ type: "messageAdded", message });
-
-  return message;
 };

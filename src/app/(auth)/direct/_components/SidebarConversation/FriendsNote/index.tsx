@@ -1,9 +1,11 @@
 "use client";
 
+import { useClickOutside } from "@mantine/hooks";
+import { useState } from "react";
+
 import BubbleThought from "@/components/BubbleThought";
 import EditThoughtDialog from "@/components/EditThoughtDialog";
 import UserAvatar from "@/components/UserAvatar";
-import useOutsideClick from "@/hooks/useOutsideClick";
 import { useUserInfo } from "@/providers/UserInfoProvider";
 
 type Props = {
@@ -12,17 +14,19 @@ type Props = {
 };
 
 export const FriendsNote = ({ thoughtContent, userAvatar }: Props) => {
-  const { isDropdownOpen, toggleDropdown, dropdownRef, buttonRef } =
-    useOutsideClick();
   const user = useUserInfo();
+  const [isOpened, setOpened] = useState(false);
+  const [buttonRef, setButtonRef] = useState<HTMLButtonElement | null>(null);
+  const [modalRef, setModalRef] = useState<HTMLDivElement | null>(null);
+  useClickOutside(() => setOpened(false), null, [modalRef, buttonRef]);
 
   return (
     <div className="relative flex h-[140px] items-end px-6">
       <button
-        ref={buttonRef}
+        ref={setButtonRef}
         className="relative flex max-w-[96px] flex-col items-center"
         data-testid="update-note-button"
-        onClick={toggleDropdown}
+        onClick={() => setOpened(true)}
       >
         <BubbleThought
           bubbleText={thoughtContent}
@@ -35,11 +39,11 @@ export const FriendsNote = ({ thoughtContent, userAvatar }: Props) => {
         </span>
       </button>
 
-      {isDropdownOpen && (
+      {isOpened && (
         <EditThoughtDialog
-          ref={dropdownRef}
+          ref={setModalRef}
           followersOnly
-          onClose={toggleDropdown}
+          onClose={() => setOpened(false)}
         />
       )}
     </div>

@@ -15,7 +15,11 @@ type PostDetailsClientProps = {
 
 const PostDetailsClient = ({ picture }: PostDetailsClientProps) => {
   const commentListRef = useRef<HTMLDivElement>(null);
-  const { handleCreateComment } = useUpdateComment(picture.id, commentListRef);
+  const { handleCreateComment } = useUpdateComment(
+    picture.id,
+    picture.user.id,
+    commentListRef,
+  );
 
   if (!picture) {
     return null;

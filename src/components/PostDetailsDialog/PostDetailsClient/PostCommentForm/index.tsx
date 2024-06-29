@@ -25,7 +25,6 @@ const PostCommentForm = ({ handleAddComment }: Props) => {
   const { register, handleSubmit, reset, watch } = useForm<CommentFormData>({
     resolver: zodResolver(commentSchema),
   });
-
   const content = watch("content");
 
   const onSubmit = async (data: CommentFormData) => {
@@ -43,7 +42,7 @@ const PostCommentForm = ({ handleAddComment }: Props) => {
           {...register("content")}
           maxRows={4}
         />
-        <Button type="submit" padding="none" disabled={!content} text="sm">
+        <Button disabled={!content} padding="none" text="sm" type="submit">
           Post
         </Button>
       </div>

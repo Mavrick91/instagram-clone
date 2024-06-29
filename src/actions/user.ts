@@ -58,8 +58,12 @@ export const login = async (email: string, password: string) => {
         expiresIn: "7d",
       });
 
-      setCookie({ name: "accessToken", value: accessToken, maxAge: 60 * 60 });
-      setCookie({
+      await setCookie({
+        name: "accessToken",
+        value: accessToken,
+        maxAge: 60 * 60,
+      });
+      await setCookie({
         name: "refreshToken",
         value: refreshToken,
         maxAge: 60 * 60 * 24 * 7,

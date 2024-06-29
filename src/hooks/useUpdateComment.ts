@@ -1,6 +1,8 @@
 import { RefObject, useCallback } from "react";
 
 import { createComment } from "@/actions/comment";
+import { createNotification } from "@/actions/notification";
+import { useWebSocket } from "@/hooks/useWebSocket";
 import { useUserInfo } from "@/providers/UserInfoProvider";
 import { UserPictureDetails } from "@/types/picture";
 
@@ -8,10 +10,12 @@ import { useOptimisticActions } from "./useOptimisticActions";
 
 const useUpdateComment = (
   pictureId: number,
+  pictureUserId: number,
   ref?: RefObject<HTMLDivElement>,
 ) => {
   const currentUser = useUserInfo();
   const { optimisticUpdate } = useOptimisticActions();
+  const { sendNotification } = useWebSocket();
 
   const handleCreateComment = useCallback(
     async (comment: string) => {
@@ -47,7 +51,15 @@ const useUpdateComment = (
           };
         },
         action: async () => {
-          await createComment(pictureId, comment);
+          const createdComment = await createComment(pictureId, comment);
+          const newNotification = await createNotification({
+            type: "COMMENT",
+            senderId: currentUser.id,
+            receiverId: pictureUserId,
+            pictureId: pictureId,
+            commentId: createdComment.id,
+          });
+          sendNotification(pictureUserId, newNotification);
         },
       });
     },
@@ -59,7 +71,9 @@ const useUpdateComment = (
       currentUser.username,
       optimisticUpdate,
       pictureId,
+      pictureUserId,
       ref,
+      sendNotification,
     ],
   );
 

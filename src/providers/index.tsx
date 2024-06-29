@@ -1,3 +1,4 @@
+import { MantineProvider } from "@mantine/core";
 import { dehydrate } from "@tanstack/react-query";
 import { ReactNode } from "react";
 
@@ -15,9 +16,11 @@ const Provider = ({ children }: ProviderProps) => {
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <ReactQueryProvider dehydratedState={dehydratedState}>
-      <ThemeProvider>{children}</ThemeProvider>
-    </ReactQueryProvider>
+    <MantineProvider>
+      <ReactQueryProvider dehydratedState={dehydratedState}>
+        <ThemeProvider>{children}</ThemeProvider>
+      </ReactQueryProvider>
+    </MantineProvider>
   );
 };
 

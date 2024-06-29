@@ -1,5 +1,6 @@
 "use server";
 
+import { createNotification } from "@/actions/notification";
 import { getCurrentUser } from "@/actions/user";
 import prisma from "@/lib/prisma";
 
@@ -12,6 +13,12 @@ export const followUser = async (targetUserId: number) => {
         initiatorId: currentUser.id,
         targetUserId,
       },
+    });
+
+    await createNotification({
+      type: "FOLLOW",
+      senderId: targetUserId,
+      receiverId: currentUser.id,
     });
   } catch (error) {
     console.error("Error follow user:", error);

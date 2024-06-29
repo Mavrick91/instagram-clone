@@ -24,6 +24,12 @@ const config = {
         custom: "0 4px 12px rgba(var(--web-always-black), 0.15)",
       },
       colors: {
+        chat: {
+          "incoming-message-bubble-background-color":
+            "rgb(var(--chat-outgoing-message-bubble-background-color))",
+          "outgoing-message-bubble-background-color":
+            "rgb(var(--chat-incoming-message-bubble-background-color))",
+        },
         barcelona: {
           logo: "rgb(var(--barcelona-logo))",
           "primary-button": "rgb(var(--barcelona-primary-button))",

@@ -7,10 +7,9 @@ import { Button } from "@/components/ui/button";
 import SecondaryDialogLayout from "@/layout/SecondaryDialogLayout";
 import { useModal } from "@/providers/ModalProvider";
 
-type CollectionNameActionDialogProps = {
+export type CollectionNameActionDialogProps = {
   collectionId: number;
   username: string;
-  collectionNameId: string;
   initialCollectionName: string;
 };
 

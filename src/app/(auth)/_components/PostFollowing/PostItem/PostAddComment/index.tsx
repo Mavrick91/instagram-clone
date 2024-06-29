@@ -16,14 +16,15 @@ type Inputs = z.infer<typeof schema>;
 
 type Props = {
   pictureId: number;
+  pictureUserId: number;
 };
 
-const PostAddComment = ({ pictureId }: Props) => {
+const PostAddComment = ({ pictureId, pictureUserId }: Props) => {
   const { reset, register, handleSubmit, watch } = useForm<Inputs>({
     resolver: zodResolver(schema),
   });
   const watchComment = watch("comment");
-  const { handleCreateComment } = useUpdateComment(pictureId);
+  const { handleCreateComment } = useUpdateComment(pictureId, pictureUserId);
 
   const onSubmit = async (data: Inputs) => {
     reset();
@@ -32,8 +33,8 @@ const PostAddComment = ({ pictureId }: Props) => {
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
       className="relative mt-2 flex items-center"
+      onSubmit={handleSubmit(onSubmit)}
     >
       <TextareaAutosize
         className="max-h-52 min-h-5 w-full resize-none bg-transparent pr-12 text-sm text-ig-primary-text outline-none placeholder:text-ig-secondary-text"
@@ -43,7 +44,7 @@ const PostAddComment = ({ pictureId }: Props) => {
       />
 
       {watchComment && (
-        <Button type="submit" padding="none" text="sm">
+        <Button padding="none" text="sm" type="submit">
           Post
         </Button>
       )}

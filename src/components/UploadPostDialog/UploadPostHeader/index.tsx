@@ -32,17 +32,17 @@ export const UploadPostHeader = ({
       })}
     >
       {currentStep === 1 && (
-        <button type="button" className="text-sm" onClick={onClick}>
+        <button className="text-sm" type="button" onClick={onClick}>
           {backButton}
         </button>
       )}
       <h3 className="font-bold">{title}</h3>
       {currentStep === 1 && (
         <Button
-          variant="ghost"
-          type="submit"
           className="font-semibold"
           loading={uploadStatus || uploadLoading || updateLoading}
+          type="submit"
+          variant="ghost"
         >
           {buttonSubmitText}
         </Button>

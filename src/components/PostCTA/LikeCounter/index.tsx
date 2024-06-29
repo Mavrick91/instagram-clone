@@ -2,10 +2,10 @@ import { Pluralize } from "@/components/Pluralize";
 
 type LikeCounterProps = {
   hideLikesAndViewCounts: boolean;
-  likes: Array<{ userId: string; user?: { username: string } }>;
+  likes: Array<{ userId: number; user?: { username: string } }>;
   _count: { likes: number };
   pictureUser: { username: string };
-  userId: string;
+  userId: number;
   handleToggleLike: () => void;
 };
 
@@ -58,9 +58,9 @@ const LikeCounter = ({
       Be the first one to{" "}
       <b>
         <button
-          onClick={handleToggleLike}
+          className="hover:text-ig-secondary-text"
           type="button"
-          className="hover:text-secondary"
+          onClick={handleToggleLike}
         >
           like this
         </button>

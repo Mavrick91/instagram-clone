@@ -70,7 +70,6 @@ const EditThoughtDialog = forwardRef<HTMLDivElement, Props>(
                   <Button
                     className="w-full font-semibold"
                     padding="sm"
-                    rounded="lg"
                     variant="primary"
                     onClick={handleClickEdit}
                   >

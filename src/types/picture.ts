@@ -9,6 +9,15 @@ export type Sizes = {
   thumbnail: string;
 };
 
+export type WithSizes = {
+  sizes: Prisma.JsonValue;
+  [key: string]: unknown;
+};
+
+export type PictureWithSizes<T> = T & {
+  sizes: Sizes;
+};
+
 export const userPictureDetailsSelect = {
   id: true,
   createdAt: true,
@@ -44,7 +53,17 @@ export const userPictureDetailsSelect = {
       },
     },
   },
-} as const;
+};
+
+export type UserPictureDetailsSelect = Prisma.PictureGetPayload<{
+  select: typeof userPictureDetailsSelect;
+}>;
+
+export type UserPictureDetails = UserPictureDetailsSelect & {
+  comments: CommentsPicture[];
+  isLiked: boolean;
+  isSaved: boolean;
+} & { sizes: Sizes };
 
 export const pictureLightSelect = {
   id: true,
@@ -60,23 +79,8 @@ export const pictureLightSelect = {
       likes: true,
     },
   },
-} as const;
+};
 
-export type UserPictureDetailsSelect = Prisma.PictureGetPayload<{
-  select: typeof userPictureDetailsSelect;
-}>;
-
-export type UserPictureDetails = UserPictureDetailsSelect & {
-  comments: CommentsPicture[];
-  isLiked: boolean;
-  isSaved: boolean;
-} & { sizes: Sizes };
-
-export type PictureLightWithJsonSizes = Prisma.PictureGetPayload<{
+export type PictureLightType = Prisma.PictureGetPayload<{
   select: typeof pictureLightSelect;
 }>;
-
-// Final type for pictures with Sizes
-export type PictureLight = Omit<PictureLightWithJsonSizes, "sizes"> & {
-  sizes: Sizes;
-};

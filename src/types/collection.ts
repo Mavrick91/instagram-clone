@@ -1,8 +1,10 @@
 import { Prisma } from "@prisma/client";
 
 import {
-  PictureLight,
   pictureLightSelect,
+  PictureLightType,
+  PictureWithSizes,
+  UserPictureDetails,
   userPictureDetailsSelect,
 } from "./picture";
 
@@ -29,7 +31,7 @@ export type LightCollectionByUserId = Omit<
 > & {
   pictures: {
     pictureId: number;
-    picture: PictureLight;
+    picture: PictureWithSizes<PictureLightType>;
   }[];
 };
 export const userCollectionDetailsSelect = {
@@ -53,6 +55,6 @@ export type UserCollectionDetails = Omit<
   "pictures"
 > & {
   pictures: {
-    picture: PictureLight;
+    picture: UserPictureDetails;
   }[];
 };

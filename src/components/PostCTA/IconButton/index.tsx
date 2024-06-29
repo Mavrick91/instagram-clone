@@ -13,20 +13,20 @@ const IconButton = ({
   onClick,
   icon: Icon,
   isActive = false,
-  activeColor = "text-primary-text",
+  activeColor = "text-ig-primary-text",
 }: IconButtonProps) => {
   return (
     <button
-      type="button"
-      onClick={onClick}
       className={cn({
         "hover:!text-ig-secondary-text": !isActive,
       })}
+      type="button"
+      onClick={onClick}
     >
       <Icon
-        className={cn("text-primary-text", {
+        className={cn("text-ig-primary-text", {
           [activeColor]: isActive,
-          "hover:text-secondary": !isActive,
+          "hover:text-ig-secondary-text": !isActive,
         })}
         fill={isActive ? "currentColor" : "none"}
       />

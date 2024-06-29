@@ -13,7 +13,7 @@ const UserProfileCollectionsHeader = ({
   defaultCollection,
   profileUsername,
 }: UserProfileCollectionsHeaderProps) => {
-  const { openModal, closeAllModals } = useModal();
+  const { openModal } = useModal();
 
   return (
     <div className="flex items-center justify-between">
@@ -27,7 +27,6 @@ const UserProfileCollectionsHeader = ({
             openModal("collectionFormManager", {
               mode: "create",
               username: profileUsername,
-              onClose: closeAllModals,
             })
           }
         >

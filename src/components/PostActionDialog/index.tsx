@@ -113,6 +113,7 @@ const PostActionDialog = ({ picture }: PostActionProps) => {
     picture.id,
     handleEditPicture,
     optimisticUpdate,
+    queryClient,
     closeAllModals,
     handleUpdatePicture,
     unfollowPending,

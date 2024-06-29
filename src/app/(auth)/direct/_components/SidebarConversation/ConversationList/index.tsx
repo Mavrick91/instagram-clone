@@ -1,13 +1,21 @@
+"use client";
+
+import { useSuspenseQuery } from "@tanstack/react-query";
+
 import { getThreads } from "@/actions/thread";
-import { getCurrentUser } from "@/actions/user";
+import { useUserInfo } from "@/providers/UserInfoProvider";
 
 import ConversationListItem from "../ConversationListItem";
 
-const ConversationList = async () => {
-  const [threads, currentUser] = await Promise.all([
-    getThreads(),
-    getCurrentUser(),
-  ]);
+export const dynamic = "force-dynamic";
+
+const ConversationList = () => {
+  const currentUser = useUserInfo();
+  const { data: threads } = useSuspenseQuery({
+    queryKey: ["threads", "currentUser"],
+    queryFn: () => getThreads(),
+    staleTime: 0,
+  });
 
   return (
     <div>
@@ -22,7 +30,7 @@ const ConversationList = async () => {
         return (
           <ConversationListItem
             key={thread.id}
-            lastMessage={lastMessage}
+            lastMessageLoaded={lastMessage}
             recipientUser={recipientUser}
             threadId={thread.id}
           />

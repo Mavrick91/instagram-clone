@@ -23,21 +23,22 @@ export const ThreadMessageItem = ({
   return (
     <>
       {showTimestamp && (
-        <div className="my-4 mt-auto self-center text-center text-xs text-secondary">
+        <div className="my-4 self-center text-center text-xs text-ig-secondary-text">
           {formatTimestamp(message.createdAt)}
         </div>
       )}
       <div
-        className={cn("my-px px-4", {
+        className={cn("my-px max-w-[70%] px-4", {
           "mr-auto": isMessageLeftSide,
           "ml-auto": !isMessageLeftSide,
         })}
       >
         <div
-          className={cn("text-sm text-white max-w-xl px-3 py-2", {
-            "bg-secondary-button-background text-primary-text rounded-tr-2xl rounded-br-2xl":
+          className={cn("text-sm text-white max-w-xl px-3 py-2 break-words", {
+            "bg-chat-outgoing-message-bubble-background-color text-ig-primary-text rounded-tr-2xl rounded-br-2xl":
               isMessageLeftSide,
-            "bg-[#3797f0] rounded-tl-2xl rounded-bl-2xl": !isMessageLeftSide,
+            "bg-chat-incoming-message-bubble-background-color rounded-tl-2xl rounded-bl-2xl":
+              !isMessageLeftSide,
             "rounded-tr-2xl": isFirstMessage && !isMessageLeftSide,
             "rounded-tl-2xl": isFirstMessage && isMessageLeftSide,
             "rounded-br-2xl": isLastMessage && !isMessageLeftSide,

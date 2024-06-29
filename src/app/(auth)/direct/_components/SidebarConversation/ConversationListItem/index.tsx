@@ -1,5 +1,6 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import moment from "moment";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -12,7 +13,7 @@ import { ThreadMessage, ThreadUser } from "@/types/thread";
 
 type ConversationListProps = {
   threadId?: number;
-  lastMessage: ThreadMessage;
+  lastMessageLoaded: ThreadMessage;
   recipientUser: ThreadUser;
 };
 
@@ -22,11 +23,15 @@ type Params = {
 
 const ConversationListItem = ({
   threadId,
-  lastMessage,
+  lastMessageLoaded,
   recipientUser,
 }: ConversationListProps) => {
   const user = useUserInfo();
   const params = useParams() as Params;
+  const { data: lastMessage } = useQuery({
+    queryKey: ["thread", user.username, threadId, "lastMessage"],
+    initialData: lastMessageLoaded,
+  });
 
   const selectedThreadId = useMemo(() => {
     if (typeof params === "object" && params !== null) {
@@ -40,18 +45,18 @@ const ConversationListItem = ({
     <Link href={`/direct/inbox/${threadId}`}>
       <div
         className={cn("px-6 py-2", {
-          "bg-highlight-background": selectedThreadId === threadId,
-          "hover:bg-hover-overlay": selectedThreadId !== threadId,
+          "bg-ig-highlight-background": selectedThreadId === threadId,
+          "hover:bg-ig-hover-overlay": selectedThreadId !== threadId,
         })}
       >
         <UserListItem
           avatar={recipientUser?.avatar}
           bottomText={
-            <>
+            <div className="flex gap-1">
               <span>{lastMessage?.user?.id === user.id ? "You: " : ""}</span>
-              <span className="max-w-52 truncate">{lastMessage?.content}</span>
+              <span className="truncate">{lastMessage?.content}</span>
               <span> · {moment(lastMessage?.createdAt).fromNow()}</span>
-            </>
+            </div>
           }
           topText={recipientUser.firstName}
           width={56}

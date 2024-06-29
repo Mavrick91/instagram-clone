@@ -190,6 +190,8 @@ body {
     --yellow-5: 253, 203, 92;
 
     /* Light mode specific variables */
+    --chat-outgoing-message-bubble-background-color: 55, 151, 240;
+    --chat-incoming-message-bubble-background-color: 239, 239, 239;
     --barcelona-logo: 0, 0, 0;
     --barcelona-primary-button: 0, 0, 0;
     --barcelona-secondary-text: 153, 153, 153;
@@ -236,6 +238,8 @@ body {
   }
 
   .dark {
+    --chat-outgoing-message-bubble-background-color: 55, 151, 240;
+    --chat-incoming-message-bubble-background-color: 38, 38, 38;
     --barcelona-logo: 243, 245, 247;
     --barcelona-primary-button: 255, 255, 255;
     --barcelona-secondary-text: 119, 119, 119;

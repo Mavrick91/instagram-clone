@@ -13,6 +13,7 @@ const buttonVariants = cva(
           "text-ig-primary-button ring-ig-primary-button hover:text-ig-link disabled:text-blue-2",
         ghost: "text-ig-primary-text",
         destructive: "font-bold text-red-500",
+        gray: "bg-ig-secondary-button-background font-semibold text-ig-primary-text hover:bg-ig-secondary-button-hover",
         primary:
           "bg-ig-primary-button text-web-always-white hover:bg-ig-primary-button-hover",
         "primary-ghost":
@@ -34,7 +35,7 @@ const buttonVariants = cva(
         xl: "md:text-xl text-lg",
       },
       padding: {
-        default: "md:px-5 md:py-2.5 px-4 py-2 lg:px-6 lg:py-3",
+        default: "px-4 py-1.5",
         xs: "md:px-3 md:py-1.5 px-2 py-1",
         sm: "md:px-4 md:py-2 px-3 py-1.5",
         lg: "md:px-7 md:py-3.5 px-6 py-3 lg:px-8 lg:py-4",
@@ -46,7 +47,7 @@ const buttonVariants = cva(
       variant: "default",
       text: "default",
       padding: "default",
-      rounded: "sm",
+      rounded: "lg",
     },
   },
 );

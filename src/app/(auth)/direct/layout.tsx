@@ -1,5 +1,3 @@
-import "@//lib/websocketServer";
-
 import { ServerLayoutProps } from "@/types/global";
 
 import SidebarConversation from "./_components/SidebarConversation";

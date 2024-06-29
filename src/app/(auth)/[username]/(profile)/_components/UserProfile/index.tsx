@@ -18,7 +18,7 @@ type UserProfileProps = {
 };
 
 const UserProfile = ({ initialUserProfile }: UserProfileProps) => {
-  const { showModal } = useModal();
+  const { openModal } = useModal();
   const currentUser = useUserInfo();
 
   const { data: userProfile } = useQuery<UserProfileType>({
@@ -40,20 +40,20 @@ const UserProfile = ({ initialUserProfile }: UserProfileProps) => {
         <div className="flex">
           <div className="mx-auto flex w-64 shrink-0 justify-center">
             <Image
-              src={userProfile.avatar || "/placeholder-avatar.png"}
               alt={
                 userProfile.username
                   ? `${userProfile.username} profile picture`
                   : "User posts picture"
               }
-              width={150}
-              height={150}
               className="rounded-full"
+              height={150}
+              src={userProfile.avatar || "/placeholder-avatar.png"}
+              width={150}
             />
           </div>
           <section className="ml-12 grow">
             <div className="flex h-10 items-center">
-              <h1 className="text-xl text-primary-text">
+              <h1 className="text-xl text-ig-primary-text">
                 <span>{userProfile.username}</span>
               </h1>
               <div className="ml-5 flex items-center space-x-2">
@@ -61,61 +61,62 @@ const UserProfile = ({ initialUserProfile }: UserProfileProps) => {
                   <OwnProfile />
                 ) : (
                   <ButtonFollow
-                    isFollowing={isCurrentUserFollowingProfile}
-                    userProfileUsername={userProfile.username}
-                    userProfileId={userProfile.id}
                     buttonProps={{
-                      variant: isCurrentUserFollowingProfile ? "gray" : "blue",
-                      size: "xs",
+                      variant: isCurrentUserFollowingProfile
+                        ? "gray"
+                        : "primary",
                     }}
+                    isFollowing={isCurrentUserFollowingProfile}
+                    userProfileId={userProfile.id}
+                    userProfileUsername={userProfile.username}
                   />
                 )}
               </div>
             </div>
-            <div className="my-3 flex space-x-8 text-primary-text">
+            <div className="my-3 flex space-x-8 text-ig-primary-text">
               <span>
                 <Pluralize
+                  bold
                   count={userProfile._count.pictures}
                   singular="post"
-                  bold
                 />
               </span>
               <button
                 type="button"
                 onClick={() => {
-                  return showModal("Followers", {
+                  return openModal("followersDialog", {
                     isFollowers: true,
                     followers: userProfile.receivedFollows,
                   });
                 }}
               >
                 <Pluralize
+                  bold
                   count={userProfile._count.receivedFollows}
                   singular="follower"
-                  bold
                 />
               </button>
               <button
                 type="button"
                 onClick={() => {
-                  return showModal("Followers", {
+                  return openModal("followersDialog", {
                     followers: userProfile.initiatedFollows,
                   });
                 }}
               >
                 <Pluralize
+                  bold
                   count={userProfile._count.initiatedFollows}
                   singular="following"
-                  bold
                 />
               </button>
             </div>
-            <div className="text-sm text-primary-text">
+            <div className="text-sm text-ig-primary-text">
               <span className="font-bold">
                 {userProfile.firstName} {userProfile.lastName}
               </span>
               {userProfile.bio && (
-                <p className="text-primary-text">{userProfile.bio}</p>
+                <p className="text-ig-primary-text">{userProfile.bio}</p>
               )}
             </div>
           </section>

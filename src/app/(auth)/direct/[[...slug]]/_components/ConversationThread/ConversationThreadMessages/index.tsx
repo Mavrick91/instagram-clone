@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import UserAvatar from "@/components/UserAvatar";
+import { useWebSocket } from "@/hooks/useWebSocket";
 import { ThreadMessage, ThreadUser } from "@/types/thread";
 
 import { ThreadMessageForm } from "./threadMessageForm";
@@ -31,37 +32,25 @@ type Props = {
   messages: ThreadMessage[];
   threadId: number;
   recipientUser: ThreadUser;
+  senderId: number;
 };
 
 const ConversationThreadMessages = ({
   messages,
   threadId,
   recipientUser,
+  senderId,
 }: Props) => {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [displayedMessages, setDisplayedMessages] =
     useState<ThreadMessage[]>(messages);
+  const { messages: WSMessages } = useWebSocket();
 
   useEffect(() => {
-    const socket = new WebSocket("ws://localhost:8081");
-
-    socket.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        if (data.type === "messageAdded") {
-          setDisplayedMessages((prevMessages) => {
-            return [...prevMessages, data.message];
-          });
-        }
-      } catch (error) {
-        console.error("Error parsing WebSocket message:", error);
-      }
-    };
-
-    return () => {
-      socket.close();
-    };
-  }, []);
+    if (WSMessages.length > 0) {
+      setDisplayedMessages((prevMessages) => [...prevMessages, ...WSMessages]);
+    }
+  }, [WSMessages]);
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -72,15 +61,15 @@ const ConversationThreadMessages = ({
   return (
     <>
       <div
-        className="flex grow flex-col items-end overflow-y-auto"
         ref={messagesEndRef}
+        className="flex grow flex-col items-end overflow-y-auto"
       >
         <div className="flex flex-col items-center justify-center self-stretch py-6">
-          <UserAvatar avatar={recipientUser.avatar} size="size-24" />
-          <div className="my-4 text-xl font-bold text-primary-text">
+          <UserAvatar avatar={recipientUser.avatar} width={96} />
+          <div className="my-4 text-xl font-bold text-ig-primary-text">
             {recipientUser.firstName} {recipientUser.lastName}
           </div>
-          <Button variant="gray" size="xs">
+          <Button variant="gray">
             <Link href={`/${recipientUser.username}`}>View Profile</Link>
           </Button>
         </div>
@@ -104,15 +93,19 @@ const ConversationThreadMessages = ({
           return (
             <ThreadMessageItem
               key={message.id}
-              message={message}
               isFirstMessage={isFirstMessage}
               isLastMessage={isLastMessage}
+              message={message}
               showTimestamp={showTimestamp}
             />
           );
         })}
       </div>
-      <ThreadMessageForm threadId={threadId} />
+      <ThreadMessageForm
+        recipientId={recipientUser.id}
+        senderId={senderId}
+        threadId={threadId}
+      />
     </>
   );
 };

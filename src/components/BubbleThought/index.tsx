@@ -30,7 +30,7 @@ const BubbleThought = ({
   };
 
   const containerClasses = cn(
-    "mb-[-80px] z-[60] relative",
+    "mb-[-80px] z-[40] relative",
     size === "small" && "mb-[-34px]",
   );
 

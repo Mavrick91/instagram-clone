@@ -12,7 +12,7 @@ import {
   userCollectionDetailsSelect,
 } from "@/types/collection";
 import { parseId } from "@/utils/IDParser";
-import { transformCollectionPictures } from "@/utils/picture";
+import { transformPictureSizes } from "@/utils/picture";
 
 export const getIsPictureInUserCollection = async (
   pictureId: number,
@@ -260,12 +260,13 @@ export const getCollectionsByUserId = async (
     orderBy: { createdAt: "asc" },
   });
 
-  return collections.map((collection) => {
-    return {
-      ...collection,
-      pictures: transformCollectionPictures(collection.pictures),
-    };
-  });
+  return collections.map((collection) => ({
+    ...collection,
+    pictures: collection.pictures.map((p) => ({
+      pictureId: p.pictureId,
+      picture: transformPictureSizes(p.picture),
+    })),
+  }));
 };
 
 export const getDefaultCollectionByUsername = async (
@@ -287,7 +288,10 @@ export const getDefaultCollectionByUsername = async (
 
   return {
     ...collection,
-    pictures: transformCollectionPictures(collection.pictures),
+    pictures: collection.pictures.map((p) => ({
+      pictureId: p.pictureId,
+      picture: transformPictureSizes(p.picture),
+    })),
   };
 };
 

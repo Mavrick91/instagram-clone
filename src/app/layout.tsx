@@ -1,4 +1,5 @@
 import "./globals.css";
+import "@mantine/core/styles.css";
 
 import moment from "moment";
 import type { Metadata } from "next";
@@ -46,13 +47,13 @@ const RootLayout = ({
         <Provider>
           {children}
           <ToastContainer
-            position="top-right"
-            autoClose={3000}
-            hideProgressBar
-            newestOnTop={false}
             closeOnClick
+            hideProgressBar
             pauseOnFocusLoss
             pauseOnHover
+            autoClose={3000}
+            newestOnTop={false}
+            position="top-right"
             theme="light"
           />
         </Provider>

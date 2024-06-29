@@ -36,10 +36,10 @@ const PostCommentList = forwardRef<HTMLDivElement, Props>(
                   key={comment.id}
                   avatar={comment.user.avatar}
                   content={comment.content}
-                  username={comment.user.username}
                   createdAt={comment.createdAt}
                   firstName={comment.user.firstName}
                   lastName={comment.user.lastName}
+                  username={comment.user.username}
                 />
               );
             })
@@ -50,8 +50,8 @@ const PostCommentList = forwardRef<HTMLDivElement, Props>(
 
     return (
       <div
-        className="h-0 grow space-y-2 overflow-y-auto p-3 pr-6 text-ig-primary-text"
         ref={ref}
+        className="h-0 grow space-y-2 overflow-y-auto p-3 pr-6 text-ig-primary-text"
       >
         {renderComments()}
       </div>

@@ -4,15 +4,14 @@ import { Button } from "@/components/ui/button";
 import { useModal } from "@/providers/ModalProvider";
 
 const OwnProfile = () => {
-  const { showModal } = useModal();
+  const { openModal } = useModal();
 
   return (
     <div className="flex">
       <Button
         variant="gray"
-        size="xs"
         onClick={() => {
-          showModal("EditProfile");
+          openModal("editProfileDialog");
         }}
       >
         Edit Profile

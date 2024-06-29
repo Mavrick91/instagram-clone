@@ -9,19 +9,22 @@ import {
   removePictureFromDefaultCollection,
 } from "@/actions/collection";
 import { likePicture, unlikePicture } from "@/actions/like";
+import { createNotification } from "@/actions/notification";
 import { useOptimisticActions } from "@/hooks/useOptimisticActions";
+import { useWebSocket } from "@/hooks/useWebSocket";
 import { useModal } from "@/providers/ModalProvider";
 import { useUserInfo } from "@/providers/UserInfoProvider";
 import { UserPictureDetails } from "@/types/picture";
 
 const usePostCTALogic = (pictureId: number) => {
-  const user = useUserInfo();
+  const currentUser = useUserInfo();
   const { openModal } = useModal();
   const queryClient = useQueryClient();
   const { optimisticUpdate } = useOptimisticActions();
   const params = useParams();
   const collectionId = params.collectionId as string | undefined;
   const username = params.username as string | undefined;
+  const { sendNotification } = useWebSocket();
 
   const picture = queryClient.getQueryData<UserPictureDetails>([
     "picture",
@@ -50,13 +53,28 @@ const usePostCTALogic = (pictureId: number) => {
           },
         };
       },
-      action: (oldData) => {
-        return oldData.isLiked
-          ? unlikePicture(pictureId)
-          : likePicture(pictureId);
+      action: async (oldData) => {
+        if (oldData.isLiked) {
+          await unlikePicture(pictureId);
+        } else {
+          const newNotification = await createNotification({
+            type: "LIKE",
+            senderId: currentUser.id,
+            receiverId: pictureUser.id,
+            pictureId: pictureId,
+          });
+          sendNotification(pictureUser.id, newNotification);
+          await likePicture(pictureId);
+        }
       },
     });
-  }, [pictureId, optimisticUpdate]);
+  }, [
+    optimisticUpdate,
+    pictureId,
+    currentUser.id,
+    pictureUser.id,
+    sendNotification,
+  ]);
 
   const handleToggleCollection = useCallback(() => {
     if (!isInAnyCollection) {
@@ -70,7 +88,7 @@ const usePostCTALogic = (pictureId: number) => {
             ? await removePictureFromDefaultCollection(pictureId)
             : await addPictureToDefaultCollection(pictureId);
           await queryClient.refetchQueries({
-            queryKey: ["collection", user.username, "default"],
+            queryKey: ["collection", currentUser.username, "default"],
           });
         },
       });
@@ -90,7 +108,7 @@ const usePostCTALogic = (pictureId: number) => {
     optimisticUpdate,
     pictureId,
     queryClient,
-    user.username,
+    currentUser.username,
     openModal,
     collectionId,
     username,
@@ -111,7 +129,7 @@ const usePostCTALogic = (pictureId: number) => {
       likes,
       _count,
       pictureUser,
-      userId: user.id,
+      userId: currentUser.id,
       handleToggleLike,
     },
   };

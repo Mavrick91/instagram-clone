@@ -28,8 +28,8 @@ const PostDetailsHeader = ({ picture }: PostDetailsHeaderProps) => {
           <div className="flex items-center justify-between pr-5">
             <div>
               <Link
-                href={`/${picture.user.username}`}
                 className="ml-4 text-sm font-semibold text-ig-primary-text"
+                href={`/${picture.user.username}`}
               >
                 {picture.user.firstName} {picture.user.lastName}
               </Link>
@@ -38,12 +38,12 @@ const PostDetailsHeader = ({ picture }: PostDetailsHeaderProps) => {
                   {" "}
                   •{" "}
                   <ButtonFollow
-                    isFollowing={isFollowingProfile}
-                    userProfileUsername={picture.user.username}
-                    userProfileId={picture.user.id}
                     buttonProps={{
                       padding: "none",
                     }}
+                    isFollowing={isFollowingProfile}
+                    userProfileId={picture.user.id}
+                    userProfileUsername={picture.user.username}
                   />
                 </>
               )}

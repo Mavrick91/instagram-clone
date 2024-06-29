@@ -11,20 +11,20 @@ import { parseId } from "@/utils/IDParser";
 
 type ButtonVariant = "destructive" | "ghost";
 
-interface ActionButton {
+type ActionButton = {
   label: string;
   variant: ButtonVariant;
   action: () => Promise<void>;
   key: "removeFromCollection" | "removeAll";
-}
+};
 
-interface RemoveFromCollectionDialogProps {
+export type RemoveFromCollectionDialogProps = {
   title: string;
   description: string;
   collectionId?: string;
-  username: string;
+  username?: string;
   pictureId: number;
-}
+};
 
 const RemoveFromCollectionDialog = ({
   title,
@@ -48,7 +48,7 @@ const RemoveFromCollectionDialog = ({
   });
 
   async function handleMutationSuccess() {
-    if (collectionId) {
+    if (collectionId && username) {
       await queryClient.refetchQueries({
         queryKey: ["collection", username, parseId(collectionId)],
       });

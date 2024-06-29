@@ -37,8 +37,8 @@ const PostItem = ({ pictureId }: Props) => {
     <div className="mx-auto max-w-lg">
       <PostHeader
         avatar={picture.user?.avatar}
-        username={picture.user.username}
         picture={picture}
+        username={picture.user.username}
       />
       <PostPicture picture={picture} />
       <PostCTA pictureId={picture.id} />
@@ -52,7 +52,10 @@ const PostItem = ({ pictureId }: Props) => {
             commentCount={picture._count.comments}
             picture={picture}
           />
-          <PostAddComment pictureId={picture.id} />
+          <PostAddComment
+            pictureId={picture.id}
+            pictureUserId={picture.user.id}
+          />
         </>
       )}
       <Separator className="mt-4" />

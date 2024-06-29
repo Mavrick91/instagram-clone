@@ -48,5 +48,10 @@ export const getThreads = async (): Promise<Thread[]> => {
       },
     },
     select: getThreadSelect,
+    orderBy: {
+      messages: {
+        _count: "asc",
+      },
+    },
   });
 };

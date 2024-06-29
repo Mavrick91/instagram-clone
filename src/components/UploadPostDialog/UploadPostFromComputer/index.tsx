@@ -22,7 +22,7 @@ const UploadPostFromComputer = () => {
       <label
         className={cn(
           "cursor-pointer",
-          buttonVariants({ variant: "primary", rounded: "lg", padding: "sm" }),
+          buttonVariants({ variant: "primary", padding: "sm" }),
         )}
       >
         Select From Computer

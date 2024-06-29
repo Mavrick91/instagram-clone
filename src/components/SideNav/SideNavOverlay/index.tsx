@@ -1,19 +1,24 @@
+import { useClickOutside } from "@mantine/hooks";
 import { motion } from "framer-motion";
-import { ReactNode, useRef } from "react";
-
-import useClickOutside from "@/hooks/useOnClickOutside";
+import { ReactNode, useState } from "react";
 
 type Props = {
   children: ReactNode;
   toggle: () => void;
+  triggerRef: HTMLElement | null;
 };
 
-const SideNavOverlay = ({ children, toggle }: Props) => {
-  const ref = useRef(null);
+const SideNavOverlay = ({ children, toggle, triggerRef }: Props) => {
+  const [overlayRef, setOverlayRef] = useState<HTMLElement | null>(null);
 
-  useClickOutside(ref, () => {
-    toggle();
-  });
+  useClickOutside(
+    () => {
+      console.log("😀 clicked outside 😀");
+      toggle();
+    },
+    null,
+    [triggerRef, overlayRef],
+  );
 
   const variants = {
     open: { left: "71px" },
@@ -22,13 +27,13 @@ const SideNavOverlay = ({ children, toggle }: Props) => {
 
   return (
     <motion.div
-      ref={ref}
-      initial="closed"
+      ref={setOverlayRef}
       animate="open"
-      exit="closed"
-      variants={variants}
-      transition={{ duration: 0.3 }}
       className="fixed z-10 flex h-full w-[397px] flex-col overflow-hidden rounded-r-2xl border border-ig-separator bg-ig-primary-background py-2 shadow-custom"
+      exit="closed"
+      initial="closed"
+      transition={{ duration: 0.3 }}
+      variants={variants}
     >
       {children}
     </motion.div>

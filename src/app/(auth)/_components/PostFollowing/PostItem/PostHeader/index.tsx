@@ -21,7 +21,7 @@ const PostHeader = ({ avatar, username, picture }: Props) => {
     <>
       <div className="mb-3 ml-1 flex items-center justify-between text-ig-primary-text">
         <div className="flex items-center gap-1 text-system-14">
-          <Link href={`/${username}`} className="flex items-center gap-2">
+          <Link className="flex items-center gap-2" href={`/${username}`}>
             <UserAvatar avatar={avatar} width={32} />
             <p className="font-semibold">{username}</p>
           </Link>

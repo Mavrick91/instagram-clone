@@ -106,20 +106,22 @@ export const getFollowedUsersPictures = async (): Promise<
 > => {
   const currentUser = await getCurrentUser();
 
-  const whereClause = {
-    user: {
-      receivedFollows: {
-        some: {
-          initiatorId: currentUser.id,
+  const pictures = await prisma.picture.findMany({
+    where: {
+      user: {
+        receivedFollows: {
+          some: {
+            initiatorId: currentUser.id,
+          },
         },
       },
     },
-  };
-
-  return prisma.picture.findMany({
-    where: whereClause,
     select: userPictureDetailsSelect,
   });
+
+  return await Promise.all(
+    pictures.map(async (picture) => getPictureDetails(picture.id)),
+  );
 };
 
 export const deletePicture = async (pictureId: number): Promise<void> => {

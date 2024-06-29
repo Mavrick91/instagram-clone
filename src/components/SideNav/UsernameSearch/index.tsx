@@ -1,36 +1,22 @@
+import { useDebouncedValue } from "@mantine/hooks";
 import { useQuery } from "@tanstack/react-query";
 import { CircleX } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 import { getUserByUsername } from "@/actions/user";
 import UserListItem from "@/components/UserListItem";
 
 const UsernameSearch = () => {
   const [inputValue, setInputValue] = useState("");
-  const [debouncedInputValue, setDebouncedInputValue] = useState("");
-  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const [debounced] = useDebouncedValue(inputValue, 400);
 
   const { data, isFetching } = useQuery({
-    queryKey: ["usersByUsername", debouncedInputValue],
-    queryFn: async () => {
-      return getUserByUsername(debouncedInputValue);
-    },
-    enabled: !!debouncedInputValue,
+    queryKey: ["usersByUsername", debounced],
+    queryFn: async () => getUserByUsername(debounced),
+    enabled: !!debounced,
     initialData: [],
   });
-
-  useEffect(() => {
-    debounceTimerRef.current = setTimeout(() => {
-      setDebouncedInputValue(inputValue);
-    }, 300);
-
-    return () => {
-      if (debounceTimerRef.current) {
-        clearTimeout(debounceTimerRef.current);
-      }
-    };
-  }, [inputValue]);
 
   return (
     <>
@@ -39,21 +25,19 @@ const UsernameSearch = () => {
       </div>
       <div className="relative mb-6 px-4">
         <input
+          autoFocus
+          className="h-10 w-full rounded-md bg-ig-highlight-background px-4 py-1 text-ig-primary-text focus:outline-none"
+          placeholder="Search"
           value={inputValue}
           onChange={(e) => {
             setInputValue(e.target.value);
           }}
-          placeholder="Search"
-          autoFocus
-          className="h-10 w-full rounded-md bg-ig-highlight-background px-4 py-1 text-ig-primary-text focus:outline-none"
         />
         <button
           className="absolute right-8 top-1/2 -translate-y-1/2"
-          onClick={() => {
-            return setInputValue("");
-          }}
+          onClick={() => setInputValue("")}
         >
-          <CircleX size={20} color="gray" />
+          <CircleX color="gray" size={20} />
         </button>
       </div>
       {(!data || (data && data.length === 0)) && !isFetching && (
@@ -85,6 +69,7 @@ const UsernameSearch = () => {
             })}
           </div>
         ) : (
+          data &&
           data.map((user) => {
             return (
               <Link key={user.id} href={`/${user.username}`}>
@@ -93,7 +78,7 @@ const UsernameSearch = () => {
                     avatar={user.avatar}
                     bottomText={`${user.firstName} ${user.lastName}`}
                     topText={user.username}
-                    width={24}
+                    width={44}
                   />
                 </div>
               </Link>

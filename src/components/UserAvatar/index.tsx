@@ -12,17 +12,17 @@ const UserAvatar = ({ avatar, width }: Props) => {
 
   return (
     <div
+      className="relative flex aspect-square shrink-0 overflow-hidden rounded-full after:absolute after:inset-0 after:z-10 after:rounded-full after:border after:border-ig-avatar-border after:bg-ig-secondary-background"
       style={{
         width: `${width}px`,
       }}
-      className="relative flex aspect-square shrink-0 overflow-hidden rounded-full after:absolute after:inset-0 after:z-10 after:rounded-full after:border after:border-ig-avatar-border after:bg-ig-secondary-background"
     >
       <ImageClient
-        className="z-50"
-        src={avatarImage}
         alt="Profile picture"
-        width={width}
+        className="z-30"
         height={width}
+        src={avatarImage}
+        width={width}
       />
     </div>
   );

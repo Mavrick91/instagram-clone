@@ -27,12 +27,12 @@ const SuggestFollowList = ({ allUsers }: SuggestFollowListProps) => {
           return (
             <SuggestFollowListItem
               key={user.id}
-              username={user.username}
               avatar={user.avatar}
               firstName={user.firstName}
-              lastName={user.lastName}
               id={user.id}
               isFollowing={isFollowing}
+              lastName={user.lastName}
+              username={user.username}
             />
           );
         })}

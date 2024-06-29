@@ -3,8 +3,10 @@
 import { useCallback } from "react";
 
 import { followUser, unfollowUser } from "@/actions/follow";
+import { createNotification } from "@/actions/notification";
 import { Button, ButtonProps } from "@/components/ui/button";
 import { useOptimisticActions } from "@/hooks/useOptimisticActions";
+import { useWebSocket } from "@/hooks/useWebSocket";
 import { useUserInfo } from "@/providers/UserInfoProvider";
 import { CurrentUserType, UserProfileType } from "@/types/user";
 import {
@@ -31,6 +33,7 @@ const ButtonFollow = ({
 }: ButtonFollowProps) => {
   const { optimisticUpdate } = useOptimisticActions();
   const currentUser = useUserInfo();
+  const { sendNotification } = useWebSocket();
 
   const toggleFollowUser = useCallback(async () => {
     const newValue = !isFollowing;
@@ -46,6 +49,12 @@ const ButtonFollow = ({
         action: async () => {
           if (newValue) {
             await followUser(userProfileId);
+            const newNotification = await createNotification({
+              type: "FOLLOW",
+              senderId: currentUser.id,
+              receiverId: userProfileId,
+            });
+            sendNotification(userProfileId, newNotification);
           } else {
             await unfollowUser(userProfileId);
           }
@@ -71,6 +80,7 @@ const ButtonFollow = ({
     currentUser,
     isFollowing,
     optimisticUpdate,
+    sendNotification,
     userProfileId,
     userProfileUsername,
   ]);

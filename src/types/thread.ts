@@ -14,6 +14,7 @@ export const getThreadSelect = {
     select: {
       id: true,
       content: true,
+      threadId: true,
       createdAt: true,
       user: {
         select: {

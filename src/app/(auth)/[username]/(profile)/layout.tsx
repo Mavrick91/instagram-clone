@@ -32,8 +32,8 @@ const ProfileLayout = async ({
         <HydrationBoundary state={dehydratedState}>
           <UserProfile initialUserProfile={userProfile} />
           <UserProfileTab
-            userProfileId={userProfile.id}
             username={userProfile.username}
+            userProfileId={userProfile.id}
           />
           {children}
         </HydrationBoundary>

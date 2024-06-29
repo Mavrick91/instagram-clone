@@ -10,10 +10,10 @@ const PostPicture = ({ picture }: Props) => {
     <div className="group relative col-span-1 aspect-square size-[512px] min-h-96 bg-ig-highlight-background">
       <div className="mb-1">
         <ImageClient
-          alt="user post picture"
-          className="w-full"
           fill
           priority
+          alt="user post picture"
+          className="w-full"
           src={picture.sizes.medium}
         />
       </div>

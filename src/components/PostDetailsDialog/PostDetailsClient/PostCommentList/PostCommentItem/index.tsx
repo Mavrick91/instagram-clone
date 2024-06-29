@@ -29,8 +29,8 @@ const PostCommentItem = ({
       </div>
       <div className="text-sm">
         <Link
-          href={`/${username}`}
           className="mr-1 inline-flex align-middle font-semibold hover:opacity-50"
+          href={`/${username}`}
         >
           {firstName} {lastName}{" "}
         </Link>

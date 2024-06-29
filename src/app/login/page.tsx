@@ -9,7 +9,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { login } from "@/actions/user";
-import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 
 import LoginForm from "./_components/LoginForm";
@@ -31,11 +30,7 @@ type LoginFormInputs = z.infer<typeof loginSchema>;
 const Login = () => {
   const [loginChoice, setLoginChoice] = useState<"custom" | "mocked">("custom");
   const router = useRouter();
-  const {
-    mutate: mutateLogin,
-    isPending,
-    error,
-  } = useMutation({
+  const { mutate: mutateLogin, isPending } = useMutation({
     mutationKey: ["login"],
     mutationFn: (data: LoginFormInputs) => {
       return login(data.email, data.password);
@@ -65,21 +60,21 @@ const Login = () => {
           <div />
           <h1 className="text-3xl font-bold">Login</h1>
         </div>
-        <LoginMode setLoginChoice={setLoginChoice} loginChoice={loginChoice} />
-        {!!error && (
-          <Alert id="error-message" variant="destructive">
-            <p>{error.message}</p>
-          </Alert>
-        )}
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <LoginMode loginChoice={loginChoice} setLoginChoice={setLoginChoice} />
+        {/*{!!error && (*/}
+        {/*  <Alert id="error-message" variant="destructive">*/}
+        {/*    <p>{error.message}</p>*/}
+        {/*  </Alert>*/}
+        {/*)}*/}
+        <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
           <div>
             {loginChoice === "mocked" ? (
               <MockedForm setValue={setValue} />
             ) : (
-              <LoginForm register={register} errors={errors} />
+              <LoginForm errors={errors} register={register} />
             )}
           </div>
-          <Button className="w-full" type="submit" loading={isPending}>
+          <Button className="w-full" loading={isPending} type="submit">
             Login
           </Button>
         </form>

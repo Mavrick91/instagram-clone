@@ -27,25 +27,20 @@ const FollowersDialogItem = ({ follower }: Props) => {
         <Link href={`/${follower.username}`}>
           <UserListItem
             avatar={follower.avatar}
+            bottomText={`${follower.firstName} ${follower.lastName}`}
             topText={follower.username}
-            bottomText={
-              <>
-                {follower.firstName} {follower.lastName}
-              </>
-            }
-            subTextSize="sm"
+            width={44}
           />
         </Link>
         {user.id !== follower.id && (
           <ButtonFollow
             buttonProps={{
-              variant: isFollowingProfile ? "gray" : "blue",
-              size: "xs",
+              variant: isFollowingProfile ? "gray" : "primary",
             }}
             isFollowing={isFollowingProfile}
+            updateType="initiated"
             userProfileId={follower.id}
             userProfileUsername={params.username as string}
-            updateType="initiated"
           />
         )}
       </div>

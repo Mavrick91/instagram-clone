@@ -16,11 +16,6 @@ type OptimisticUpdateOptions<T> = {
   };
 };
 
-type OptimisticDeleteOptions<T> = {
-  queryKey: ReadonlyArray<unknown>;
-  action?: ActionFunction<T>;
-};
-
 export const useOptimisticActions = () => {
   const queryClient = useQueryClient();
 
@@ -57,28 +52,5 @@ export const useOptimisticActions = () => {
     [queryClient],
   );
 
-  const optimisticDelete = useCallback(
-    async <T>({ queryKey, action }: OptimisticDeleteOptions<T>) => {
-      const previousData = queryClient.getQueryData<T>(queryKey);
-
-      if (!previousData) {
-        console.error("No data found for query key:", queryKey);
-        return;
-      }
-
-      queryClient.removeQueries({
-        queryKey,
-      });
-
-      try {
-        if (action) await action(previousData);
-      } catch (error) {
-        queryClient.setQueryData(queryKey, previousData);
-        toast(getErrorMessage(error), { type: "error" });
-      }
-    },
-    [queryClient],
-  );
-
-  return { optimisticUpdate, optimisticDelete };
+  return { optimisticUpdate };
 };

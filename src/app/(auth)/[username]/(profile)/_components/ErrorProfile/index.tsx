@@ -6,7 +6,7 @@ const ErrorProfile = () => {
       <h1 className="text-2xl font-semibold">Profile not found</h1>
       <span>
         The link you followed may be broken, or the page may have been removed.{" "}
-        <Link href="/" className="text-blue-700">
+        <Link className="text-blue-700" href="/">
           Go back
         </Link>{" "}
         to Instagram Clone.

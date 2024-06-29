@@ -16,10 +16,10 @@ export interface NotificationBadgeProps {
   isSmall: boolean;
 }
 
-const NotificationBadge: React.FC<NotificationBadgeProps> = ({
+const NotificationBadge = ({
   notificationsCount,
   isSmall,
-}) => {
+}: NotificationBadgeProps) => {
   const [isVisible, setIsVisible] = useState(true);
 
   const notificationIds = notificationsCount.flatMap((item) => {
@@ -47,16 +47,16 @@ const NotificationBadge: React.FC<NotificationBadgeProps> = ({
       <AnimatePresence>
         {isVisible && (
           <motion.button
+            animate={{ opacity: 1, scale: 1 }}
             className={cn(
-              "absolute -top-2 bg-badge rounded-lg p-3 py-1.5 before:content-[' '] before:top-1/2 before:transform before:-translate-y-1/2 before:size-4 before:rounded-sm before:rotate-45 before:absolute before:-left-1.5 before:bg-badge",
+              "absolute -top-2 bg-ig-badge rounded-lg p-3 py-1.5 before:content-[' '] before:top-1/2 before:transform before:-translate-y-1/2 before:size-4 before:rounded-sm before:rotate-45 before:absolute before:-left-1.5 before:bg-ig-badge",
               {
                 "left-40": !isSmall,
                 "left-12": isSmall,
               },
             )}
-            initial={{ opacity: 0, scale: 0.7 }}
-            animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
+            initial={{ opacity: 0, scale: 0.7 }}
             onClick={() => {
               return setIsVisible(false);
             }}
@@ -68,11 +68,11 @@ const NotificationBadge: React.FC<NotificationBadgeProps> = ({
                 return (
                   <div key={index} className={`flex items-center text-white`}>
                     {id === "comment" ? (
-                      <MessageCircle fill="white" stroke="none" size={20} />
+                      <MessageCircle fill="white" size={20} stroke="none" />
                     ) : id === "like" ? (
-                      <HeartIcon fill="white" stroke="none" size={20} />
+                      <HeartIcon fill="white" size={20} stroke="none" />
                     ) : (
-                      <UserRound fill="white" stroke="none" size={20} />
+                      <UserRound fill="white" size={20} stroke="none" />
                     )}
                     <span className="ml-1">{count.length}</span>
                   </div>

@@ -1,5 +1,8 @@
 import { PrismaClient } from "@prisma/client";
+import { Server as NetServer } from "net";
+import { NextApiResponse } from "next";
 import { ReactNode } from "react";
+import { Server as SocketIOServer, Socket } from "socket.io";
 
 declare global {
   // eslint-disable-next-line no-var
@@ -37,4 +40,12 @@ export type ServerCatchAllPageProps<
 > = {
   params: Record<TParams, string[]>;
   searchParams: Params<TSearchParams>;
+};
+
+export type NextApiResponseServerIO = NextApiResponse & {
+  socket: Socket & {
+    server: NetServer & {
+      io: SocketIOServer;
+    };
+  };
 };

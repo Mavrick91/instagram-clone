@@ -71,7 +71,7 @@ const EditProfileDialog = () => {
         revalidateUserProfilePage,
       );
 
-      closeModal();
+      closeModal("editProfileDialog");
     } catch (error) {
       console.error("Failed to update user posts:", error);
     }
@@ -79,14 +79,14 @@ const EditProfileDialog = () => {
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
       className="flex w-screen max-w-lg flex-col gap-3 bg-white p-5"
+      onSubmit={handleSubmit(onSubmit)}
     >
       <div className="flex items-center space-x-4">
         <Label className="m-0 size-24 cursor-pointer" htmlFor="avatar">
           <span
             className={cn(
-              "flex w-full h-full relative items-center group justify-center border-2 rounded-full text-secondary",
+              "flex w-full h-full relative items-center group justify-center border-2 rounded-full text-ig-secondary-text",
               {
                 "border-dashed border-gray-300": !user.avatar,
               },
@@ -120,11 +120,11 @@ const EditProfileDialog = () => {
         <div>
           <Textarea
             {...register("bio")}
+            error={errors.bio?.message}
             id="bio"
             placeholder="Enter your bio"
-            error={errors.bio?.message}
           />
-          <span className="text-sm text-secondary">
+          <span className="text-sm text-ig-secondary-text">
             {bioWatch?.length} / 150 characters
           </span>
         </div>

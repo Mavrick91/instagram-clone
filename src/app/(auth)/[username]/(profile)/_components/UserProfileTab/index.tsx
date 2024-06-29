@@ -40,18 +40,21 @@ const UserProfileTab = ({ username, userProfileId }: UserProfileTabProps) => {
   };
 
   return (
-    <div className="relative flex cursor-pointer justify-center gap-14 border-t border-separator">
+    <div className="relative flex cursor-pointer justify-center gap-14 border-t border-ig-separator">
       {activeTab &&
         tabs.map((tab) => {
           return (
             <Link
-              href={`/${username}/${tab.path}`}
-              prefetch
               key={tab.name}
-              className={cn("py-4 flex text-primary-text gap-2 items-center", {
-                "border-t border-primary-text": activeTab.name === tab.name,
-                "text-secondary": activeTab.name !== tab.name,
-              })}
+              prefetch
+              className={cn(
+                "py-4 flex text-ig-primary-text gap-2 items-center",
+                {
+                  "border-t border-primary-text": activeTab.name === tab.name,
+                  "text-ig-secondary-text": activeTab.name !== tab.name,
+                },
+              )}
+              href={`/${username}/${tab.path}`}
             >
               {tab.icon}
               <div className="text-sm font-semibold">{tab.name}</div>

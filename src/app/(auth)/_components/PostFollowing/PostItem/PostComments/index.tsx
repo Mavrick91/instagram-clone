@@ -10,7 +10,7 @@ type Props = {
 };
 
 const PostComments = ({ commentCount, picture }: Props) => {
-  const { showModal } = useModal();
+  const { openModal } = useModal();
 
   if (commentCount === 0) {
     return null;
@@ -23,7 +23,7 @@ const PostComments = ({ commentCount, picture }: Props) => {
           className="text-sm text-ig-secondary-text"
           type="button"
           onClick={() => {
-            showModal("PostDetails", { pictureId: picture.id });
+            openModal("postDetailsDialog", { pictureId: picture.id });
           }}
         >
           View all <Pluralize count={commentCount} singular="comment" />
