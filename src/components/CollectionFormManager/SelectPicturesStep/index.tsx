@@ -21,8 +21,8 @@ const SelectPicturesStep = ({
   isLoading,
   onBack,
 }: SelectPicturesStepProps) => {
-  const { getValues } = useFormContext();
-  const selectedPictures = getValues("selectedPictures");
+  const { watch } = useFormContext();
+  const selectedPictures = watch("selectedPictures");
 
   return (
     <div className="flex min-h-[691px] w-screen max-w-[400px] flex-col gap-0 overflow-hidden rounded-lg p-0">
@@ -40,11 +40,10 @@ const SelectPicturesStep = ({
               onClick={() => onPictureToggle(picture.picture.id)}
             >
               <ImageClient
+                fill
                 alt="collection"
                 className="object-cover"
-                height={133}
                 src={picture.picture.sizes.small}
-                width={133}
               />
               {selectedPictures.includes(picture.picture.id) && (
                 <div
@@ -61,7 +60,12 @@ const SelectPicturesStep = ({
       </div>
       <Separator elevated />
       <div className="flex justify-center">
-        <Button loading={isLoading} type="submit" variant="primary-ghost">
+        <Button
+          loading={isLoading}
+          padding="lg"
+          type="submit"
+          variant="primary-ghost"
+        >
           Done
         </Button>
       </div>
