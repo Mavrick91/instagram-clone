@@ -24,7 +24,7 @@ export const FriendsNote = ({ thoughtContent, userAvatar }: Props) => {
     <div className="relative flex h-[140px] items-end px-6">
       <button
         ref={setButtonRef}
-        className="relative flex max-w-[96px] flex-col items-center"
+        className="relative flex w-[96px] flex-col items-center"
         data-testid="update-note-button"
         onClick={() => setOpened(true)}
       >
@@ -34,8 +34,12 @@ export const FriendsNote = ({ thoughtContent, userAvatar }: Props) => {
           size="small"
         />
         <UserAvatar avatar={userAvatar} width={72} />
-        <span className="mt-1 break-words text-xs text-ig-primary-text">
-          {user.firstName} {user.lastName}
+        <span className="mt-1 max-w-[96px] truncate whitespace-nowrap text-xs">
+          {user.thought ? (
+            <span className="text-ig-primary-text">{`${user.firstName} ${user.lastName}`}</span>
+          ) : (
+            <span className="text-ig-secondary-text">Your note</span>
+          )}
         </span>
       </button>
 
