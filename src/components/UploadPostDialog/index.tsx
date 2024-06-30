@@ -60,7 +60,7 @@ const UploadPostDialog = ({
         queryKey: ["user", currentUser.username, "posts"],
       });
       queryClient.setQueryData(
-        ["user", currentUser.username],
+        ["user", "currentUser"],
         updateCountForPosts.add,
       );
     },

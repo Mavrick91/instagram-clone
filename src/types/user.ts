@@ -13,6 +13,7 @@ export const currentUserSelect = {
     select: {
       initiatedFollows: true,
       receivedFollows: true,
+      pictures: true,
     },
   },
   thought: {

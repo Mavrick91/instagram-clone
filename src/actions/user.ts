@@ -80,8 +80,8 @@ export const login = async (email: string, password: string) => {
 };
 
 export const logout = async () => {
-  setCookie({ name: "accessToken", value: "", maxAge: 0 });
-  setCookie({ name: "refreshToken", value: "", maxAge: 0 });
+  await setCookie({ name: "accessToken", value: "", maxAge: 0 });
+  await setCookie({ name: "refreshToken", value: "", maxAge: 0 });
   redirect("/login");
 };
 
