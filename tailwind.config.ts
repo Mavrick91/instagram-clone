@@ -18,7 +18,7 @@ const config = {
     },
     extend: {
       maxWidth: {
-        "lg-page": "935px",
+        "polaris-site-width-wide": "935px",
       },
       boxShadow: {
         custom: "0 4px 12px rgba(var(--web-always-black), 0.15)",

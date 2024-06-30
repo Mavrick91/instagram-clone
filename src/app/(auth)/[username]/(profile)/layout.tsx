@@ -27,7 +27,7 @@ const ProfileLayout = async ({
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <div className="mx-auto flex max-w-lg-page flex-col">
+    <div className="mx-auto flex max-w-polaris-site-width-wide flex-col">
       <div className="px-5 pt-9">
         <HydrationBoundary state={dehydratedState}>
           <UserProfile initialUserProfile={userProfile} />

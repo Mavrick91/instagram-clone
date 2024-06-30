@@ -32,7 +32,7 @@ const UserProfileCollectionDetails = ({
     return p.picture;
   });
   return (
-    <div className="mx-auto mt-6 flex max-w-lg-page flex-col">
+    <div className="mx-auto mt-6 flex max-w-polaris-site-width-wide flex-col">
       <UserProfileCollectionDetailsHeader
         userCollectionDetails={userCollectionDetails}
         username={username}

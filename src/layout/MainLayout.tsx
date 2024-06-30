@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 
+import ImageClient from "@/components/ImageClient";
 import SideNav from "@/components/SideNav";
 import { cn } from "@/lib/utils";
 import { useModal } from "@/providers/ModalProvider";

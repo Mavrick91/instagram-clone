@@ -27,6 +27,7 @@ body {
 @layer base {
   :root {
     /* Common variables for both light and dark modes */
+    --polaris-site-width-wide: 935px;
     --always-dark-overlay: rgba(0, 0, 0, 0.4);
     --avatar-border: rgba(var(--web-always-black), 0.0975);
     --base-unit: 4px;

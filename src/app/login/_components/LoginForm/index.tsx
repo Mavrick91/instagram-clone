@@ -1,42 +1,51 @@
-import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { useQuery } from "@tanstack/react-query";
 
-import { Input } from "@/components/ui/input";
-
-type FormData = {
-  email: string;
-  password: string;
-};
+import { getMockedUser } from "@/actions/user";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type Props = {
-  register: UseFormRegister<FormData>;
-  errors: FieldErrors<FormData>;
+  handleChangeEmail: (email: string) => void;
 };
 
-const LoginForm = ({ register, errors }: Props) => {
+const LoginForm = ({ handleChangeEmail }: Props) => {
+  const {
+    data: mockedUser,
+    isPending,
+    isError,
+  } = useQuery({
+    queryKey: ["mockedUser"],
+    queryFn: () => getMockedUser(),
+  });
+
+  if (isError) {
+    return <div>Error</div>;
+  }
+
   return (
-    <div className="space-y-4">
-      <div className="space-y-2">
-        <Input
-          {...register("email")}
-          error={errors.email?.message}
-          id="email"
-          label="Email"
-          placeholder="m@example.com"
-          type="email"
-        />
-      </div>
-      <div className="space-y-2">
-        <Input
-          required
-          id="password"
-          type="password"
-          {...register("password")}
-          error={errors.password?.message}
-          label="Password"
-          placeholder="********"
-        />
-      </div>
-    </div>
+    <Select onValueChange={handleChangeEmail}>
+      <SelectTrigger className="h-12 w-full">
+        <SelectValue placeholder="Choose an user" />
+      </SelectTrigger>
+      <SelectContent>
+        {isPending ? (
+          <SelectItem value="Loading...">Loading...</SelectItem>
+        ) : (
+          mockedUser.map((user) => {
+            return (
+              <SelectItem key={user.id} value={user.email}>
+                {user.email}
+              </SelectItem>
+            );
+          })
+        )}
+      </SelectContent>
+    </Select>
   );
 };
 

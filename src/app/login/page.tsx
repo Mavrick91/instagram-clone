@@ -1,19 +1,15 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { FormEvent, useState } from "react";
 import { z } from "zod";
 
 import { login } from "@/actions/user";
+import AnimatedScreenshots from "@/app/login/_components/AnimatedScreenshots";
+import LoginForm from "@/app/login/_components/LoginForm";
+import ImageClient from "@/components/ImageClient";
 import { Button } from "@/components/ui/button";
-
-import LoginForm from "./_components/LoginForm";
-import LoginMode from "./_components/LoginMode";
-import MockedForm from "./_components/MockedForm";
 
 const loginSchema = z.object({
   email: z
@@ -28,8 +24,8 @@ const loginSchema = z.object({
 type LoginFormInputs = z.infer<typeof loginSchema>;
 
 const Login = () => {
-  const [loginChoice, setLoginChoice] = useState<"custom" | "mocked">("custom");
   const router = useRouter();
+  const [email, setEmail] = useState<string>("");
   const { mutate: mutateLogin, isPending } = useMutation({
     mutationKey: ["login"],
     mutationFn: (data: LoginFormInputs) => {
@@ -40,50 +36,41 @@ const Login = () => {
     },
   });
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm<LoginFormInputs>({
-    resolver: zodResolver(loginSchema),
-  });
+  const handleChangeEmail = (email: string) => {
+    setEmail(email);
+  };
 
-  const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
-    mutateLogin(data);
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    mutateLogin({ email, password: "test" });
   };
 
   return (
     <main className="flex min-h-screen w-full flex-col items-center justify-center space-y-4">
-      <div className="w-full max-w-sm space-y-4">
-        <div className="space-y-2 text-center">
-          <div />
-          <h1 className="text-3xl font-bold">Login</h1>
-        </div>
-        <LoginMode loginChoice={loginChoice} setLoginChoice={setLoginChoice} />
-        {/*{!!error && (*/}
-        {/*  <Alert id="error-message" variant="destructive">*/}
-        {/*    <p>{error.message}</p>*/}
-        {/*  </Alert>*/}
-        {/*)}*/}
-        <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-          <div>
-            {loginChoice === "mocked" ? (
-              <MockedForm setValue={setValue} />
-            ) : (
-              <LoginForm errors={errors} register={register} />
-            )}
+      <article className="mx-auto flex max-w-polaris-site-width-wide items-center gap-8">
+        <div className="relative h-[631px] w-[380px]">
+          <ImageClient fill alt="home phones" src="/home-phones.png" />
+          <div className="absolute top-[25px] ml-[112px] h-[540px] w-[248px]">
+            <AnimatedScreenshots />
           </div>
-          <Button className="w-full" loading={isPending} type="submit">
+        </div>
+        <form
+          className="w-[350px] space-y-4 border px-10 py-8"
+          onSubmit={onSubmit}
+        >
+          <LoginForm handleChangeEmail={handleChangeEmail} />
+          <Button
+            className="w-full"
+            disabled={!email}
+            loading={isPending}
+            text="lg"
+            type="submit"
+            variant="primary"
+          >
             Login
           </Button>
         </form>
-        <div className="flex items-center">
-          <Link className="ml-auto text-sm underline" href="/register">
-            Sign up
-          </Link>
-        </div>
-      </div>
+      </article>
     </main>
   );
 };
