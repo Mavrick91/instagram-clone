@@ -45,11 +45,11 @@ const Login = () => {
   };
 
   return (
-    <main className="flex min-h-screen w-full flex-col items-center justify-center space-y-4">
+    <main className="flex min-h-screen w-full flex-col items-center justify-center space-y-4 bg-ig-primary-background">
       <article className="mx-auto flex max-w-polaris-site-width-wide items-center gap-8">
         <PhonePreview />
         <form
-          className="w-[350px] space-y-4 border px-10 py-8"
+          className="w-[350px] space-y-4 border border-ig-elevated-separator px-10 py-8"
           onSubmit={onSubmit}
         >
           <LoginForm handleChangeEmail={handleChangeEmail} />
