@@ -1,5 +1,5 @@
 import { useDebouncedValue } from "@mantine/hooks";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -13,6 +13,7 @@ import { useUserInfo } from "@/providers/UserInfoProvider";
 const CreateConversationDialog = () => {
   const user = useUserInfo();
   const { closeModal } = useModal();
+  const queryClient = useQueryClient();
 
   const [inputValue, setInputValue] = useState("");
   const [debounced] = useDebouncedValue(inputValue, 400);
@@ -29,6 +30,9 @@ const CreateConversationDialog = () => {
   const handleStartConversation = async (recipientId: number) => {
     try {
       const thread = await getOrCreateThread([user.id, recipientId]);
+      await queryClient.invalidateQueries({
+        queryKey: ["threads", "currentUser"],
+      });
       router.push(`/direct/inbox/${thread.id}`);
       closeModal("createConversationDialog");
     } catch (e) {
@@ -41,11 +45,12 @@ const CreateConversationDialog = () => {
       <div className="flex justify-center px-4 py-3.5">
         <h3 className="font-bold">New message</h3>
       </div>
-      <Separator />
+      <Separator elevated />
       <div className="flex h-9 items-center px-4">
         <span className="font-bold">To:</span>
         <div className="px-4 py-1">
           <input
+            autoFocus
             className="grow bg-transparent focus:outline-none"
             placeholder="Search..."
             type="text"
@@ -56,7 +61,7 @@ const CreateConversationDialog = () => {
           />
         </div>
       </div>
-      <Separator />
+      <Separator elevated />
       <div className="h-96 overflow-y-auto py-3">
         {!users || !users.length ? (
           <div className="px-6 text-sm text-ig-secondary-text">
