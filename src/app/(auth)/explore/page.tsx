@@ -1,6 +1,8 @@
 import { getPicturesByUser } from "@/actions/picture";
 import ThumbnailGrid from "@/components/ThumbnailGrid";
 
+export const dynamic = "force-dynamic";
+
 const ExplorePage = async () => {
   const explorePictures = await getPicturesByUser();
 

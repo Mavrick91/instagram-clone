@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { createThread } from "@/actions/thread";
+import { createThread, getOrCreateThread } from "@/actions/thread";
 import { getUserByUsername } from "@/actions/user";
 import Separator from "@/components/ui/separator";
 import UserListItem from "@/components/UserListItem";
@@ -28,8 +28,8 @@ const CreateConversationDialog = () => {
 
   const handleStartConversation = async (recipientId: number) => {
     try {
-      const newThread = await createThread([user.id, recipientId]);
-      router.push(`/direct/inbox/${newThread.id}`);
+      const thread = await getOrCreateThread([user.id, recipientId]);
+      router.push(`/direct/inbox/${thread.id}`);
       closeModal("createConversationDialog");
     } catch (e) {
       console.error(e);

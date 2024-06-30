@@ -1,5 +1,7 @@
 "use server";
 
+import { redirect } from "next/navigation";
+
 import { getCurrentUser } from "@/actions/user";
 import prisma from "@/lib/prisma";
 import {
@@ -23,6 +25,24 @@ export const getThreadById = async (threadId: number): Promise<Thread> => {
   }
 };
 
+export const findExistingThread = async (
+  userIds: number[],
+): Promise<NewThread | null> => {
+  return prisma.thread.findFirst({
+    where: {
+      users: {
+        every: {
+          id: {
+            in: userIds,
+          },
+        },
+      },
+      AND: userIds.map((id) => ({ users: { some: { id } } })),
+    },
+    select: createThreadSelect,
+  });
+};
+
 export const createThread = async (userIds: number[]): Promise<NewThread> => {
   return prisma.thread.create({
     data: {
@@ -34,6 +54,16 @@ export const createThread = async (userIds: number[]): Promise<NewThread> => {
     },
     select: createThreadSelect,
   });
+};
+
+export const getOrCreateThread = async (
+  userIds: number[],
+): Promise<NewThread> => {
+  const existingThread = await findExistingThread(userIds);
+  if (existingThread) {
+    return existingThread;
+  }
+  return createThread(userIds);
 };
 
 export const getThreads = async (): Promise<Thread[]> => {
