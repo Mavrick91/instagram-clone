@@ -54,7 +54,8 @@ const ButtonFollow = ({
               senderId: currentUser.id,
               receiverId: userProfileId,
             });
-            sendNotification(userProfileId, newNotification);
+            if (newNotification)
+              sendNotification(userProfileId, newNotification);
           } else {
             await unfollowUser(userProfileId);
           }

@@ -63,7 +63,8 @@ const usePostCTALogic = (pictureId: number) => {
             receiverId: pictureUser.id,
             pictureId: pictureId,
           });
-          sendNotification(pictureUser.id, newNotification);
+          if (newNotification)
+            sendNotification(pictureUser.id, newNotification);
           await likePicture(pictureId);
         }
       },

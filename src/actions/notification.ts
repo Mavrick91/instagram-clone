@@ -28,8 +28,10 @@ export type NotificationWithRelations = Prisma.NotificationGetPayload<{
 
 export const createOrUpdateNotification = async (
   data: CreateNotificationInput,
-): Promise<NotificationWithRelations> => {
+): Promise<NotificationWithRelations | null> => {
   const { type, senderId, receiverId, pictureId, commentId } = data;
+
+  if (senderId === receiverId) return null;
 
   const existingNotification = await prisma.notification.findFirst({
     where: {

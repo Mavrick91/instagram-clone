@@ -59,7 +59,7 @@ const useUpdateComment = (
             pictureId: pictureId,
             commentId: createdComment.id,
           });
-          sendNotification(pictureUserId, newNotification);
+          if (newNotification) sendNotification(pictureUserId, newNotification);
         },
       });
     },
