@@ -50,7 +50,8 @@ const UserProfileTab = ({ username, userProfileId }: UserProfileTabProps) => {
               className={cn(
                 "py-4 flex text-ig-primary-text gap-2 items-center",
                 {
-                  "border-t border-primary-text": activeTab.name === tab.name,
+                  "border-t border-ig-primary-text":
+                    activeTab.name === tab.name,
                   "text-ig-secondary-text": activeTab.name !== tab.name,
                 },
               )}
