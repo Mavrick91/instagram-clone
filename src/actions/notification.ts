@@ -26,24 +26,52 @@ export type NotificationWithRelations = Prisma.NotificationGetPayload<{
   };
 }>;
 
-export const createNotification = async (
+export const createOrUpdateNotification = async (
   data: CreateNotificationInput,
 ): Promise<NotificationWithRelations> => {
-  return prisma.notification.create({
-    data: {
-      type: data.type,
-      sender: { connect: { id: data.senderId } },
-      receiver: { connect: { id: data.receiverId } },
-      ...(data.pictureId && { picture: { connect: { id: data.pictureId } } }),
-      ...(data.commentId && { comment: { connect: { id: data.commentId } } }),
-    },
-    include: {
-      sender: true,
-      receiver: true,
-      comment: true,
-      picture: true,
+  const { type, senderId, receiverId, pictureId, commentId } = data;
+
+  const existingNotification = await prisma.notification.findFirst({
+    where: {
+      type,
+      senderId,
+      receiverId,
+      pictureId: pictureId || null,
+      commentId: commentId || null,
     },
   });
+
+  if (existingNotification) {
+    return prisma.notification.update({
+      where: { id: existingNotification.id },
+      data: {
+        createdAt: new Date(),
+        read: false,
+      },
+      include: {
+        sender: true,
+        receiver: true,
+        comment: true,
+        picture: true,
+      },
+    });
+  } else {
+    return prisma.notification.create({
+      data: {
+        type,
+        sender: { connect: { id: senderId } },
+        receiver: { connect: { id: receiverId } },
+        ...(pictureId && { picture: { connect: { id: pictureId } } }),
+        ...(commentId && { comment: { connect: { id: commentId } } }),
+      },
+      include: {
+        sender: true,
+        receiver: true,
+        comment: true,
+        picture: true,
+      },
+    });
+  }
 };
 
 export const getAllNotifications = async (

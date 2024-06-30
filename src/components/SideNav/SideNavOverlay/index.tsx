@@ -11,14 +11,7 @@ type Props = {
 const SideNavOverlay = ({ children, toggle, triggerRef }: Props) => {
   const [overlayRef, setOverlayRef] = useState<HTMLElement | null>(null);
 
-  useClickOutside(
-    () => {
-      console.log("😀 clicked outside 😀");
-      toggle();
-    },
-    null,
-    [triggerRef, overlayRef],
-  );
+  useClickOutside(toggle, null, [triggerRef, overlayRef]);
 
   const variants = {
     open: { left: "71px" },

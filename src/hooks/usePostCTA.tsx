@@ -9,7 +9,7 @@ import {
   removePictureFromDefaultCollection,
 } from "@/actions/collection";
 import { likePicture, unlikePicture } from "@/actions/like";
-import { createNotification } from "@/actions/notification";
+import { createOrUpdateNotification } from "@/actions/notification";
 import { useOptimisticActions } from "@/hooks/useOptimisticActions";
 import { useWebSocket } from "@/hooks/useWebSocket";
 import { useModal } from "@/providers/ModalProvider";
@@ -57,7 +57,7 @@ const usePostCTALogic = (pictureId: number) => {
         if (oldData.isLiked) {
           await unlikePicture(pictureId);
         } else {
-          const newNotification = await createNotification({
+          const newNotification = await createOrUpdateNotification({
             type: "LIKE",
             senderId: currentUser.id,
             receiverId: pictureUser.id,

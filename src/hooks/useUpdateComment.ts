@@ -1,7 +1,7 @@
 import { RefObject, useCallback } from "react";
 
 import { createComment } from "@/actions/comment";
-import { createNotification } from "@/actions/notification";
+import { createOrUpdateNotification } from "@/actions/notification";
 import { useWebSocket } from "@/hooks/useWebSocket";
 import { useUserInfo } from "@/providers/UserInfoProvider";
 import { UserPictureDetails } from "@/types/picture";
@@ -52,7 +52,7 @@ const useUpdateComment = (
         },
         action: async () => {
           const createdComment = await createComment(pictureId, comment);
-          const newNotification = await createNotification({
+          const newNotification = await createOrUpdateNotification({
             type: "COMMENT",
             senderId: currentUser.id,
             receiverId: pictureUserId,
