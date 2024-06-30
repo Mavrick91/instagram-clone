@@ -1,7 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
-
 import { getCurrentUser } from "@/actions/user";
 import prisma from "@/lib/prisma";
 import {

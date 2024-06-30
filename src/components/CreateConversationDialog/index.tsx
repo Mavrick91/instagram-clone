@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { createThread, getOrCreateThread } from "@/actions/thread";
+import { getOrCreateThread } from "@/actions/thread";
 import { getUserByUsername } from "@/actions/user";
 import Separator from "@/components/ui/separator";
 import UserListItem from "@/components/UserListItem";

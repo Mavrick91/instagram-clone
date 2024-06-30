@@ -1,6 +1,5 @@
 "use server";
 
-import { createOrUpdateNotification } from "@/actions/notification";
 import { getCurrentUser } from "@/actions/user";
 import prisma from "@/lib/prisma";
 
