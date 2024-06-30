@@ -6,9 +6,8 @@ import { FormEvent, useState } from "react";
 import { z } from "zod";
 
 import { login } from "@/actions/user";
-import AnimatedScreenshots from "@/app/login/_components/AnimatedScreenshots";
 import LoginForm from "@/app/login/_components/LoginForm";
-import ImageClient from "@/components/ImageClient";
+import PhonePreview from "@/app/login/_components/PhonePreview";
 import { Button } from "@/components/ui/button";
 
 const loginSchema = z.object({
@@ -48,12 +47,7 @@ const Login = () => {
   return (
     <main className="flex min-h-screen w-full flex-col items-center justify-center space-y-4">
       <article className="mx-auto flex max-w-polaris-site-width-wide items-center gap-8">
-        <div className="relative h-[631px] w-[380px]">
-          <ImageClient fill alt="home phones" src="/home-phones.png" />
-          <div className="absolute top-[25px] ml-[112px] h-[540px] w-[248px]">
-            <AnimatedScreenshots />
-          </div>
-        </div>
+        <PhonePreview />
         <form
           className="w-[350px] space-y-4 border px-10 py-8"
           onSubmit={onSubmit}
