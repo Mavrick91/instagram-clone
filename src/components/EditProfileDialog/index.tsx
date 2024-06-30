@@ -9,10 +9,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import UserAvatar from "@/components/UserAvatar";
 import { revalidateUserProfilePage } from "@/constants/revalidate";
-import { cn } from "@/lib/utils";
+import { useOptimisticActions } from "@/hooks/useOptimisticActions";
 import { useModal } from "@/providers/ModalProvider";
 import { useUserInfo } from "@/providers/UserInfoProvider";
+import { CurrentUserType } from "@/types/user";
 
 const ProfileSchema = z.object({
   firstName: z
@@ -56,20 +58,32 @@ const EditProfileDialog = () => {
       avatar: user.avatar,
     },
   });
+  const { optimisticUpdate } = useOptimisticActions();
 
   const bioWatch = watch("bio");
 
   const onSubmit = async (data: FormData) => {
     try {
-      await updateUserProfile(
-        user.username,
-        {
-          firstName: data.firstName,
-          lastName: data.lastName,
-          bio: data.bio,
+      optimisticUpdate<CurrentUserType>({
+        queryKey: ["user", user.username],
+        updateFn: (user) => {
+          return {
+            ...user,
+            ...data,
+          };
         },
-        revalidateUserProfilePage,
-      );
+        action: async () => {
+          await updateUserProfile(
+            user.username,
+            {
+              firstName: data.firstName,
+              lastName: data.lastName,
+              bio: data.bio,
+            },
+            revalidateUserProfilePage,
+          );
+        },
+      });
 
       closeModal("editProfileDialog");
     } catch (error) {
@@ -79,20 +93,11 @@ const EditProfileDialog = () => {
 
   return (
     <form
-      className="flex w-screen max-w-lg flex-col gap-3 bg-white p-5"
+      className="flex w-screen max-w-lg flex-col gap-3 p-5"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="flex items-center space-x-4">
-        <Label className="m-0 size-24 cursor-pointer" htmlFor="avatar">
-          <span
-            className={cn(
-              "flex w-full h-full relative items-center group justify-center border-2 rounded-full text-ig-secondary-text",
-              {
-                "border-dashed border-gray-300": !user.avatar,
-              },
-            )}
-          ></span>
-        </Label>
+        <UserAvatar avatar={user.avatar} width={96} />
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
@@ -129,7 +134,7 @@ const EditProfileDialog = () => {
           </span>
         </div>
       </div>
-      <Button className="ml-auto mt-4" type="submit">
+      <Button className="ml-auto mt-4" type="submit" variant="primary">
         Save
       </Button>
     </form>
