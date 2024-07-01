@@ -55,7 +55,7 @@ const AccessibilityExpand = ({ previewPicture }: Props) => {
                     width={44}
                   />
                   <Input
-                    className="h-full grow bg-transparent placeholder:text-ig-secondary-text"
+                    className="h-10 grow border-ig-separator bg-transparent placeholder:text-ig-secondary-text focus:border-ig-stroke"
                     placeholder="Write alt text..."
                     {...register("altText")}
                   />
