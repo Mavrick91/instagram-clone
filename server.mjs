@@ -37,6 +37,7 @@ app.prepare().then(() => {
     });
 
     socket.on("notification", ({ recipientId, notification }) => {
+      console.log('😀😀 recipientId ~ ', recipientId);
       io.to(recipientId).emit("notification", notification);
     });
 

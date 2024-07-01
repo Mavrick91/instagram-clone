@@ -20,13 +20,3 @@ export const parseId = (id: string | number): number => {
 
   throw new Error("Invalid ID: Must be a string or number");
 };
-
-export const isValidId = (value: unknown): value is string | number => {
-  if (typeof value === "number") {
-    return Number.isInteger(value) && value > 0;
-  }
-  if (typeof value === "string") {
-    return /^\d+$/.test(value) && parseInt(value, 10) > 0;
-  }
-  return false;
-};

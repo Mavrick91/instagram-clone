@@ -1,0 +1,16 @@
+version: 1
+applications:
+  - frontend:
+      phases:
+        preBuild:
+          commands:
+            - npm install
+        build:
+          commands:
+            - npm run reset
+            - npm run build
+      artifacts:
+        baseDirectory: .next
+        files:
+          - '**/*'
+    appRoot: .

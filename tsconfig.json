@@ -19,10 +19,10 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
     },
     "target": "ES2017"
   },
-  "include": ["src/**/*", ".next/types/**/*.ts", "node_modules/@prisma/client"],
+  "include": ["src/**/*", ".next/types/**/*.ts", "node_modules/@prisma/client", "jest", "@testing-library/jest-dom"],
   "exclude": ["node_modules", ".next", "out"]
 }

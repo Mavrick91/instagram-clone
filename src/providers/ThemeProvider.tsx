@@ -22,7 +22,7 @@ type ThemeProviderProps = {
   children: ReactNode;
 };
 
-export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
+export const ThemeProvider = ({ children }: ThemeProviderProps) => {
   const [theme, setTheme] = useState("light");
 
   const toggleTheme = () => {
