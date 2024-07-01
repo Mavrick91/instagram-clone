@@ -41,3 +41,6 @@ coverage/
 
 # Other
 .DS_Store
+**/*.test.ts
+**/*.test.tsx
+./src/test-utils.tsx
