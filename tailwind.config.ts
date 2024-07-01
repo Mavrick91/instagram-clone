@@ -94,6 +94,11 @@ const config = {
         },
         ig: {
           badge: "rgb(var(--ig-badge))",
+          "stroke-prism": "rgb(var(--ig-stroke-prism))",
+          "toggle-background-on-prism":
+            "rgb(var(--ig-toggle-background-on-prism))",
+          "toggle-background-off-prism":
+            "rgb(var(--ig-toggle-background-off-prism))",
           "avatar-border": "var(--avatar-border)",
           "banner-background": "rgb(var(--ig-banner-background))",
           "banner-highlight-background":

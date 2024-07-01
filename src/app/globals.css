@@ -197,6 +197,9 @@ body {
     --barcelona-primary-button: 0, 0, 0;
     --barcelona-secondary-text: 153, 153, 153;
     --challenge-link: 54, 54, 54;
+    --ig-stroke-prism: 255, 255, 255;
+    --ig-stroke-disabled-on-prism: 233, 237, 240;
+    --ig-stroke-disabled-off-prism: 248, 249, 249;
     --ig-banner-background: 255, 255, 255;
     --ig-banner-highlight-background: 239, 239, 239;
     --ig-bubble-background: 255, 255, 255;
@@ -229,9 +232,6 @@ body {
     --ig-toggle-background-disabled-off-prism: 233, 237, 240;
     --ig-toggle-outline-prism: 219, 223, 228;
     --ig-toggle-outline-disabled-prism: 243, 245, 247;
-    --ig-stroke-prism: 255, 255, 255;
-    --ig-stroke-disabled-on-prism: 233, 237, 240;
-    --ig-stroke-disabled-off-prism: 248, 249, 249;
     --post-separator: 239, 239, 239;
     --revamp-feed-card-max-height: 835px;
     --revamp-feed-card-min-height: 835px;
@@ -245,6 +245,9 @@ body {
     --barcelona-primary-button: 255, 255, 255;
     --barcelona-secondary-text: 119, 119, 119;
     --challenge-link: 219, 219, 219;
+    --ig-toggle-background-on-prism: 248, 249, 249;
+    --ig-toggle-background-off-prism: 50, 53, 57;
+    --ig-stroke-prism: 15, 20, 25;
     --ig-banner-background: 38, 38, 38;
     --ig-banner-highlight-background: 54, 54, 54;
     --ig-bubble-background: 54, 54, 54;
@@ -271,13 +274,10 @@ body {
     --ig-tertiary-text: 115, 115, 115;
     --ig-text-input-border-prism: 50, 53, 57;
     --ig-text-input-border-hover-prism: 248, 249, 249;
-    --ig-toggle-background-on-prism: 248, 249, 249;
-    --ig-toggle-background-off-prism: 50, 53, 57;
     --ig-toggle-background-disabled-on-prism: 111, 118, 128;
     --ig-toggle-background-disabled-off-prism: 41, 41, 46;
     --ig-toggle-outline-prism: 219, 223, 228;
     --ig-toggle-outline-disabled-prism: 94, 100, 109;
-    --ig-stroke-prism: 15, 20, 25;
     --ig-stroke-disabled-on-prism: 50, 53, 57;
     --ig-stroke-disabled-off-prism: 33, 35, 38;
     --post-separator: 38, 38, 38;
