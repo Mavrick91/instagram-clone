@@ -31,6 +31,7 @@ export const ThreadMessageForm = ({
 
   const { register, handleSubmit, watch, reset } = useForm<FormData>({
     resolver: zodResolver(schema),
+    defaultValues: { message: "" },
   });
   const messageWatch = watch("message");
 
@@ -41,7 +42,7 @@ export const ThreadMessageForm = ({
       threadId,
     );
     sendMessage(recipientId, senderId, newMessage);
-    reset();
+    reset({ message: "" });
   };
 
   return (

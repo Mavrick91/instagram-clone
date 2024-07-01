@@ -6,7 +6,7 @@
     "dev": "node server.mjs",
     "dev-debug": "NODE_OPTIONS='--inspect' next",
     "build": "next build",
-    "start": "next start",
+    "start": "NODE_ENV=production node server.mjs",
     "lint": "next lint",
     "format": "prettier --write .",
     "lint:fix": "eslint --fix .",
