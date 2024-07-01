@@ -8,10 +8,10 @@ import sharp from "sharp";
 const prisma = new PrismaClient();
 
 const s3Client = new S3Client({
-  region: process.env.AWS_REGION,
+  region: process.env.REGION_AWS,
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    accessKeyId: process.env.ACCESS_KEY_ID_AWS,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY_AWS,
   },
 });
 
@@ -37,7 +37,7 @@ const convertAndUploadImage = async (imageBuffer, baseKey, sizes) => {
     const key = `${baseKey}-${size.name}.webp`;
 
     const params = {
-      Bucket: process.env.AWS_S3_BUCKET_NAME,
+      Bucket: process.env.S3_BUCKET_NAME_AWS,
       Key: key,
       Body: webpData,
       ContentType: "image/webp",
