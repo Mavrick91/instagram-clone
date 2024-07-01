@@ -7,7 +7,7 @@ applications:
             - npm install
         build:
           commands:
-            - npm run reset
+            - npm run seed
             - npm run build
       artifacts:
         baseDirectory: .next
