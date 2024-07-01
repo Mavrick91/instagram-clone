@@ -18,7 +18,7 @@
     "drop-db": "PGPASSWORD=postgres psql -h localhost -U postgres -c \"DROP DATABASE IF EXISTS \\\"instagram-clone\\\"\"",
     "create-db": "PGPASSWORD=postgres psql -h localhost -U postgres -c \"CREATE DATABASE \\\"instagram-clone\\\"\"",
     "migrate": "cd backend && bunx prisma migrate dev --name init",
-    "reset": "bun run drop-db && bun run create-db && bun run clear-s3 && prisma db push && bun run seed"
+    "reset": "npm run drop-db && npm run create-db && npm run clear-s3 && prisma db push && npm run seed"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.600.0",
