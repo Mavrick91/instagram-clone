@@ -1,7 +1,7 @@
 "use server";
 
 import { User } from "@prisma/client";
-import * as bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";

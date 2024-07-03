@@ -55,14 +55,12 @@ async function fetchAndProcessImage(url, baseKey) {
   const response = await axios.get(url, { responseType: "arraybuffer" });
   const imageBuffer = Buffer.from(response.data, "binary");
 
-  const urls = await convertAndUploadImage(imageBuffer, baseKey, [
+  return await convertAndUploadImage(imageBuffer, baseKey, [
     { name: "original" },
     { name: "thumbnail", width: 300, height: 300 },
     { name: "medium", width: 512 },
     { name: "small", width: 170 },
   ]);
-
-  return urls;
 }
 
 async function main() {
