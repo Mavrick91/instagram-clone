@@ -9,10 +9,19 @@ const nextConfig = {
     },
   },
   images: {
-    domains: [
-      "cloudflare-ipfs.com",
-      "avatars.githubusercontent.com",
-      "instagram-clone-bucket-mav.s3.amazonaws.com",
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cloudflare-ipfs.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'avatars.githubusercontent.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'instagram-clone-bucket-mav.s3.amazonaws.com',
+      },
     ],
   },
   reactStrictMode: false,
