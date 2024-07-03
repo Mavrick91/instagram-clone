@@ -1,8 +1,9 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import Image from "next/image";
 import { useEffect, useState } from "react";
+
+import ImageClient from "@/components/ImageClient";
 
 const screenshots = [
   "/screenshot1.png",
@@ -33,8 +34,9 @@ const AnimatedScreenshots = () => {
           initial={{ opacity: 0 }}
           transition={{ duration: 1.5 }}
         >
-          <Image
+          <ImageClient
             fill
+            priority
             alt={`screenshot ${currentIndex + 1}`}
             src={screenshots[currentIndex]}
           />
