@@ -13,6 +13,7 @@ const ImageClient = ({ src, alt, className, ...props }: CustomImageProps) => {
     <Image
       alt={alt}
       className={cn("object-cover", className)}
+      quality={100}
       src={src}
       {...props}
     />
