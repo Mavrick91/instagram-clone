@@ -3,18 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { NO_AUTH_PATHS } from "./constants/route";
 import { getErrorMessage } from "./utils";
 
-const getVerifyTokenUrl = () => {
-  if (process.env.VERCEL_ENV) {
-    const vercelUrl = `https://${process.env.VERCEL_URL}`;
-
-    return `${vercelUrl}/api/auth/verifyToken`;
-  }
-
-  return "http://localhost:3000/api/auth/verifyToken";
-};
-
 const verifyToken = async (accessToken: string, url: string) => {
-  const VERIFY_TOKEN_URL = getVerifyTokenUrl();
+  const VERIFY_TOKEN_URL = "http://localhost:3000/api/auth/verifyToken";
 
   try {
     const response = await fetch(new URL(VERIFY_TOKEN_URL, url), {
@@ -51,10 +41,6 @@ const clearTokenAndRedirect = (url: string, search: string) => {
 export const middleware = async (request: NextRequest) => {
   const accessToken = request.cookies.get("accessToken")?.value;
   const { pathname, search } = request.nextUrl;
-
-  if (request.method !== "GET") {
-    return NextResponse.next();
-  }
 
   if (accessToken) {
     try {
