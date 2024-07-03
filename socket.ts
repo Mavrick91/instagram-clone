@@ -1,10 +1,8 @@
-// socket.ts
 "use client";
 
 import { io, Socket } from "socket.io-client";
 
-const URL =
-  process.env.NODE_ENV === "production" ? "" : "http://localhost:3000";
+const URL = "http://localhost:3000";
 
 class SocketManager {
   private static instance: SocketManager;
