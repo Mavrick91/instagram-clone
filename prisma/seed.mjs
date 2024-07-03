@@ -2,7 +2,7 @@ import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { faker } from "@faker-js/faker";
 import { PrismaClient } from "@prisma/client";
 import axios from "axios";
-import * as bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import sharp from "sharp";
 
 const prisma = new PrismaClient();

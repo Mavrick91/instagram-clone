@@ -13,15 +13,15 @@
     "format": "prettier --write .",
     "lint:fix": "eslint --fix .",
     "check": "tsc --noEmit",
-    "seed": "ts-node prisma/seed.js",
-    "clear-s3": "node script/clearS3Bucket.js",
-    "drop-db": "PGPASSWORD=postgres psql -h localhost -U postgres -c \"DROP DATABASE IF EXISTS \\\"instagram-clone\\\"\"",
-    "create-db": "PGPASSWORD=postgres psql -h localhost -U postgres -c \"CREATE DATABASE \\\"instagram-clone\\\"\"",
-    "migrate": "cd backend && bunx prisma migrate dev --name init",
-    "reset": "npm run drop-db && npm run create-db && npm run clear-s3 && prisma db push && npm run seed"
+    "seed": "node prisma/seed.mjs",
+    "clear-s3": "node script/clearS3Bucket.mjs",
+    "drop-db": "PGPASSWORD=postgres psql -h localhost -U postgres -c \"DROP DATABASE IF EXISTS \\\"instagram-clone-db\\\"\"",
+    "create-db": "PGPASSWORD=postgres psql -h localhost -U postgres -c \"CREATE DATABASE \\\"instagram-clone-db\\\"\"",
+    "reset": "npm run drop-db && npm run create-db && npm run clear-s3 && npx prisma db push && npm run seed"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.600.0",
+    "@faker-js/faker": "^8.4.1",
     "@graphql-codegen/typescript-graphql-files-modules": "^3.0.0",
     "@hookform/resolvers": "^3.3.4",
     "@mantine/core": "^7.11.0",
@@ -38,7 +38,8 @@
     "@radix-ui/react-switch": "^1.0.3",
     "@tanstack/react-query": "^5.45.0",
     "@tanstack/react-query-devtools": "^5.45.0",
-    "bcrypt": "^5.1.1",
+    "axios": "^1.7.2",
+    "bcryptjs": "^2.4.3",
     "bufferutil": "^4.0.8",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
@@ -75,7 +76,6 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@faker-js/faker": "^8.4.1",
     "@graphql-codegen/cli": "^5.0.2",
     "@graphql-codegen/typescript": "^4.0.7",
     "@graphql-codegen/typescript-operations": "^4.2.1",
@@ -84,6 +84,7 @@
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",
     "@types/bcrypt": "^5.0.2",
+    "@types/bcryptjs": "^2.4.6",
     "@types/jest": "^29.5.12",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20",
@@ -108,6 +109,6 @@
     "prettier": "^3.3.2",
     "tailwindcss": "^3.4.4",
     "ts-jest": "^29.1.5",
-    "typescript": "^5"
+    "typescript": "5.5.3"
   }
 }
