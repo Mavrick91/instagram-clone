@@ -34,6 +34,9 @@ moment.updateLocale("en", {
 export const metadata: Metadata = {
   title: "Instagram clone",
   description: "Instagram clone",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 const RootLayout = ({
