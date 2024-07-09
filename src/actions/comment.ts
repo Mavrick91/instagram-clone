@@ -10,11 +10,11 @@ export const getCommentsForPicture = async (
 ): Promise<CommentsPicture[]> => {
   return prisma.comment.findMany({
     where: {
-      pictureId: pictureId,
+      picture_id: pictureId,
     },
     select: commentsPictureSelect,
     orderBy: {
-      createdAt: "desc",
+      created_at: "desc",
     },
   });
 };
@@ -26,12 +26,12 @@ export const createComment = async (pictureId: number, content: string) => {
     return await prisma.comment.create({
       data: {
         content,
-        pictureId,
-        userId: currentUser.id,
+        picture_id: pictureId,
+        user_id: currentUser.id,
       },
       select: {
         id: true,
-        createdAt: true,
+        created_at: true,
       },
     });
   } catch (error) {

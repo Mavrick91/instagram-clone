@@ -38,7 +38,7 @@ const ThumbnailGridItem = ({ initialPicture }: Props) => {
       >
         <ImageClient
           priority
-          alt={picture.altText || "Picture"}
+          alt={picture.alt_text || "Picture"}
           className="size-full overflow-hidden object-cover"
           height={317}
           src={picture.sizes.thumbnail}

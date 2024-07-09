@@ -31,13 +31,13 @@ const usePostCTALogic = (pictureId: number) => {
     pictureId,
   ])!;
   const {
-    isLiked,
-    isSaved,
+    is_liked,
+    is_saved,
     _count,
-    hideLikesAndViewCounts,
+    hide_likes_and_view_counts,
     likes,
     user: pictureUser,
-    isInAnyCollection,
+    is_in_any_collection,
   } = picture;
 
   const handleToggleLike = useCallback(() => {
@@ -46,15 +46,15 @@ const usePostCTALogic = (pictureId: number) => {
       updateFn: (oldData) => {
         return {
           ...oldData,
-          isLiked: !oldData.isLiked,
+          isLiked: !oldData.is_liked,
           _count: {
             ...oldData._count,
-            likes: oldData._count.likes + (oldData.isLiked ? -1 : 1),
+            likes: oldData._count.likes + (oldData.is_liked ? -1 : 1),
           },
         };
       },
       action: async (oldData) => {
-        if (oldData.isLiked) {
+        if (oldData.is_liked) {
           await unlikePicture(pictureId);
         } else {
           const newNotification = await createOrUpdateNotification({
@@ -78,14 +78,14 @@ const usePostCTALogic = (pictureId: number) => {
   ]);
 
   const handleToggleCollection = useCallback(() => {
-    if (!isInAnyCollection) {
+    if (!is_in_any_collection) {
       optimisticUpdate<UserPictureDetails>({
         queryKey: ["picture", pictureId],
         updateFn: (oldData) => {
-          return { ...oldData, isSaved: !oldData.isSaved };
+          return { ...oldData, isSaved: !oldData.is_saved };
         },
         action: async (oldData) => {
-          oldData.isSaved
+          oldData.is_saved
             ? await removePictureFromDefaultCollection(pictureId)
             : await addPictureToDefaultCollection(pictureId);
           await queryClient.refetchQueries({
@@ -105,7 +105,7 @@ const usePostCTALogic = (pictureId: number) => {
       });
     }
   }, [
-    isInAnyCollection,
+    is_in_any_collection,
     optimisticUpdate,
     pictureId,
     queryClient,
@@ -120,17 +120,17 @@ const usePostCTALogic = (pictureId: number) => {
   };
 
   return {
-    isLiked,
-    isSaved,
+    is_liked,
+    is_saved,
     handleToggleLike,
     handleToggleCollection,
     showPostDetails,
     likeCounterProps: {
-      hideLikesAndViewCounts,
+      hide_likes_and_view_counts,
       likes,
       _count,
       pictureUser,
-      userId: currentUser.id,
+      user_id: currentUser.id,
       handleToggleLike,
     },
   };

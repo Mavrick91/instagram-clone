@@ -39,7 +39,7 @@ export function useWebSocket() {
     function onChatMessage(message: ThreadMessage) {
       setMessages((prevMessages) => [...prevMessages, message]);
       queryClient.setQueryData(
-        ["thread", user.username, message.threadId, "lastMessage"],
+        ["thread", user.username, message.thread_id, "lastMessage"],
         message,
       );
     }

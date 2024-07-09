@@ -10,12 +10,12 @@ import {
 
 export const lightCollectionByUserIdSelect = {
   id: true,
-  nameId: true,
+  name_id: true,
   name: true,
-  isDefault: true,
+  is_default: true,
   pictures: {
     select: {
-      pictureId: true,
+      picture_id: true,
       picture: {
         select: pictureLightSelect,
       },
@@ -24,7 +24,7 @@ export const lightCollectionByUserIdSelect = {
 } as const;
 
 export type LightCollectionByUserId = Omit<
-  Prisma.CollectionGetPayload<{
+  Prisma.collectionGetPayload<{
     select: typeof lightCollectionByUserIdSelect;
   }>,
   "pictures"
@@ -36,9 +36,9 @@ export type LightCollectionByUserId = Omit<
 };
 export const userCollectionDetailsSelect = {
   id: true,
-  nameId: true,
+  name_id: true,
   name: true,
-  isDefault: true,
+  is_default: true,
   pictures: {
     select: {
       picture: {
@@ -49,7 +49,7 @@ export const userCollectionDetailsSelect = {
 } as const;
 
 export type UserCollectionDetails = Omit<
-  Prisma.CollectionGetPayload<{
+  Prisma.collectionGetPayload<{
     select: typeof userCollectionDetailsSelect;
   }>,
   "pictures"

@@ -27,7 +27,7 @@ const PostHeader = ({ avatar, username, picture }: Props) => {
           </Link>
           <span className="flex items-center gap-1 font-normal text-ig-secondary-text">
             <span> • </span>
-            {moment(picture.createdAt).fromNow()}
+            {moment(picture.created_at).fromNow()}
           </span>
         </div>
         <button

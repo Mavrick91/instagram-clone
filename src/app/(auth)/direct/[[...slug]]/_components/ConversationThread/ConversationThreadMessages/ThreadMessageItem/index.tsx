@@ -24,7 +24,7 @@ export const ThreadMessageItem = ({
     <>
       {showTimestamp && (
         <div className="my-4 self-center text-center text-xs text-ig-secondary-text">
-          {formatTimestamp(message.createdAt)}
+          {formatTimestamp(message.created_at)}
         </div>
       )}
       <div

@@ -52,8 +52,8 @@ const EditProfileDialog = () => {
   } = useForm<FormData>({
     resolver: zodResolver(ProfileSchema),
     defaultValues: {
-      firstName: user.firstName,
-      lastName: user.lastName,
+      firstName: user.first_name,
+      lastName: user.last_name,
       bio: user.bio ?? "",
       avatar: user.avatar,
     },
@@ -76,8 +76,8 @@ const EditProfileDialog = () => {
           await updateUserProfile(
             user.username,
             {
-              firstName: data.firstName,
-              lastName: data.lastName,
+              first_name: data.firstName,
+              last_name: data.lastName,
               bio: data.bio,
             },
             revalidateUserProfilePage,

@@ -1,4 +1,4 @@
-import { Picture, Prisma } from "@prisma/client";
+import { picture, Prisma } from "@prisma/client";
 
 import { PictureWithSizes } from "@/types/picture";
 
@@ -8,19 +8,19 @@ export const notificationTypeSelect = {
   id: true,
   read: true,
   type: true,
-  createdAt: true,
+  created_at: true,
   sender: true,
   picture: true,
   comment: true,
 } as const;
 
 export type PrismaNotification = Omit<
-  Prisma.NotificationGetPayload<{
+  Prisma.notificationGetPayload<{
     select: typeof notificationTypeSelect;
   }>,
   "picture"
 > & {
-  picture: PictureWithSizes<Picture> | undefined;
+  picture: PictureWithSizes<picture> | undefined;
 };
 
 export type PaginatedNotifications = {

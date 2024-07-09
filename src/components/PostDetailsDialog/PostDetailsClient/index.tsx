@@ -29,7 +29,7 @@ const PostDetailsClient = ({ picture }: PostDetailsClientProps) => {
     <div className="flex grow flex-col">
       <PictureCommentList ref={commentListRef} picture={picture} />
       <PostDetailsCTA picture={picture} />
-      {!picture.disableComments && (
+      {!picture.disable_comments && (
         <PostCommentForm handleAddComment={handleCreateComment} />
       )}
     </div>

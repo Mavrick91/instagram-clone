@@ -76,7 +76,7 @@ const UsernameSearch = () => {
                 <div className="w-full overflow-hidden px-6 py-2 hover:bg-ig-hover-overlay">
                   <UserListItem
                     avatar={user.avatar}
-                    bottomText={`${user.firstName} ${user.lastName}`}
+                    bottomText={`${user.first_name} ${user.last_name}`}
                     topText={user.username}
                     width={44}
                   />

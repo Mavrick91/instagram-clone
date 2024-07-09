@@ -24,7 +24,7 @@ const SavedPage = async ({ params }: ServerPageProps<"username">) => {
   });
 
   const defaultCollection = collections.find((collection) => {
-    return collection.isDefault;
+    return collection.is_default;
   });
 
   const dehydratedState = dehydrate(queryClient);

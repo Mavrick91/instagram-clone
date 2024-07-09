@@ -19,7 +19,7 @@ import { getCurrentUser } from "./user";
 const createDefaultAltText = async (): Promise<string> => {
   const currentUser = await getCurrentUser();
 
-  return `Photo by ${currentUser.firstName} ${currentUser.lastName} on ${moment().format("MMMM Do, YYYY")}. May be an image of text.`;
+  return `Photo by ${currentUser.first_name} ${currentUser.last_name} on ${moment().format("MMMM Do, YYYY")}. May be an image of text.`;
 };
 
 export const createPicture = async (formData: FormData): Promise<void> => {
@@ -35,16 +35,16 @@ export const createPicture = async (formData: FormData): Promise<void> => {
 
   const defaultAltText = await createDefaultAltText();
 
-  const pictureData: Prisma.PictureCreateInput = {
+  const pictureData: Prisma.pictureCreateInput = {
     user: {
       connect: { id: currentUser.id },
     },
     sizes,
-    fileName,
+    file_name: fileName,
     description,
-    altText: altText || defaultAltText,
-    hideLikesAndViewCounts,
-    disableComments,
+    alt_text: altText || defaultAltText,
+    hide_likes_and_view_counts: hideLikesAndViewCounts,
+    disable_comments: disableComments,
   };
 
   await prisma.picture.create({ data: pictureData });
@@ -64,8 +64,8 @@ export const getPicturesByUser = async (
   userId?: number,
 ): Promise<UserPictureDetails[]> => {
   const pictures = await prisma.picture.findMany({
-    where: { userId: userId ? userId : undefined },
-    orderBy: { createdAt: "desc" },
+    where: { user_id: userId ? userId : undefined },
+    orderBy: { created_at: "desc" },
     select: userPictureDetailsSelect,
     take: 12,
   });
@@ -94,8 +94,8 @@ export const getPictureDetails = async (
 
   return {
     comments,
-    isLiked,
-    isSaved,
+    is_liked: isLiked,
+    is_saved: isSaved,
     ...picture,
     sizes: picture.sizes as Sizes,
   };
@@ -109,9 +109,9 @@ export const getFollowedUsersPictures = async (): Promise<
   const pictures = await prisma.picture.findMany({
     where: {
       user: {
-        receivedFollows: {
+        received_follows: {
           some: {
-            initiatorId: currentUser.id,
+            initiator_id: currentUser.id,
           },
         },
       },

@@ -7,7 +7,7 @@ import SuggestFollowList from "./_components/SuggestFollowList";
 const HomePage = async () => {
   const currentUser = await getCurrentUser();
 
-  if (currentUser.initiatedFollows.length <= 3) {
+  if (currentUser._count.initiated_follows <= 3) {
     const allUsers = await getAllUsers();
 
     return <SuggestFollowList allUsers={allUsers} />;

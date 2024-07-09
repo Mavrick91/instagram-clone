@@ -86,13 +86,13 @@ const UserProfile = ({ initialUserProfile }: UserProfileProps) => {
                 onClick={() => {
                   return openModal("followersDialog", {
                     isFollowers: true,
-                    followers: userProfile.receivedFollows,
+                    followers: userProfile.received_follows,
                   });
                 }}
               >
                 <Pluralize
                   bold
-                  count={userProfile._count.receivedFollows}
+                  count={userProfile._count.received_follows}
                   singular="follower"
                 />
               </button>
@@ -100,20 +100,20 @@ const UserProfile = ({ initialUserProfile }: UserProfileProps) => {
                 type="button"
                 onClick={() => {
                   return openModal("followersDialog", {
-                    followers: userProfile.initiatedFollows,
+                    followers: userProfile.initiated_follows,
                   });
                 }}
               >
                 <Pluralize
                   bold
-                  count={userProfile._count.initiatedFollows}
+                  count={userProfile._count.initiated_follows}
                   singular="following"
                 />
               </button>
             </div>
             <div className="text-sm text-ig-primary-text">
               <span className="font-bold">
-                {userProfile.firstName} {userProfile.lastName}
+                {userProfile.first_name} {userProfile.last_name}
               </span>
               {userProfile.bio && (
                 <p className="text-ig-primary-text">{userProfile.bio}</p>

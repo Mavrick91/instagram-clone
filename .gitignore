@@ -43,3 +43,6 @@ build/
 
 # Other
 .husky/
+/task-definition.json
+/setup_and_start.sh
+/deploy.sh

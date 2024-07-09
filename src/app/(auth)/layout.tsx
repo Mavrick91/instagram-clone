@@ -1,4 +1,3 @@
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 import { ReactNode } from "react";
 
@@ -32,18 +31,14 @@ const HomeLayout = async ({ children }: HomeLayoutProps) => {
     return null;
   }
 
-  const dehydratedState = dehydrate(queryClient);
-
   return (
     <SideNavProvider>
-      <HydrationBoundary state={dehydratedState}>
-        <UserInfoProvider initialCurrentUser={currentUser}>
-          <ModalProvider>
-            <MainLayout>{children}</MainLayout>
-            <div id="modal-root" />
-          </ModalProvider>
-        </UserInfoProvider>
-      </HydrationBoundary>
+      <UserInfoProvider initialCurrentUser={currentUser}>
+        <ModalProvider>
+          <MainLayout>{children}</MainLayout>
+          <div id="modal-root" />
+        </ModalProvider>
+      </UserInfoProvider>
     </SideNavProvider>
   );
 };

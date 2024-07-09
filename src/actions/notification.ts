@@ -10,14 +10,14 @@ import {
 import { transformPictureSizes } from "@/utils/picture";
 
 type CreateNotificationInput = {
-  type: Prisma.NotificationCreateInput["type"];
+  type: Prisma.notificationCreateInput["type"];
   senderId: number;
   receiverId: number;
   pictureId?: number;
   commentId?: number;
 };
 
-export type NotificationWithRelations = Prisma.NotificationGetPayload<{
+export type NotificationWithRelations = Prisma.notificationGetPayload<{
   include: {
     sender: true;
     receiver: true;
@@ -36,10 +36,10 @@ export const createOrUpdateNotification = async (
   const existingNotification = await prisma.notification.findFirst({
     where: {
       type,
-      senderId,
-      receiverId,
-      pictureId: pictureId || null,
-      commentId: commentId || null,
+      sender_id: senderId,
+      receiver_id: receiverId,
+      picture_id: pictureId || null,
+      comment_id: commentId || null,
     },
   });
 
@@ -47,7 +47,7 @@ export const createOrUpdateNotification = async (
     return prisma.notification.update({
       where: { id: existingNotification.id },
       data: {
-        createdAt: new Date(),
+        created_at: new Date(),
         read: false,
       },
       include: {
@@ -86,14 +86,14 @@ export const getAllNotifications = async (
 
     const [notifications, totalCount] = await Promise.all([
       prisma.notification.findMany({
-        where: { receiverId: userId },
-        orderBy: { createdAt: "desc" },
+        where: { receiver_id: userId },
+        orderBy: { created_at: "desc" },
         select: notificationTypeSelect,
         skip,
         take: limit,
       }),
       prisma.notification.count({
-        where: { receiverId: userId },
+        where: { receiver_id: userId },
       }),
     ]);
 

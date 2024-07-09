@@ -66,9 +66,9 @@ const RemoveFromCollectionDialog = ({
         queryKey: ["picture", pictureId],
         updateFn: (oldData) => ({
           ...oldData,
-          isSaved: !oldData.isSaved,
+          isSaved: !oldData.is_saved,
           isInAnyCollection: fromSpecificCollection
-            ? oldData.isInAnyCollection
+            ? oldData.is_in_any_collection
             : false,
         }),
         action: () => mutation.mutateAsync(),

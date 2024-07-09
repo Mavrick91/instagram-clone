@@ -28,7 +28,7 @@ const UserProfileCollections = ({
   return collections?.slice(0, 4).map((collection) => {
     return (
       <UserProfileCollectionsItem
-        key={collection.nameId}
+        key={collection.name_id}
         collection={collection}
         profileUsername={profileUsername}
       />

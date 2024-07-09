@@ -22,12 +22,12 @@ const useUpdateComment = (
       const newComment = {
         id: new Date().getTime(),
         content: comment,
-        createdAt: new Date(),
+        created_at: new Date(),
         user: {
           id: currentUser.id,
           username: currentUser.username,
-          firstName: currentUser.firstName,
-          lastName: currentUser.lastName,
+          first_name: currentUser.first_name,
+          last_name: currentUser.last_name,
           avatar: currentUser.avatar,
         },
       };
@@ -65,9 +65,9 @@ const useUpdateComment = (
     },
     [
       currentUser.avatar,
-      currentUser.firstName,
+      currentUser.first_name,
       currentUser.id,
-      currentUser.lastName,
+      currentUser.last_name,
       currentUser.username,
       optimisticUpdate,
       pictureId,

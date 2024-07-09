@@ -7,11 +7,11 @@ const userFollowTypeSelect = {
   initiator: {
     select: followInitiatorOrTargetSelect,
   },
-  targetUser: {
+  target_user: {
     select: followInitiatorOrTargetSelect,
   },
-} as const;
+};
 
-export type UserFollowType = Prisma.FollowGetPayload<{
+export type UserFollowType = Prisma.followGetPayload<{
   select: typeof userFollowTypeSelect;
 }>;

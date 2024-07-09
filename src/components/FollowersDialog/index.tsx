@@ -1,12 +1,13 @@
 "use client";
 
 import * as user from "@/types/user";
+import { FollowerType } from "@/types/user";
 
 import Modal from "../Modal";
 import FollowersDialogItem from "./FollowersDialogItem";
 
 export type FollowersDialogProps = {
-  followers: user.FollowerType[];
+  followers: FollowerType[];
   isFollowers?: boolean;
 };
 
@@ -26,14 +27,14 @@ const FollowersDialog = ({ followers, isFollowers }: FollowersDialogProps) => {
 
       <div className="overflow-y-auto">
         {followers.length ? (
-          followers.map((follower: user.FollowerType) => {
+          followers.map((follower: FollowerType) => {
             let user: user.FollowInitiatorOrTargetSelectType | undefined;
 
             if ("initiator" in follower) {
               user = follower.initiator;
             }
-            if ("targetUser" in follower) {
-              user = follower.targetUser;
+            if ("target_user" in follower) {
+              user = follower.target_user;
             }
 
             if (!user) return null;

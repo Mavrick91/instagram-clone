@@ -2,37 +2,37 @@ import { CurrentUserType, UserProfileType } from "@/types/user";
 
 type FollowType = {
   id: number;
-  createdAt: Date;
-  initiatorId: number;
-  targetUserId: number;
+  created_at: Date;
+  initiator_id: number;
+  target_user_id: number;
 };
 
 type UserSummary = {
   id: number;
   avatar: string | null;
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   username: string;
 };
 
 type FollowListItem = {
   id: number;
   initiator?: UserSummary;
-  targetUser?: UserSummary;
+  target_user?: UserSummary;
 };
 
 type CountType = {
   pictures: number;
-  initiatedFollows: number;
-  receivedFollows: number;
+  initiated_follows: number;
+  received_follows: number;
 };
 
 export const getIsCurrentUserFollowingProfile = (
   currentUser: CurrentUserType,
   profileId: number,
 ): boolean => {
-  return currentUser.initiatedFollows.some((initiateFollow) => {
-    return initiateFollow.targetUserId === profileId;
+  return currentUser.initiated_follows.some((initiateFollow) => {
+    return initiateFollow.target_user_id === profileId;
   });
 };
 
@@ -44,15 +44,15 @@ const updateFollows = (
 ): FollowType[] => {
   const newFollow: FollowType = {
     id: Date.now(),
-    createdAt: new Date(),
-    initiatorId: currentUserId,
-    targetUserId,
+    created_at: new Date(),
+    initiator_id: currentUserId,
+    target_user_id: targetUserId,
   };
 
   return action === "add"
     ? [...follows, newFollow]
     : follows.filter((follow) => {
-        return follow.targetUserId !== targetUserId;
+        return follow.target_user_id !== targetUserId;
       });
 };
 
@@ -61,11 +61,11 @@ export const updateFollowCache = (
   targetUserId: number,
   action: "add" | "remove",
 ): CurrentUserType => {
-  const followField = "initiatedFollows";
+  const followField = "initiated_follows";
 
   return {
     ...oldData,
-    initiatedFollows: updateFollows(
+    initiated_follows: updateFollows(
       oldData.id,
       oldData[followField],
       targetUserId,
@@ -98,7 +98,7 @@ const updateFollowList = (
   newFollowStatus: boolean,
   isReceived: boolean,
 ): FollowListItem[] => {
-  const userField = isReceived ? "initiator" : "targetUser";
+  const userField = isReceived ? "initiator" : "target_user";
 
   return newFollowStatus
     ? [
@@ -108,8 +108,8 @@ const updateFollowList = (
           [userField]: {
             id: currentUser.id,
             avatar: currentUser.avatar,
-            firstName: currentUser.firstName,
-            lastName: currentUser.lastName,
+            firstName: currentUser.first_name,
+            lastName: currentUser.last_name,
             username: currentUser.username,
           },
         },
@@ -137,7 +137,7 @@ export const updateUserProfileFollowStatus = (
   updateType: "received" | "initiated",
 ): UserProfileType => {
   const isReceived = updateType === "received";
-  const followField = isReceived ? "receivedFollows" : "initiatedFollows";
+  const followField = isReceived ? "received_follows" : "initiated_follows";
 
   return {
     ...oldData,

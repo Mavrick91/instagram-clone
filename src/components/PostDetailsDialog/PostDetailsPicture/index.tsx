@@ -18,7 +18,7 @@ const PostDetailsPicture = ({ picture }: PostDetailsPictureProps) => {
         <ImageClient
           fill
           priority
-          alt={picture.altText || "Post image"}
+          alt={picture.alt_text || "Post image"}
           src={picture.sizes.original}
         />
       </div>

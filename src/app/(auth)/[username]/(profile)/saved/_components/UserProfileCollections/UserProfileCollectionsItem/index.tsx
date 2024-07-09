@@ -14,7 +14,7 @@ const UserProfileCollectionsItem = ({
 }: UserProfileCollectionsItemProps) => {
   return (
     <Link
-      key={collection.nameId}
+      key={collection.name_id}
       prefetch
       className="relative col-span-1 grid aspect-square grid-cols-2 overflow-hidden rounded-md border border-ig-separator bg-gradient-to-t from-black/50 to-transparent hover:from-black/40"
       href={`/${profileUsername}/collection/${collection.id}`}

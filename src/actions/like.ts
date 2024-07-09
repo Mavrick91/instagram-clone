@@ -10,8 +10,8 @@ export const likePicture = async (pictureId: number): Promise<void> => {
 
     const existingLike = await prisma.like.findFirst({
       where: {
-        userId: currentUser.id,
-        pictureId: pictureId,
+        user_id: currentUser.id,
+        picture_id: pictureId,
       },
     });
 
@@ -21,8 +21,8 @@ export const likePicture = async (pictureId: number): Promise<void> => {
 
     await prisma.like.create({
       data: {
-        userId: currentUser.id,
-        pictureId: pictureId,
+        user_id: currentUser.id,
+        picture_id: pictureId,
       },
     });
   } catch (error) {
@@ -37,8 +37,8 @@ export const unlikePicture = async (pictureId: number): Promise<void> => {
 
     const existingLike = await prisma.like.findFirstOrThrow({
       where: {
-        userId: currentUser.id,
-        pictureId: pictureId,
+        user_id: currentUser.id,
+        picture_id: pictureId,
       },
     });
 
@@ -61,8 +61,8 @@ export const getIsPictureLiked = async (
 
     const isLiked = await prisma.like.findFirst({
       where: {
-        userId: currentUser.id,
-        pictureId: pictureId,
+        user_id: currentUser.id,
+        picture_id: pictureId,
       },
     });
     return isLiked !== null;

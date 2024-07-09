@@ -15,8 +15,8 @@ type PostCTAProps = {
 
 const PostCTA = ({ pictureId, showMessageIcon = true }: PostCTAProps) => {
   const {
-    isLiked,
-    isSaved,
+    is_liked,
+    is_saved,
     handleToggleLike,
     handleToggleCollection,
     showPostDetails,
@@ -30,7 +30,7 @@ const PostCTA = ({ pictureId, showMessageIcon = true }: PostCTAProps) => {
           <IconButton
             activeColor="text-destructive"
             icon={HeartIcon}
-            isActive={isLiked}
+            isActive={is_liked}
             onClick={handleToggleLike}
           />
           {showMessageIcon && (
@@ -40,7 +40,7 @@ const PostCTA = ({ pictureId, showMessageIcon = true }: PostCTAProps) => {
         </div>
         <IconButton
           icon={BookmarkIcon}
-          isActive={isSaved}
+          isActive={is_saved}
           onClick={handleToggleCollection}
         />
       </div>

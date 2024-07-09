@@ -56,8 +56,8 @@ const NotificationItem = ({ notification }: Props) => {
 
   const user = useUserInfo();
 
-  const isFollowingCurrentProfile = user.initiatedFollows.some(
-    (follow) => follow.targetUserId === notification.sender.id,
+  const isFollowingCurrentProfile = user.initiated_follows.some(
+    (follow) => follow.target_user_id === notification.sender.id,
   );
 
   return (
@@ -72,7 +72,7 @@ const NotificationItem = ({ notification }: Props) => {
         <div className="text-sm">
           {renderContentBasedOnType()}{" "}
           <span className="text-ig-secondary-text">
-            {moment(notification.createdAt).fromNow()}
+            {moment(notification.created_at).fromNow()}
           </span>
         </div>
         {notification.type === "FOLLOW" ? (
@@ -88,7 +88,7 @@ const NotificationItem = ({ notification }: Props) => {
           <div className="relative size-11 shrink-0">
             <ImageClient
               fill
-              alt={notification.picture?.altText || "Picture commented"}
+              alt={notification.picture?.alt_text || "Picture commented"}
               className="aspect-square object-cover"
               src={notification.picture.sizes.small}
             />

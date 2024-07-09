@@ -81,7 +81,7 @@ const CreateConversationDialog = () => {
                   <UserListItem
                     avatar={user.avatar}
                     bottomText={user.username}
-                    topText={user.firstName}
+                    topText={user.first_name}
                     width={44}
                   />
                 </div>

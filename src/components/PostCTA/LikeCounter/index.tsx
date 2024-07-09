@@ -1,25 +1,25 @@
 import { Pluralize } from "@/components/Pluralize";
 
 type LikeCounterProps = {
-  hideLikesAndViewCounts: boolean;
-  likes: Array<{ userId: number; user?: { username: string } }>;
+  hide_likes_and_view_counts: boolean;
+  likes: Array<{ user_id: number; user?: { username: string } }>;
   _count: { likes: number };
   pictureUser: { username: string };
-  userId: number;
+  user_id: number;
   handleToggleLike: () => void;
 };
 
 const LikeCounter = ({
-  hideLikesAndViewCounts,
+  hide_likes_and_view_counts,
   likes,
   _count,
   pictureUser,
-  userId,
+  user_id,
   handleToggleLike,
 }: LikeCounterProps) => {
-  if (hideLikesAndViewCounts) {
+  if (hide_likes_and_view_counts) {
     const userLiked = likes.some((like) => {
-      return like.userId === userId;
+      return like.user_id === user_id;
     });
     if (userLiked) {
       return (

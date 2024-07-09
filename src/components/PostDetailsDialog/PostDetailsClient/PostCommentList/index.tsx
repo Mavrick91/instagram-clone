@@ -18,13 +18,13 @@ const PostCommentList = forwardRef<HTMLDivElement, Props>(
               key={picture.id}
               avatar={picture.user.avatar}
               content={picture.description}
-              createdAt={picture.createdAt}
-              firstName={picture.user.firstName}
-              lastName={picture.user.lastName}
+              createdAt={picture.created_at}
+              firstName={picture.user.first_name}
+              lastName={picture.user.last_name}
               username={picture.user.username}
             />
           )}
-          {!picture.comments.length || picture.disableComments ? (
+          {!picture.comments.length || picture.disable_comments ? (
             <div className="flex h-full grow flex-col items-center justify-center text-ig-primary-text">
               <span className="text-2xl font-bold">No comments yet.</span>
               <span className="mt-2 text-sm">Start the conversation.</span>
@@ -36,9 +36,9 @@ const PostCommentList = forwardRef<HTMLDivElement, Props>(
                   key={comment.id}
                   avatar={comment.user.avatar}
                   content={comment.content}
-                  createdAt={comment.createdAt}
-                  firstName={comment.user.firstName}
-                  lastName={comment.user.lastName}
+                  createdAt={comment.created_at}
+                  firstName={comment.user.first_name}
+                  lastName={comment.user.last_name}
                   username={comment.user.username}
                 />
               );

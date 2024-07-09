@@ -1,6 +1,6 @@
 "use server";
 
-import { Collection } from "@prisma/client";
+import { collection } from "@prisma/client";
 
 import { getPictureDetails } from "@/actions/picture";
 import { getCurrentUser } from "@/actions/user";
@@ -18,17 +18,16 @@ export const getIsPictureInUserCollection = async (
   pictureId: number,
 ): Promise<boolean> => {
   const currentUser = await getCurrentUser();
-  const pictureInDefaultCollection = await prisma.pictureOnCollection.findFirst(
-    {
+  const pictureInDefaultCollection =
+    await prisma.picture_on_collection.findFirst({
       where: {
-        pictureId: pictureId,
+        picture_id: pictureId,
         collection: {
-          userId: currentUser.id,
-          isDefault: true,
+          user_id: currentUser.id,
+          is_default: true,
         },
       },
-    },
-  );
+    });
   return !!pictureInDefaultCollection;
 };
 
@@ -40,25 +39,25 @@ export const removePictureFromDefaultCollection = async (
 
     const defaultCollection = await prisma.collection.findFirstOrThrow({
       where: {
-        userId: currentUser.id,
-        isDefault: true,
+        user_id: currentUser.id,
+        is_default: true,
       },
     });
 
-    const pictureExisting = await prisma.pictureOnCollection.findFirst({
+    const pictureExisting = await prisma.picture_on_collection.findFirst({
       where: {
-        pictureId: pictureId,
-        collectionId: defaultCollection.id,
+        picture_id: pictureId,
+        collection_id: defaultCollection.id,
       },
     });
 
     if (!pictureExisting) throw new Error("Picture not in collection");
 
-    await prisma.pictureOnCollection.delete({
+    await prisma.picture_on_collection.delete({
       where: {
-        pictureId_collectionId: {
-          pictureId: pictureId,
-          collectionId: defaultCollection.id,
+        picture_id_collection_id: {
+          picture_id: pictureId,
+          collection_id: defaultCollection.id,
         },
       },
     });
@@ -78,11 +77,11 @@ export const removePictureFromCollection = async (
     await prisma.$transaction(async (prisma) => {
       if (!collectionId) {
         // Removing from all of the user's collections
-        await prisma.pictureOnCollection.deleteMany({
+        await prisma.picture_on_collection.deleteMany({
           where: {
-            pictureId: pictureId,
+            picture_id: pictureId,
             collection: {
-              userId: currentUser.id,
+              user_id: currentUser.id,
             },
           },
         });
@@ -91,25 +90,25 @@ export const removePictureFromCollection = async (
         await prisma.picture.update({
           where: { id: pictureId },
           data: {
-            isInAnyCollection: false,
+            is_in_any_collection: false,
           },
         });
       } else {
         const collectionPicture = await prisma.collection.findFirst({
           where: {
-            userId: currentUser.id,
+            user_id: currentUser.id,
             id: parseInt(collectionId, 10),
           },
         });
         if (!collectionPicture) throw new Error("Collection not found");
 
         // Removing from a specific collection
-        const pictureExisting = await prisma.pictureOnCollection.findFirst({
+        const pictureExisting = await prisma.picture_on_collection.findFirst({
           where: {
-            pictureId: pictureId,
-            collectionId: collectionPicture.id,
+            picture_id: pictureId,
+            collection_id: collectionPicture.id,
             collection: {
-              userId: currentUser.id,
+              user_id: currentUser.id,
             },
           },
         });
@@ -118,33 +117,32 @@ export const removePictureFromCollection = async (
           throw new Error("Picture not in collection");
         }
 
-        await prisma.pictureOnCollection.delete({
+        await prisma.picture_on_collection.delete({
           where: {
-            pictureId_collectionId: {
-              pictureId: pictureId,
-              collectionId: collectionPicture.id,
+            picture_id_collection_id: {
+              picture_id: pictureId,
+              collection_id: collectionPicture.id,
             },
           },
         });
 
         // Check if the picture is still in any collection
-        const remainingCollections = await prisma.pictureOnCollection.findFirst(
-          {
+        const remainingCollections =
+          await prisma.picture_on_collection.findFirst({
             where: {
-              pictureId: pictureId,
+              picture_id: pictureId,
               collection: {
-                userId: currentUser.id,
-                isDefault: false,
+                user_id: currentUser.id,
+                is_default: false,
               },
             },
-          },
-        );
+          });
 
         // Update isInAnyCollection if no collections left
         if (!remainingCollections) {
           await prisma.picture.update({
             where: { id: pictureId },
-            data: { isInAnyCollection: false },
+            data: { is_in_any_collection: false },
           });
         }
       }
@@ -163,7 +161,7 @@ export const addPictureToCollectionById = async (
     // First, get the collection to check if it's the default collection
     const collection = await prisma.collection.findUnique({
       where: { id: collectionId },
-      select: { isDefault: true },
+      select: { is_default: true },
     });
 
     if (!collection) {
@@ -171,15 +169,15 @@ export const addPictureToCollectionById = async (
     }
 
     // Find existing pictures in the collection
-    const existingPictures = await prisma.pictureOnCollection.findMany({
+    const existingPictures = await prisma.picture_on_collection.findMany({
       where: {
-        pictureId: { in: pictureIds },
-        collectionId: collectionId,
+        picture_id: { in: pictureIds },
+        collection_id: collectionId,
       },
     });
 
     const existingPictureIds = existingPictures.map((pic) => {
-      return pic.pictureId;
+      return pic.picture_id;
     });
 
     // Filter out pictures that are already in the collection
@@ -190,11 +188,11 @@ export const addPictureToCollectionById = async (
     // Perform operations in a transaction to ensure consistency
     await prisma.$transaction(async (prisma) => {
       // Add new pictures to the collection
-      await prisma.pictureOnCollection.createMany({
+      await prisma.picture_on_collection.createMany({
         data: newPictureIds.map((pictureId) => {
           return {
-            collectionId: collectionId,
-            pictureId,
+            collection_id: collectionId,
+            picture_id: pictureId,
           };
         }),
         skipDuplicates: true,
@@ -204,7 +202,7 @@ export const addPictureToCollectionById = async (
       await prisma.picture.updateMany({
         where: { id: { in: newPictureIds } },
         data: {
-          isInAnyCollection: true,
+          is_in_any_collection: true,
         },
       });
     });
@@ -222,25 +220,25 @@ export const addPictureToDefaultCollection = async (
 
     const defaultCollection = await prisma.collection.findFirstOrThrow({
       where: {
-        userId: currentUser.id,
-        isDefault: true,
+        user_id: currentUser.id,
+        is_default: true,
       },
     });
 
-    const pictureExisting = await prisma.pictureOnCollection.findFirst({
+    const pictureExisting = await prisma.picture_on_collection.findFirst({
       where: {
-        pictureId: pictureId,
-        collectionId: defaultCollection.id,
+        picture_id: pictureId,
+        collection_id: defaultCollection.id,
       },
     });
 
     if (pictureExisting)
       throw new Error("Picture already in default collection.");
 
-    await prisma.pictureOnCollection.create({
+    await prisma.picture_on_collection.create({
       data: {
-        pictureId: pictureId,
-        collectionId: defaultCollection.id,
+        picture_id: pictureId,
+        collection_id: defaultCollection.id,
       },
     });
   } catch (error) {
@@ -254,16 +252,16 @@ export const getCollectionsByUserId = async (
 ): Promise<LightCollectionByUserId[]> => {
   const collections = await prisma.collection.findMany({
     where: {
-      userId: userId,
+      user_id: userId,
     },
     select: lightCollectionByUserIdSelect,
-    orderBy: { createdAt: "asc" },
+    orderBy: { created_at: "asc" },
   });
 
   return collections.map((collection) => ({
     ...collection,
     pictures: collection.pictures.map((p) => ({
-      pictureId: p.pictureId,
+      pictureId: p.picture_id,
       picture: transformPictureSizes(p.picture),
     })),
   }));
@@ -272,7 +270,7 @@ export const getCollectionsByUserId = async (
 export const getDefaultCollectionByUsername = async (
   username: string,
 ): Promise<LightCollectionByUserId> => {
-  const user = await prisma.user.findFirstOrThrow({
+  const user = await prisma.users.findFirstOrThrow({
     where: {
       username: username,
     },
@@ -280,8 +278,8 @@ export const getDefaultCollectionByUsername = async (
 
   const collection = await prisma.collection.findFirstOrThrow({
     where: {
-      userId: user.id,
-      isDefault: true,
+      user_id: user.id,
+      is_default: true,
     },
     select: lightCollectionByUserIdSelect,
   });
@@ -289,7 +287,7 @@ export const getDefaultCollectionByUsername = async (
   return {
     ...collection,
     pictures: collection.pictures.map((p) => ({
-      pictureId: p.pictureId,
+      pictureId: p.picture_id,
       picture: transformPictureSizes(p.picture),
     })),
   };
@@ -299,7 +297,7 @@ export const getUserCollectionDetails = async (
   username: string,
   collectionId: string | number,
 ): Promise<UserCollectionDetails> => {
-  const user = await prisma.user.findFirstOrThrow({
+  const user = await prisma.users.findFirstOrThrow({
     where: {
       username: username,
     },
@@ -307,7 +305,7 @@ export const getUserCollectionDetails = async (
 
   const collection = await prisma.collection.findFirstOrThrow({
     where: {
-      userId: user.id,
+      user_id: user.id,
       id: parseId(collectionId),
     },
     select: userCollectionDetailsSelect,
@@ -330,15 +328,15 @@ export const getUserCollectionDetails = async (
 export const createCollectionAndAddPictures = async (
   collectionName: string,
   pictureIds: number[],
-): Promise<Collection> => {
+): Promise<collection> => {
   const currentUser = await getCurrentUser();
 
   const transaction = async () => {
     const newCollection = await prisma.collection.create({
       data: {
         name: collectionName,
-        nameId: collectionName.toLowerCase().replace(/ /g, "-"),
-        isDefault: false,
+        name_id: collectionName.toLowerCase().replace(/ /g, "-"),
+        is_default: false,
         user: {
           connect: {
             id: currentUser.id,
@@ -347,28 +345,28 @@ export const createCollectionAndAddPictures = async (
       },
     });
 
-    const existingPictures = await prisma.pictureOnCollection.findMany({
+    const existingPictures = await prisma.picture_on_collection.findMany({
       where: {
-        pictureId: {
+        picture_id: {
           in: pictureIds,
         },
-        collectionId: newCollection.id,
+        collection_id: newCollection.id,
       },
     });
 
     const existingPictureIds = existingPictures.map((pic) => {
-      return pic.pictureId;
+      return pic.picture_id;
     });
     const newPictureIds = pictureIds.filter((picId) => {
       return !existingPictureIds.includes(picId);
     });
 
     // Add pictures to the new collection
-    await prisma.pictureOnCollection.createMany({
+    await prisma.picture_on_collection.createMany({
       data: newPictureIds.map((pictureId) => {
         return {
-          collectionId: newCollection.id,
-          pictureId,
+          collection_id: newCollection.id,
+          picture_id: pictureId,
         };
       }),
       skipDuplicates: true,
@@ -379,7 +377,7 @@ export const createCollectionAndAddPictures = async (
       await prisma.picture.updateMany({
         where: { id: { in: newPictureIds } },
         data: {
-          isInAnyCollection: true,
+          is_in_any_collection: true,
         },
       });
     }
@@ -407,22 +405,22 @@ export const deleteCollection = async (collectionId: number): Promise<void> => {
       // Check if the collection to be deleted is not the default one
       const collectionToDelete = await prisma.collection.findUnique({
         where: { id: collectionId },
-        select: { isDefault: true },
+        select: { is_default: true },
       });
 
-      if (!collectionToDelete || collectionToDelete.isDefault) {
+      if (!collectionToDelete || collectionToDelete.is_default) {
         throw new Error("Cannot delete the default collection.");
       }
 
       // Get all pictures in the collection
-      const picturesInCollection = await prisma.pictureOnCollection.findMany({
-        where: { collectionId },
-        select: { pictureId: true },
+      const picturesInCollection = await prisma.picture_on_collection.findMany({
+        where: { collection_id: collectionId },
+        select: { picture_id: true },
       });
 
       // Delete all picture-collection associations
-      await prisma.pictureOnCollection.deleteMany({
-        where: { collectionId },
+      await prisma.picture_on_collection.deleteMany({
+        where: { collection_id: collectionId },
       });
 
       // Delete the collection
@@ -430,25 +428,24 @@ export const deleteCollection = async (collectionId: number): Promise<void> => {
         where: { id: collectionId },
       });
 
-      // Check and update isInAnyCollection for each picture
-      for (const { pictureId } of picturesInCollection) {
-        const remainingCollections = await prisma.pictureOnCollection.findFirst(
-          {
+      // Check and update is_in_any_collection for each picture
+      for (const { picture_id } of picturesInCollection) {
+        const remainingCollections =
+          await prisma.picture_on_collection.findFirst({
             where: {
-              pictureId,
+              picture_id,
               collection: {
-                userId: currentUser.id,
-                isDefault: false, // Exclude the default collection
+                user_id: currentUser.id,
+                is_default: false, // Exclude the default collection
               },
             },
-          },
-        );
+          });
 
         if (!remainingCollections) {
           await prisma.picture.update({
-            where: { id: pictureId },
+            where: { id: picture_id },
             data: {
-              isInAnyCollection: false,
+              is_in_any_collection: false,
             },
           });
         }
@@ -471,7 +468,7 @@ export const updateCollectionName = async (
       },
       data: {
         name: newName,
-        nameId: newName.toLowerCase().replace(/ /g, "-"),
+        name_id: newName.toLowerCase().replace(/ /g, "-"),
       },
     });
   } catch (error) {

@@ -5,9 +5,10 @@ import UserProfilePosts from "./posts/_components/UserProfilePosts";
 
 const UserProfilePage = async ({ params }: ServerPageProps<"username">) => {
   const userUsername = params.username;
+  console.log("😀😀 userUsername ~ ", userUsername);
 
+  if (!userUsername) return null;
   const userProfile = await getUserProfile(userUsername);
-  if (!userProfile) return null;
 
   return (
     <UserProfilePosts username={userUsername} userProfileId={userProfile.id} />

@@ -72,11 +72,11 @@ const UploadPostDialog = ({
   const defaultValues: RHFFormData = useMemo(() => {
     if (picture) {
       return {
-        picture: picture.fileName,
+        picture: picture.file_name,
         description: picture.description || "",
-        altText: picture.altText || "",
-        hideLikesAndViewCounts: picture.hideLikesAndViewCounts,
-        disableComments: picture.disableComments,
+        altText: picture.alt_text || "",
+        hideLikesAndViewCounts: picture.hide_likes_and_view_counts,
+        disableComments: picture.disable_comments,
       };
     }
 

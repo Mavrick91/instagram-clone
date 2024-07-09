@@ -32,7 +32,7 @@ const PostActionDialog = ({ picture }: PostActionProps) => {
   });
 
   const handleUpdatePicture = useCallback(
-    async (field: "hideLikesAndViewCounts" | "disableComments") => {
+    async (field: "hide_likes_and_view_counts" | "disable_comments") => {
       closeModal("postActionDialog");
       await optimisticUpdate<UserPictureDetails>({
         queryKey: ["picture", picture.id],
@@ -80,17 +80,17 @@ const PostActionDialog = ({ picture }: PostActionProps) => {
         { key: "edit", label: "Edit", onClick: handleEditPicture },
         {
           key: "toggle-like-count",
-          label: picture.hideLikesAndViewCounts
+          label: picture.hide_likes_and_view_counts
             ? "Unhide like count to others"
             : "Hide like count to others",
-          onClick: () => handleUpdatePicture("hideLikesAndViewCounts"),
+          onClick: () => handleUpdatePicture("hide_likes_and_view_counts"),
         },
         {
           key: "toggle-comments",
-          label: picture.disableComments
+          label: picture.disable_comments
             ? "Turn on commenting"
             : "Turn off commenting",
-          onClick: () => handleUpdatePicture("disableComments"),
+          onClick: () => handleUpdatePicture("disable_comments"),
         },
       );
     } else {
@@ -108,8 +108,8 @@ const PostActionDialog = ({ picture }: PostActionProps) => {
     user.id,
     picture.user.id,
     picture.user.username,
-    picture.hideLikesAndViewCounts,
-    picture.disableComments,
+    picture.hide_likes_and_view_counts,
+    picture.disable_comments,
     picture.id,
     handleEditPicture,
     optimisticUpdate,

@@ -15,25 +15,27 @@ const NOTIFICATION_CATEGORIES = [
   {
     label: "Today",
     filter: (notification: PrismaNotification) => {
-      return moment().isSame(notification.createdAt, "day");
+      return moment().isSame(notification.created_at, "day");
     },
   },
   {
     label: "Yesterday",
     filter: (notification: PrismaNotification) => {
-      return moment().subtract(1, "days").isSame(notification.createdAt, "day");
+      return moment()
+        .subtract(1, "days")
+        .isSame(notification.created_at, "day");
     },
   },
   {
     label: "Last 7 days",
     filter: (notification: PrismaNotification) => {
-      return moment().diff(notification.createdAt, "days") <= 7;
+      return moment().diff(notification.created_at, "days") <= 7;
     },
   },
   {
     label: "Last 30 days",
     filter: (notification: PrismaNotification) => {
-      return moment().diff(notification.createdAt, "days") <= 30;
+      return moment().diff(notification.created_at, "days") <= 30;
     },
   },
   {

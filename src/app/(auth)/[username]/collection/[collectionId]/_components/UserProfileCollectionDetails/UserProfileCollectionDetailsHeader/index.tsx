@@ -22,7 +22,7 @@ const UserProfileCollectionDetailsHeader = ({
       <BackToSavedLink username={username} />
       <div className="mb-1 flex min-h-10 items-center justify-between">
         <h2 className="text-xl">{userCollectionDetails.name}</h2>
-        {!userCollectionDetails.isDefault && (
+        {!userCollectionDetails.is_default && (
           <Button
             variant="ghost"
             onClick={() =>

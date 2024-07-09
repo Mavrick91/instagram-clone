@@ -1,6 +1,6 @@
 "use server";
 
-import { User } from "@prisma/client";
+import { users } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { revalidatePath } from "next/cache";
@@ -30,7 +30,7 @@ export const getCurrentUser = async (): Promise<CurrentUserType> => {
     email: string;
   };
 
-  const currentUser = await prisma.user.findUnique({
+  const currentUser = await prisma.users.findUnique({
     where: {
       email: decoded.email,
     },
@@ -46,7 +46,7 @@ export const getCurrentUser = async (): Promise<CurrentUserType> => {
 
 export const login = async (email: string, password: string) => {
   try {
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.users.findUnique({ where: { email } });
 
     if (user && (await bcrypt.compare(password, user.password))) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -85,24 +85,24 @@ export const logout = async () => {
   redirect("/login");
 };
 
-export const getMockedUser = async (): Promise<User[]> => {
-  return prisma.user.findMany({
+export const getMockedUser = async (): Promise<users[]> => {
+  return prisma.users.findMany({
     where: {
-      isMock: true,
+      is_mock: true,
     },
   });
 };
 
-export const getAllUsers = async (): Promise<User[]> => {
+export const getAllUsers = async (): Promise<users[]> => {
   const currentUser = await getCurrentUser();
 
-  return prisma.user.findMany({ where: { id: { not: currentUser.id } } });
+  return prisma.users.findMany({ where: { id: { not: currentUser.id } } });
 };
 
-export const getUserByUsername = async (username: string): Promise<User[]> => {
+export const getUserByUsername = async (username: string): Promise<users[]> => {
   const currentUser = await getCurrentUser();
 
-  return prisma.user.findMany({
+  return prisma.users.findMany({
     where: {
       username: {
         contains: username,
@@ -116,7 +116,7 @@ export const getUserByUsername = async (username: string): Promise<User[]> => {
 export const getUserProfile = async (
   username: string,
 ): Promise<UserProfileType> => {
-  return prisma.user.findFirstOrThrow({
+  return prisma.users.findFirstOrThrow({
     where: {
       username,
     },
@@ -127,15 +127,15 @@ export const getUserProfile = async (
 export const updateUserProfile = async (
   username: string,
   updateUserInput: {
-    firstName: string;
-    lastName: string;
+    first_name: string;
+    last_name: string;
     bio?: string;
     avatar?: string;
-    avatarName?: string;
+    avatar_name?: string;
   },
   options?: RevalidatePath,
 ) => {
-  await prisma.user.update({
+  await prisma.users.update({
     where: {
       username,
     },

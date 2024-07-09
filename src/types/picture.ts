@@ -20,14 +20,14 @@ export type PictureWithSizes<T> = T & {
 
 export const userPictureDetailsSelect = {
   id: true,
-  createdAt: true,
-  disableComments: true,
+  created_at: true,
+  disable_comments: true,
   sizes: true,
   description: true,
-  hideLikesAndViewCounts: true,
-  fileName: true,
-  altText: true,
-  isInAnyCollection: true,
+  hide_likes_and_view_counts: true,
+  file_name: true,
+  alt_text: true,
+  is_in_any_collection: true,
   _count: {
     select: {
       comments: true,
@@ -39,13 +39,13 @@ export const userPictureDetailsSelect = {
       id: true,
       username: true,
       avatar: true,
-      firstName: true,
-      lastName: true,
+      first_name: true,
+      last_name: true,
     },
   },
   likes: {
     select: {
-      userId: true,
+      user_id: true,
       user: {
         select: {
           username: true,
@@ -55,24 +55,24 @@ export const userPictureDetailsSelect = {
   },
 };
 
-export type UserPictureDetailsSelect = Prisma.PictureGetPayload<{
+export type UserPictureDetailsSelect = Prisma.pictureGetPayload<{
   select: typeof userPictureDetailsSelect;
 }>;
 
 export type UserPictureDetails = UserPictureDetailsSelect & {
   comments: CommentsPicture[];
-  isLiked: boolean;
-  isSaved: boolean;
+  is_liked: boolean;
+  is_saved: boolean;
 } & { sizes: Sizes };
 
 export const pictureLightSelect = {
   id: true,
-  altText: true,
+  alt_text: true,
   sizes: true,
-  fileName: true,
+  file_name: true,
   description: true,
-  hideLikesAndViewCounts: true,
-  disableComments: true,
+  hide_likes_and_view_counts: true,
+  disable_comments: true,
   _count: {
     select: {
       comments: true,
@@ -81,6 +81,6 @@ export const pictureLightSelect = {
   },
 };
 
-export type PictureLightType = Prisma.PictureGetPayload<{
+export type PictureLightType = Prisma.pictureGetPayload<{
   select: typeof pictureLightSelect;
 }>;

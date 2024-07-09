@@ -21,8 +21,8 @@ const shouldShowTimestamp = (
     return true;
   }
 
-  const currentTimestamp = new Date(currentMessage.createdAt).getTime();
-  const previousTimestamp = new Date(previousMessage.createdAt).getTime();
+  const currentTimestamp = new Date(currentMessage.created_at).getTime();
+  const previousTimestamp = new Date(previousMessage.created_at).getTime();
   const timeDifference = currentTimestamp - previousTimestamp;
 
   return timeDifference >= TIMESTAMP_THRESHOLD;
@@ -67,7 +67,7 @@ const ConversationThreadMessages = ({
         <div className="flex flex-col items-center justify-center self-stretch py-6">
           <UserAvatar avatar={recipientUser.avatar} width={96} />
           <div className="my-4 text-xl font-bold text-ig-primary-text">
-            {recipientUser.firstName} {recipientUser.lastName}
+            {recipientUser.first_name} {recipientUser.last_name}
           </div>
           <Button variant="gray">
             <Link href={`/${recipientUser.username}`}>View Profile</Link>

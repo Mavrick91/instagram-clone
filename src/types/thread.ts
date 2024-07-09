@@ -4,7 +4,7 @@ export const createThreadSelect = {
   id: true,
 };
 
-export type NewThread = Prisma.PictureGetPayload<{
+export type NewThread = Prisma.pictureGetPayload<{
   select: typeof createThreadSelect;
 }>;
 
@@ -14,8 +14,8 @@ export const getThreadSelect = {
     select: {
       id: true,
       content: true,
-      threadId: true,
-      createdAt: true,
+      thread_id: true,
+      created_at: true,
       user: {
         select: {
           id: true,
@@ -27,14 +27,14 @@ export const getThreadSelect = {
     select: {
       id: true,
       username: true,
-      firstName: true,
-      lastName: true,
+      first_name: true,
+      last_name: true,
       avatar: true,
     },
   },
 };
 
-export type Thread = Prisma.ThreadGetPayload<{
+export type Thread = Prisma.threadGetPayload<{
   select: typeof getThreadSelect;
 }>;
 

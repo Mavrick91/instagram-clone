@@ -1,6 +1,6 @@
 "use client";
 
-import { User } from "@prisma/client";
+import { users } from "@prisma/client";
 
 import { useUserInfo } from "@/providers/UserInfoProvider";
 import { getIsCurrentUserFollowingProfile } from "@/utils/user";
@@ -8,7 +8,7 @@ import { getIsCurrentUserFollowingProfile } from "@/utils/user";
 import SuggestFollowListItem from "./SuggestFollowListItem";
 
 type SuggestFollowListProps = {
-  allUsers: User[];
+  allUsers: users[];
 };
 
 const SuggestFollowList = ({ allUsers }: SuggestFollowListProps) => {
@@ -28,10 +28,10 @@ const SuggestFollowList = ({ allUsers }: SuggestFollowListProps) => {
             <SuggestFollowListItem
               key={user.id}
               avatar={user.avatar}
-              firstName={user.firstName}
+              first_name={user.first_name}
               id={user.id}
               isFollowing={isFollowing}
-              lastName={user.lastName}
+              last_name={user.last_name}
               username={user.username}
             />
           );

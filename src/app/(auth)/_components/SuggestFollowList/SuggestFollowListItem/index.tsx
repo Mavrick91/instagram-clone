@@ -1,12 +1,12 @@
-import { User } from "@prisma/client";
+import { users } from "@prisma/client";
 import Link from "next/link";
 
 import ButtonFollow from "@/components/ButtonFollow";
 import UserListItem from "@/components/UserListItem";
 
 type SuggestFollowListItemProps = Pick<
-  User,
-  "username" | "avatar" | "firstName" | "lastName" | "id"
+  users,
+  "username" | "avatar" | "first_name" | "last_name" | "id"
 > & {
   isFollowing: boolean;
 };
@@ -14,8 +14,8 @@ type SuggestFollowListItemProps = Pick<
 const SuggestFollowListItem = ({
   username,
   avatar,
-  firstName,
-  lastName,
+  first_name,
+  last_name,
   id,
   isFollowing,
 }: SuggestFollowListItemProps) => {
@@ -25,7 +25,7 @@ const SuggestFollowListItem = ({
         <Link href={`/${username}`}>
           <UserListItem
             avatar={avatar}
-            bottomText={`${firstName} ${lastName}`}
+            bottomText={`${first_name} ${last_name}`}
             topText={username}
             width={32}
           />

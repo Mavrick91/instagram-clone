@@ -6,7 +6,7 @@
     "dev": "node server.mjs",
     "dev-debug": "NODE_OPTIONS='--inspect' next",
     "build": "next build",
-    "start": "NODE_ENV=production node server.mjs",
+    "start": "set NODE_ENV=production&& node server.mjs",
     "lint": "next lint",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -15,9 +15,9 @@
     "check": "tsc --noEmit",
     "seed": "node prisma/seed.mjs",
     "clear-s3": "node script/clearS3Bucket.mjs",
-    "drop-db": "PGPASSWORD=postgres psql -h localhost -U postgres -c \"DROP DATABASE IF EXISTS \\\"instagram-clone-db\\\"\"",
-    "create-db": "PGPASSWORD=postgres psql -h localhost -U postgres -c \"CREATE DATABASE \\\"instagram-clone-db\\\"\"",
-    "reset": "npm run drop-db && npm run create-db && npm run clear-s3 && npx prisma db push && npm run seed"
+    "drop-db": "set PGPASSWORD=postgres&& psql -h localhost -U postgres -c \"DROP DATABASE IF EXISTS \\\"instagram-clone-db\\\"\"",
+    "create-db": "set PGPASSWORD=postgres&& psql -h localhost -U postgres -c \"CREATE DATABASE \\\"instagram-clone-db\\\"\"",
+    "reset": "npm run drop-db && npm run create-db && npm run clear-s3 && npx prisma db push && npx prisma generate && npm run seed"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.600.0",

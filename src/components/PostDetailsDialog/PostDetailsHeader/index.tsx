@@ -31,7 +31,7 @@ const PostDetailsHeader = ({ picture }: PostDetailsHeaderProps) => {
                 className="ml-4 text-sm font-semibold text-ig-primary-text"
                 href={`/${picture.user.username}`}
               >
-                {picture.user.firstName} {picture.user.lastName}
+                {picture.user.first_name} {picture.user.last_name}
               </Link>
               {currentUser.id !== picture.user?.id && (
                 <>

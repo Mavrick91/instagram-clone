@@ -55,10 +55,10 @@ const ConversationListItem = ({
             <div className="flex gap-1">
               <span>{lastMessage?.user?.id === user.id ? "You: " : ""}</span>
               <span className="truncate">{lastMessage?.content}</span>
-              <span> · {moment(lastMessage?.createdAt).fromNow()}</span>
+              <span> · {moment(lastMessage?.created_at).fromNow()}</span>
             </div>
           }
-          topText={recipientUser.firstName}
+          topText={recipientUser.first_name}
           width={56}
         />
       </div>

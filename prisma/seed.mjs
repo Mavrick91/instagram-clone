@@ -73,19 +73,19 @@ async function main() {
     return {
       email: faker.internet.email().toLowerCase(),
       password: hashedPassword,
-      firstName: faker.person.firstName(),
-      lastName: faker.person.lastName(),
+      first_name: faker.person.firstName(),
+      last_name: faker.person.lastName(),
       avatar: faker.image.avatar(),
       username: faker.internet.userName().toLowerCase(),
-      isMock: true,
+      is_mock: true,
     };
   });
 
-  const createdUsers = await prisma.user.createMany({
+  const createdUsers = await prisma.users.createMany({
     data: mockUsers,
   });
 
-  const userIds = await prisma.user.findMany({
+  const userIds = await prisma.users.findMany({
     select: { id: true },
     take: createdUsers.count,
   });
@@ -94,9 +94,9 @@ async function main() {
     await prisma.collection.create({
       data: {
         name: "All posts",
-        nameId: "all-posts",
-        userId: user.id,
-        isDefault: true,
+        name_id: "all-posts",
+        user_id: user.id,
+        is_default: true,
       },
     });
   }
@@ -108,9 +108,9 @@ async function main() {
       const sizes = await fetchAndProcessImage(imageUrl, baseKey);
 
       return {
-        fileName: faker.system.commonFileName("webp"),
+        file_name: faker.system.commonFileName("webp"),
         description: faker.lorem.sentence(),
-        userId: faker.helpers.arrayElement(userIds).id,
+        user_id: faker.helpers.arrayElement(userIds).id,
         sizes: sizes,
       };
     }),
@@ -129,8 +129,8 @@ async function main() {
   const mockComments = Array.from({ length: 50 }, () => {
     return {
       content: faker.lorem.paragraph(),
-      userId: faker.helpers.arrayElement(userIds).id,
-      pictureId: faker.helpers.arrayElement(pictureIds).id,
+      user_id: faker.helpers.arrayElement(userIds).id,
+      picture_id: faker.helpers.arrayElement(pictureIds).id,
     };
   });
 

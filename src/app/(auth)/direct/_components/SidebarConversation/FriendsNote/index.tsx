@@ -36,7 +36,7 @@ export const FriendsNote = ({ thoughtContent, userAvatar }: Props) => {
         <UserAvatar avatar={userAvatar} width={72} />
         <span className="mt-1 max-w-[96px] truncate whitespace-nowrap text-xs">
           {user.thought ? (
-            <span className="text-ig-primary-text">{`${user.firstName} ${user.lastName}`}</span>
+            <span className="text-ig-primary-text">{`${user.first_name} ${user.last_name}`}</span>
           ) : (
             <span className="text-ig-secondary-text">Your note</span>
           )}

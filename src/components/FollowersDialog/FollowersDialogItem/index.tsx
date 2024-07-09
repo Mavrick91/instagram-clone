@@ -10,15 +10,15 @@ import { useUserInfo } from "@/providers/UserInfoProvider";
 import { UserFollowType } from "@/types/follow";
 
 type Props = {
-  follower: UserFollowType["initiator"] | UserFollowType["targetUser"];
+  follower: UserFollowType["initiator"] | UserFollowType["target_user"];
 };
 
 const FollowersDialogItem = ({ follower }: Props) => {
   const params = useParams();
   const user = useUserInfo();
 
-  const isFollowingProfile = user.initiatedFollows.some((initiateFollow) => {
-    return initiateFollow.targetUserId === follower.id;
+  const isFollowingProfile = user.initiated_follows.some((initiateFollow) => {
+    return initiateFollow.target_user_id === follower.id;
   });
 
   return (
@@ -27,7 +27,7 @@ const FollowersDialogItem = ({ follower }: Props) => {
         <Link href={`/${follower.username}`}>
           <UserListItem
             avatar={follower.avatar}
-            bottomText={`${follower.firstName} ${follower.lastName}`}
+            bottomText={`${follower.first_name} ${follower.last_name}`}
             topText={follower.username}
             width={44}
           />

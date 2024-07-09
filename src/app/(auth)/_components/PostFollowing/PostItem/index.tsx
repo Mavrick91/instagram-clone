@@ -42,7 +42,7 @@ const PostItem = ({ pictureId }: Props) => {
       />
       <PostPicture picture={picture} />
       <PostCTA pictureId={picture.id} />
-      {!picture.disableComments && (
+      {!picture.disable_comments && (
         <>
           <PostCaption
             description={picture.description}
