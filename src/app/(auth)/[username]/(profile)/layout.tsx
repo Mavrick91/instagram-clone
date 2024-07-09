@@ -1,5 +1,3 @@
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-
 import { getUserProfile } from "@/actions/user";
 import UserProfile from "@/app/(auth)/[username]/(profile)/_components/UserProfile";
 import UserProfileTab from "@/app/(auth)/[username]/(profile)/_components/UserProfileTab";
@@ -24,19 +22,15 @@ const ProfileLayout = async ({
 
   if (!userProfile) return <ErrorProfile />;
 
-  const dehydratedState = dehydrate(queryClient);
-
   return (
     <div className="mx-auto flex max-w-polaris-site-width-wide flex-col">
       <div className="px-5 pt-9">
-        <HydrationBoundary state={dehydratedState}>
-          <UserProfile initialUserProfile={userProfile} />
-          <UserProfileTab
-            username={userProfile.username}
-            userProfileId={userProfile.id}
-          />
-          {children}
-        </HydrationBoundary>
+        <UserProfile initialUserProfile={userProfile} />
+        <UserProfileTab
+          username={userProfile.username}
+          userProfileId={userProfile.id}
+        />
+        {children}
       </div>
     </div>
   );

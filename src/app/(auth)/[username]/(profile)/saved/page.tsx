@@ -1,5 +1,3 @@
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-
 import { getCollectionsByUserId } from "@/actions/collection";
 import { getUserProfile } from "@/actions/user";
 import getQueryClient from "@/lib/queryClient";
@@ -27,26 +25,22 @@ const SavedPage = async ({ params }: ServerPageProps<"username">) => {
     return collection.is_default;
   });
 
-  const dehydratedState = dehydrate(queryClient);
-
   return (
-    <HydrationBoundary state={dehydratedState}>
-      <div className="flex flex-col gap-3">
-        <UserProfileCollectionsHeader
-          defaultCollection={defaultCollection}
-          profileUsername={profileUsername}
-        />
-        <div>
-          <div className="grid grid-cols-3 gap-1">
-            <UserProfileCollections
-              profileUsername={profileUsername}
-              serverCollections={collections}
-              userProfileId={userProfile.id}
-            />
-          </div>
+    <div className="flex flex-col gap-3">
+      <UserProfileCollectionsHeader
+        defaultCollection={defaultCollection}
+        profileUsername={profileUsername}
+      />
+      <div>
+        <div className="grid grid-cols-3 gap-1">
+          <UserProfileCollections
+            profileUsername={profileUsername}
+            serverCollections={collections}
+            userProfileId={userProfile.id}
+          />
         </div>
       </div>
-    </HydrationBoundary>
+    </div>
   );
 };
 

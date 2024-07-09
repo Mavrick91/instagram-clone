@@ -45,32 +45,24 @@ const SideNavProvider = ({ children }: SideNavProviderProps) => {
   }, [windowWidth]);
 
   const toggleSideNav = useCallback(() => {
-    setSideNavOpen((prevSideNavOpen) => {
-      return !prevSideNavOpen;
-    });
+    setSideNavOpen((prevSideNavOpen) => !prevSideNavOpen);
   }, []);
 
   const toggleSearch = useCallback(() => {
-    setIsSearchVisible((prevIsSearchVisible) => {
-      return !prevIsSearchVisible;
-    });
+    setIsSearchVisible((prevIsSearchVisible) => !prevIsSearchVisible);
   }, []);
 
   const toggleNotification = useCallback(() => {
-    setIsNotificationVisible((prevIsNotificationVisible) => {
-      return !prevIsNotificationVisible;
-    });
+    setIsNotificationVisible(
+      (prevIsNotificationVisible) => !prevIsNotificationVisible,
+    );
   }, []);
 
   const toggleNewPost = useCallback(() => {
-    setIsNewPostVisible((prevIsNewPostVisible) => {
-      return !prevIsNewPostVisible;
-    });
+    setIsNewPostVisible((prevIsNewPostVisible) => !prevIsNewPostVisible);
   }, []);
 
-  const closeSearch = useCallback(() => {
-    setIsSearchVisible(false);
-  }, []);
+  const closeSearch = useCallback(() => setIsSearchVisible(false), []);
 
   useEffect(() => {
     closeSearch();

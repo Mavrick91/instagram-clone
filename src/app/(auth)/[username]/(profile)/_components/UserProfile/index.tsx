@@ -23,9 +23,7 @@ const UserProfile = ({ initialUserProfile }: UserProfileProps) => {
 
   const { data: userProfile } = useQuery<UserProfileType>({
     queryKey: ["user", initialUserProfile.username],
-    queryFn: () => {
-      return getUserProfile(initialUserProfile.username);
-    },
+    queryFn: () => getUserProfile(initialUserProfile.username),
     initialData: initialUserProfile,
   });
 

@@ -10,10 +10,9 @@ import { ReactNode, useState } from "react";
 
 type Props = {
   children: ReactNode;
-  dehydratedState: unknown;
 };
 
-const ReactQueryProvider = ({ children, dehydratedState }: Props) => {
+const ReactQueryProvider = ({ children }: Props) => {
   const [queryClient] = useState(() => {
     return new QueryClient({
       defaultOptions: {
@@ -26,7 +25,7 @@ const ReactQueryProvider = ({ children, dehydratedState }: Props) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <HydrationBoundary state={dehydratedState}>{children}</HydrationBoundary>
+      {children}
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );

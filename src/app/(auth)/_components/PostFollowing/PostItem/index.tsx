@@ -5,7 +5,6 @@ import { useQuery } from "@tanstack/react-query";
 import { getPictureDetails } from "@/actions/picture";
 import PostCTA from "@/components/PostCTA";
 import Separator from "@/components/ui/separator";
-import getQueryClient from "@/lib/queryClient";
 import { UserPictureDetails } from "@/types/picture";
 
 import PostAddComment from "./PostAddComment";
@@ -15,22 +14,16 @@ import PostHeader from "./PostHeader";
 import PostPicture from "./PostPicture";
 
 type Props = {
-  pictureId: number;
+  serverPictureDetails: UserPictureDetails;
 };
 
-const PostItem = ({ pictureId }: Props) => {
-  const queryClient = getQueryClient();
+const PostItem = ({ serverPictureDetails }: Props) => {
   const { data: picture } = useQuery<UserPictureDetails>({
-    queryKey: ["picture", pictureId],
+    queryKey: ["picture", serverPictureDetails.id],
     queryFn: () => {
-      return getPictureDetails(pictureId);
+      return getPictureDetails(serverPictureDetails.id);
     },
-    initialData: () => {
-      return queryClient.getQueryData<UserPictureDetails>([
-        "picture",
-        pictureId,
-      ])!;
-    },
+    initialData: serverPictureDetails,
   });
 
   return (

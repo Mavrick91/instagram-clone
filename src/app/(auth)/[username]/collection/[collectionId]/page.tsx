@@ -1,5 +1,3 @@
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-
 import { getUserCollectionDetails } from "@/actions/collection";
 import getQueryClient from "@/lib/queryClient";
 import { UserCollectionDetails } from "@/types/collection";
@@ -17,20 +15,15 @@ const CollectionPage = async ({
   const serverUserCollectionDetails =
     await queryClient.ensureQueryData<UserCollectionDetails>({
       queryKey: ["collection", username, collectionId],
-      queryFn: async () => {
-        return await getUserCollectionDetails(username, collectionId);
-      },
+      queryFn: async () =>
+        await getUserCollectionDetails(username, collectionId),
     });
 
-  const dehydratedState = dehydrate(queryClient);
-
   return (
-    <HydrationBoundary state={dehydratedState}>
-      <UserProfileCollectionDetails
-        serverUserCollectionDetails={serverUserCollectionDetails}
-        username={username}
-      />
-    </HydrationBoundary>
+    <UserProfileCollectionDetails
+      serverUserCollectionDetails={serverUserCollectionDetails}
+      username={username}
+    />
   );
 };
 

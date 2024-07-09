@@ -46,7 +46,7 @@ const usePostCTALogic = (pictureId: number) => {
       updateFn: (oldData) => {
         return {
           ...oldData,
-          isLiked: !oldData.is_liked,
+          is_liked: !oldData.is_liked,
           _count: {
             ...oldData._count,
             likes: oldData._count.likes + (oldData.is_liked ? -1 : 1),
@@ -82,7 +82,7 @@ const usePostCTALogic = (pictureId: number) => {
       optimisticUpdate<UserPictureDetails>({
         queryKey: ["picture", pictureId],
         updateFn: (oldData) => {
-          return { ...oldData, isSaved: !oldData.is_saved };
+          return { ...oldData, is_saved: !oldData.is_saved };
         },
         action: async (oldData) => {
           oldData.is_saved
