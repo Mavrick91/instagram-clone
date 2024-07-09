@@ -2,7 +2,7 @@ import { Prisma } from "@prisma/client";
 
 import { followInitiatorOrTargetSelect } from "@/types/user";
 
-const userFollowTypeSelect = {
+const userFollowTypeSelect: Prisma.followSelect = {
   id: true,
   initiator: {
     select: followInitiatorOrTargetSelect,

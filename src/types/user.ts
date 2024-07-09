@@ -28,7 +28,7 @@ export type CurrentUserType = Prisma.usersGetPayload<{
   select: typeof currentUserSelect;
 }>;
 
-export const followInitiatorOrTargetSelect = {
+export const followInitiatorOrTargetSelect: Prisma.usersSelect = {
   id: true,
   username: true,
   avatar: true,
@@ -77,15 +77,11 @@ export type UserProfileType = Prisma.usersGetPayload<{
 }>;
 
 type InitiatorFollowerType = {
-  initiator: NonNullable<
-    UserProfileType["received_follows"]
-  >[number]["initiator"];
+  initiator: UserProfileType["received_follows"][number]["initiator"];
 };
 
 type TargetUserFollowerType = {
-  target_user: NonNullable<
-    UserProfileType["initiated_follows"]
-  >[number]["target_user"];
+  target_user: UserProfileType["initiated_follows"][number]["target_user"];
 };
 
 export type FollowerType = InitiatorFollowerType | TargetUserFollowerType;

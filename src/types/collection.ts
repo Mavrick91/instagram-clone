@@ -8,7 +8,7 @@ import {
   userPictureDetailsSelect,
 } from "./picture";
 
-export const lightCollectionByUserIdSelect = {
+export const lightCollectionByUserIdSelect: Prisma.collectionSelect = {
   id: true,
   name_id: true,
   name: true,
@@ -21,7 +21,7 @@ export const lightCollectionByUserIdSelect = {
       },
     },
   },
-} as const;
+};
 
 export type LightCollectionByUserId = Omit<
   Prisma.collectionGetPayload<{
@@ -34,7 +34,7 @@ export type LightCollectionByUserId = Omit<
     picture: PictureWithSizes<PictureLightType>;
   }[];
 };
-export const userCollectionDetailsSelect = {
+export const userCollectionDetailsSelect: Prisma.collectionSelect = {
   id: true,
   name_id: true,
   name: true,
@@ -46,7 +46,7 @@ export const userCollectionDetailsSelect = {
       },
     },
   },
-} as const;
+};
 
 export type UserCollectionDetails = Omit<
   Prisma.collectionGetPayload<{

@@ -4,7 +4,7 @@ import { PictureWithSizes } from "@/types/picture";
 
 export type NotificationType = "LIKE" | "COMMENT" | "FOLLOW";
 
-export const notificationTypeSelect = {
+export const notificationTypeSelect: Prisma.notificationSelect = {
   id: true,
   read: true,
   type: true,
@@ -12,7 +12,7 @@ export const notificationTypeSelect = {
   sender: true,
   picture: true,
   comment: true,
-} as const;
+};
 
 export type PrismaNotification = Omit<
   Prisma.notificationGetPayload<{

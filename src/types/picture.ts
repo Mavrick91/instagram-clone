@@ -18,7 +18,7 @@ export type PictureWithSizes<T> = T & {
   sizes: Sizes;
 };
 
-export const userPictureDetailsSelect = {
+export const userPictureDetailsSelect: Prisma.pictureSelect = {
   id: true,
   created_at: true,
   disable_comments: true,
@@ -65,7 +65,7 @@ export type UserPictureDetails = UserPictureDetailsSelect & {
   is_saved: boolean;
 } & { sizes: Sizes };
 
-export const pictureLightSelect = {
+export const pictureLightSelect: Prisma.pictureSelect = {
   id: true,
   alt_text: true,
   sizes: true,

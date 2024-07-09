@@ -1,14 +1,14 @@
 import { Prisma } from "@prisma/client";
 
-export const createThreadSelect = {
+export const createThreadSelect: Prisma.threadSelect = {
   id: true,
 };
 
-export type NewThread = Prisma.pictureGetPayload<{
+export type NewThread = Prisma.threadGetPayload<{
   select: typeof createThreadSelect;
 }>;
 
-export const getThreadSelect = {
+export const getThreadSelect: Prisma.threadSelect = {
   id: true,
   messages: {
     select: {
