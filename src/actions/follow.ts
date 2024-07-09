@@ -7,7 +7,7 @@ export const followUser = async (targetUserId: number) => {
   try {
     const currentUser = await getCurrentUser();
 
-    await prisma.follow.create({
+    await prisma.follows.create({
       data: {
         initiator_id: currentUser.id,
         target_user_id: targetUserId,
@@ -23,7 +23,7 @@ export const unfollowUser = async (targetUserId: number) => {
   try {
     const currentUser = await getCurrentUser();
 
-    await prisma.follow.deleteMany({
+    await prisma.follows.deleteMany({
       where: {
         initiator_id: currentUser.id,
         target_user_id: targetUserId,

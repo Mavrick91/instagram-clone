@@ -10,14 +10,14 @@ import {
 import { transformPictureSizes } from "@/utils/picture";
 
 type CreateNotificationInput = {
-  type: Prisma.notificationCreateInput["type"];
+  type: Prisma.notificationsCreateInput["type"];
   senderId: number;
   receiverId: number;
   pictureId?: number;
   commentId?: number;
 };
 
-export type NotificationWithRelations = Prisma.notificationGetPayload<{
+export type NotificationWithRelations = Prisma.notificationsGetPayload<{
   include: {
     sender: true;
     receiver: true;
@@ -33,7 +33,7 @@ export const createOrUpdateNotification = async (
 
   if (senderId === receiverId) return null;
 
-  const existingNotification = await prisma.notification.findFirst({
+  const existingNotification = await prisma.notifications.findFirst({
     where: {
       type,
       sender_id: senderId,
@@ -44,7 +44,7 @@ export const createOrUpdateNotification = async (
   });
 
   if (existingNotification) {
-    return prisma.notification.update({
+    return prisma.notifications.update({
       where: { id: existingNotification.id },
       data: {
         created_at: new Date(),
@@ -58,7 +58,7 @@ export const createOrUpdateNotification = async (
       },
     });
   } else {
-    return prisma.notification.create({
+    return prisma.notifications.create({
       data: {
         type,
         sender: { connect: { id: senderId } },
@@ -85,14 +85,14 @@ export const getAllNotifications = async (
     const skip = (page - 1) * limit;
 
     const [notifications, totalCount] = await Promise.all([
-      prisma.notification.findMany({
+      prisma.notifications.findMany({
         where: { receiver_id: userId },
         orderBy: { created_at: "desc" },
         select: notificationTypeSelect,
         skip,
         take: limit,
       }),
-      prisma.notification.count({
+      prisma.notifications.count({
         where: { receiver_id: userId },
       }),
     ]);
@@ -115,12 +115,12 @@ export const getAllNotifications = async (
 
 export const markNotificationsAsRead = async (notificationIds: number[]) => {
   {
-    await prisma.notification.updateMany({
+    await prisma.notifications.updateMany({
       where: { id: { in: notificationIds } },
       data: { read: true },
     });
 
-    return prisma.notification.findMany({
+    return prisma.notifications.findMany({
       where: { id: { in: notificationIds } },
     });
   }

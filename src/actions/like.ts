@@ -8,7 +8,7 @@ export const likePicture = async (pictureId: number): Promise<void> => {
   try {
     const currentUser = await getCurrentUser();
 
-    const existingLike = await prisma.like.findFirst({
+    const existingLike = await prisma.likes.findFirst({
       where: {
         user_id: currentUser.id,
         picture_id: pictureId,
@@ -19,7 +19,7 @@ export const likePicture = async (pictureId: number): Promise<void> => {
       throw new Error("Picture has already been liked by the user");
     }
 
-    await prisma.like.create({
+    await prisma.likes.create({
       data: {
         user_id: currentUser.id,
         picture_id: pictureId,
@@ -35,14 +35,14 @@ export const unlikePicture = async (pictureId: number): Promise<void> => {
   try {
     const currentUser = await getCurrentUser();
 
-    const existingLike = await prisma.like.findFirstOrThrow({
+    const existingLike = await prisma.likes.findFirstOrThrow({
       where: {
         user_id: currentUser.id,
         picture_id: pictureId,
       },
     });
 
-    await prisma.like.delete({
+    await prisma.likes.delete({
       where: {
         id: existingLike.id,
       },
@@ -59,7 +59,7 @@ export const getIsPictureLiked = async (
   try {
     const currentUser = await getCurrentUser();
 
-    const isLiked = await prisma.like.findFirst({
+    const isLiked = await prisma.likes.findFirst({
       where: {
         user_id: currentUser.id,
         picture_id: pictureId,

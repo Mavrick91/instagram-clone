@@ -1,14 +1,14 @@
 import { Prisma } from "@prisma/client";
 
-export const createThreadSelect: Prisma.threadSelect = {
+export const createThreadSelect = {
   id: true,
 };
 
-export type NewThread = Prisma.threadGetPayload<{
+export type NewThread = Prisma.threadsGetPayload<{
   select: typeof createThreadSelect;
 }>;
 
-export const getThreadSelect: Prisma.threadSelect = {
+export const getThreadSelect = {
   id: true,
   messages: {
     select: {
@@ -34,7 +34,7 @@ export const getThreadSelect: Prisma.threadSelect = {
   },
 };
 
-export type Thread = Prisma.threadGetPayload<{
+export type Thread = Prisma.threadsGetPayload<{
   select: typeof getThreadSelect;
 }>;
 

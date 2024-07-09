@@ -2,7 +2,7 @@ import { Prisma } from "@prisma/client";
 
 import { followInitiatorOrTargetSelect } from "@/types/user";
 
-const userFollowTypeSelect: Prisma.followSelect = {
+const userFollowTypeSelect = {
   id: true,
   initiator: {
     select: followInitiatorOrTargetSelect,
@@ -12,6 +12,6 @@ const userFollowTypeSelect: Prisma.followSelect = {
   },
 };
 
-export type UserFollowType = Prisma.followGetPayload<{
+export type UserFollowType = Prisma.followsGetPayload<{
   select: typeof userFollowTypeSelect;
 }>;

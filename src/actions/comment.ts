@@ -8,7 +8,7 @@ import { getCurrentUser } from "./user";
 export const getCommentsForPicture = async (
   pictureId: number,
 ): Promise<CommentsPicture[]> => {
-  return prisma.comment.findMany({
+  return prisma.comments.findMany({
     where: {
       picture_id: pictureId,
     },
@@ -23,7 +23,7 @@ export const createComment = async (pictureId: number, content: string) => {
   try {
     const currentUser = await getCurrentUser();
 
-    return await prisma.comment.create({
+    return await prisma.comments.create({
       data: {
         content,
         picture_id: pictureId,

@@ -8,7 +8,7 @@ generator client {
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
-model notification {
+model notifications {
   id          Int               @id @default(autoincrement())
   created_at  DateTime          @default(now())
   updated_at  DateTime          @updatedAt
@@ -17,9 +17,9 @@ model notification {
   sender_id   Int
   receiver    users             @relation("ReceivedNotifications", fields: [receiver_id], references: [id])
   receiver_id Int
-  picture     picture?          @relation(fields: [picture_id], references: [id])
+  picture     pictures?          @relation(fields: [picture_id], references: [id])
   picture_id  Int?
-  comment     comment?          @relation(fields: [comment_id], references: [id])
+  comment     comments?          @relation(fields: [comment_id], references: [id])
   comment_id  Int?
 
   read Boolean @default(false)
@@ -46,42 +46,42 @@ model users {
   avatar_name            String?
   created_at             DateTime       @default(now())
   updated_at             DateTime       @updatedAt
-  pictures               picture[]
-  comments               comment[]
+  pictures               pictures[]
+  comments               comments[]
   is_mock                Boolean        @default(false)
-  initiated_follows      follow[]       @relation("FollowedBy")
-  received_follows       follow[]       @relation("Following")
+  initiated_follows      follows[]       @relation("FollowedBy")
+  received_follows       follows[]       @relation("Following")
   close_friends          users[]        @relation("CloseFriends")
   close_friends_of       users[]        @relation("CloseFriends")
-  likes                  like[]
-  collections            collection[]
-  sent_notifications     notification[] @relation("SentNotifications")
-  received_notifications notification[] @relation("ReceivedNotifications")
-  thought                thought?
-  threads                thread[]       @relation("UserThreads")
-  messages               message[]
+  likes                  likes[]
+  collections            collections[]
+  sent_notifications     notifications[] @relation("SentNotifications")
+  received_notifications notifications[] @relation("ReceivedNotifications")
+  thought                thoughts?
+  threads                threads[]       @relation("UserThreads")
+  messages               messages[]
 }
 
-model thread {
+model threads {
   id         Int       @id @default(autoincrement())
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
   users      users[]   @relation("UserThreads")
-  messages   message[]
+  messages   messages[]
 }
 
-model message {
+model messages {
   id         Int      @id @default(autoincrement())
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   content    String
   user       users    @relation(fields: [user_id], references: [id])
   user_id    Int
-  thread     thread   @relation(fields: [thread_id], references: [id])
+  thread     threads   @relation(fields: [thread_id], references: [id])
   thread_id  Int
 }
 
-model thought {
+model thoughts {
   id         Int        @id @default(autoincrement())
   content    String
   user       users      @relation(fields: [user_id], references: [id])
@@ -96,7 +96,7 @@ enum visibility {
   CLOSE_FRIENDS
 }
 
-model collection {
+model collections {
   id         Int                     @id @default(autoincrement())
   name       String
   name_id    String
@@ -104,10 +104,10 @@ model collection {
   created_at DateTime                @default(now())
   user_id    Int
   user       users                   @relation(fields: [user_id], references: [id])
-  pictures   picture_on_collection[]
+  pictures   picture_on_collections[]
 }
 
-model follow {
+model follows {
   id             Int      @id @default(autoincrement())
   created_at     DateTime @default(now())
   initiator      users    @relation("FollowedBy", fields: [initiator_id], references: [id])
@@ -116,7 +116,7 @@ model follow {
   target_user_id Int
 }
 
-model picture {
+model pictures {
   id                         Int                     @id @default(autoincrement())
   file_name                  String
   description                String?
@@ -127,44 +127,44 @@ model picture {
   user_id                    Int
   created_at                 DateTime                @default(now())
   updated_at                 DateTime                @updatedAt
-  comments                   comment[]               @relation("PictureComments")
-  likes                      like[]                  @relation("PictureLikes")
-  collection                 picture_on_collection[]
+  comments                   comments[]               @relation("PictureComments")
+  likes                      likes[]                  @relation("PictureLikes")
+  collection                 picture_on_collections[]
   sizes                      Json
-  notifications              notification[]
+  notifications              notifications[]
   is_in_any_collection       Boolean                 @default(false) // For any collection
 
   @@index([user_id])
 }
 
-model picture_on_collection {
+model picture_on_collections {
   picture_id    Int
-  picture       picture    @relation(fields: [picture_id], references: [id], onDelete: Cascade)
+  picture       pictures    @relation(fields: [picture_id], references: [id], onDelete: Cascade)
   collection_id Int
-  collection    collection @relation(fields: [collection_id], references: [id], onDelete: Cascade)
+  collection    collections @relation(fields: [collection_id], references: [id], onDelete: Cascade)
 
   @@id([picture_id, collection_id])
   @@index([picture_id])
   @@index([collection_id])
 }
 
-model comment {
+model comments {
   id            Int            @id @default(autoincrement())
   content       String
   user          users          @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id       Int
-  picture       picture        @relation("PictureComments", fields: [picture_id], references: [id], onDelete: Cascade)
+  picture       pictures        @relation("PictureComments", fields: [picture_id], references: [id], onDelete: Cascade)
   picture_id    Int
   created_at    DateTime       @default(now())
   updated_at    DateTime       @updatedAt
-  notifications notification[]
+  notifications notifications[]
 }
 
-model like {
+model likes {
   id         Int      @id @default(autoincrement())
   created_at DateTime @default(now())
   user       users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id    Int
-  picture    picture  @relation("PictureLikes", fields: [picture_id], references: [id], onDelete: Cascade)
+  picture    pictures  @relation("PictureLikes", fields: [picture_id], references: [id], onDelete: Cascade)
   picture_id Int
 }

@@ -7,7 +7,7 @@ import prisma from "@/lib/prisma";
 
 export const deleteThought = async (thoughtId: number) => {
   try {
-    await prisma.thought.delete({
+    await prisma.thoughts.delete({
       where: { id: thoughtId },
     });
 
@@ -20,7 +20,7 @@ export const deleteThought = async (thoughtId: number) => {
 
 export const createThought = async (content: string, userId: number) => {
   try {
-    await prisma.thought.create({
+    await prisma.thoughts.create({
       data: {
         content,
         user: {
@@ -46,7 +46,7 @@ export const createThought = async (content: string, userId: number) => {
 
 export const updateThought = async (id: number, content: string) => {
   try {
-    await prisma.thought.update({
+    await prisma.thoughts.update({
       where: { id },
       data: { content },
     });

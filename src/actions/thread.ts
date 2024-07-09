@@ -11,7 +11,7 @@ import {
 
 export const getThreadById = async (threadId: number): Promise<Thread> => {
   try {
-    return await prisma.thread.findUniqueOrThrow({
+    return await prisma.threads.findUniqueOrThrow({
       where: {
         id: threadId,
       },
@@ -26,7 +26,7 @@ export const getThreadById = async (threadId: number): Promise<Thread> => {
 export const findExistingThread = async (
   userIds: number[],
 ): Promise<NewThread | null> => {
-  return prisma.thread.findFirst({
+  return prisma.threads.findFirst({
     where: {
       users: {
         every: {
@@ -42,7 +42,7 @@ export const findExistingThread = async (
 };
 
 export const createThread = async (userIds: number[]): Promise<NewThread> => {
-  return prisma.thread.create({
+  return prisma.threads.create({
     data: {
       users: {
         connect: userIds.map((userId) => {
@@ -67,7 +67,7 @@ export const getOrCreateThread = async (
 export const getThreads = async (): Promise<Thread[]> => {
   const currentUser = await getCurrentUser();
 
-  return prisma.thread.findMany({
+  return prisma.threads.findMany({
     where: {
       users: {
         some: {

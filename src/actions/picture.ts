@@ -35,7 +35,7 @@ export const createPicture = async (formData: FormData): Promise<void> => {
 
   const defaultAltText = await createDefaultAltText();
 
-  const pictureData: Prisma.pictureCreateInput = {
+  const pictureData: Prisma.picturesCreateInput = {
     user: {
       connect: { id: currentUser.id },
     },
@@ -47,14 +47,14 @@ export const createPicture = async (formData: FormData): Promise<void> => {
     disable_comments: disableComments,
   };
 
-  await prisma.picture.create({ data: pictureData });
+  await prisma.pictures.create({ data: pictureData });
 };
 
 export const updatePicture = async (
   pictureId: number,
   data: Record<string, string | boolean>,
 ) => {
-  await prisma.picture.update({
+  await prisma.pictures.update({
     where: { id: pictureId },
     data,
   });
@@ -63,7 +63,7 @@ export const updatePicture = async (
 export const getPicturesByUser = async (
   userId?: number,
 ): Promise<UserPictureDetails[]> => {
-  const pictures = await prisma.picture.findMany({
+  const pictures = await prisma.pictures.findMany({
     where: { user_id: userId ? userId : undefined },
     orderBy: { created_at: "desc" },
     select: userPictureDetailsSelect,
@@ -82,7 +82,7 @@ export const getPictureDetails = async (
     getCommentsForPicture(pictureId),
     getIsPictureLiked(pictureId),
     getIsPictureInUserCollection(pictureId),
-    prisma.picture.findUnique({
+    prisma.pictures.findUnique({
       where: { id: pictureId },
       select: userPictureDetailsSelect,
     }),
@@ -106,7 +106,7 @@ export const getFollowedUsersPictures = async (): Promise<
 > => {
   const currentUser = await getCurrentUser();
 
-  const pictures = await prisma.picture.findMany({
+  const pictures = await prisma.pictures.findMany({
     where: {
       user: {
         received_follows: {
@@ -125,7 +125,7 @@ export const getFollowedUsersPictures = async (): Promise<
 };
 
 export const deletePicture = async (pictureId: number): Promise<void> => {
-  await prisma.picture.delete({
+  await prisma.pictures.delete({
     where: { id: pictureId },
   });
 };

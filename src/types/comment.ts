@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 
-export const commentsPictureSelect: Prisma.commentSelect = {
+export const commentsPictureSelect = {
   id: true,
   content: true,
   created_at: true,
@@ -14,6 +14,6 @@ export const commentsPictureSelect: Prisma.commentSelect = {
   },
 };
 
-export type CommentsPicture = Prisma.commentGetPayload<{
+export type CommentsPicture = Prisma.commentsGetPayload<{
   select: typeof commentsPictureSelect;
 }>;

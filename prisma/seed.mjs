@@ -91,7 +91,7 @@ async function main() {
   });
 
   for (const user of userIds) {
-    await prisma.collection.create({
+    await prisma.collections.create({
       data: {
         name: "All posts",
         name_id: "all-posts",
@@ -116,11 +116,11 @@ async function main() {
     }),
   );
 
-  const createdPictures = await prisma.picture.createMany({
+  const createdPictures = await prisma.pictures.createMany({
     data: mockPictures,
   });
 
-  const pictureIds = await prisma.picture.findMany({
+  const pictureIds = await prisma.pictures.findMany({
     select: { id: true },
     take: createdPictures.count,
   });
@@ -134,7 +134,7 @@ async function main() {
     };
   });
 
-  await prisma.comment.createMany({
+  await prisma.comments.createMany({
     data: mockComments,
   });
 

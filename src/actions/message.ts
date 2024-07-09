@@ -8,7 +8,7 @@ export const createMessage = async (
   userId: number,
   threadId: number,
 ): Promise<ThreadMessage> => {
-  return prisma.message.create({
+  return prisma.messages.create({
     data: {
       content,
       user: {
